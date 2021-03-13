@@ -715,7 +715,7 @@
         \setlength{\thesiswidth}{\paperwidth-88mm}%
       }%
 \begin{minipage}[t]{\thesiswidth}
-      {\fontsize{25pt}{30pt}\selectfont\swedishenglish{\@titleswedish}{\@titleenglish}\par}%
+      {\fontsize{25pt}{20pt}\selectfont\swedishenglish{\@titleswedish}{\@titleenglish}\par}%
       \swedishenglish{\ifsubtitleswedish}{\ifsubtitleenglish} -- {\fontsize{13pt}{15pt}\selectfont\swedishenglish{\@subtitleswedish}{\@subtitleenglish}\par}\fi%
       \hrulefill{}
       \\{}
@@ -873,7 +873,7 @@
   \thispagestyle{empty}
   {\@calibri\selectfont
 
-\vspace*{2cm}
+\vspace*{0.5cm}
  \section*{Upphovsrätt}
 \label{sec:upphovsratt}
 Detta dokument hålls tillgängligt på Internet - eller dess framtida ersättare
@@ -899,7 +899,7 @@ förlagets hemsida
 \href{http://www.ep.liu.se/}{\texttt{http://www.ep.liu.se/}}.
 
 
-\vspace*{2cm}
+\vspace*{0.5cm}
 \section*{Copyright}
 \label{sec:copyright}
 

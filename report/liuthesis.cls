@@ -61,6 +61,7 @@
 
 \RequirePackage{xkeyval}
 \RequirePackage{ifxetex}
+\RequirePackage{indentfirst}
 
 \ifxetex
 \else

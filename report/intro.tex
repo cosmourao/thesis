@@ -34,25 +34,41 @@
 \chapter{Introduction}
 \label{cha:introduction}
 
-\textcolor{red}{TODO: list of acronyms, chemical formulas correct formatting, frequency modulation, images, adjust line /paragraph spacing, change documentclass to thesis template, reference alignment}
+\section{Motivation}
+\label{sec:motivation}
 
-Nitric Oxide (NO) and Nitrogen Dioxide (NO2), commonly referred together as NOx,  are hazardous gases to the environment and to humans. Its main sources are combustion processes in transportation, and industrial processes such as (but not limited to) auto mobiles, trucks, boats, industrial boilers, turbines, etc. \cite{EPA_2019}.
+Nitric Oxide ({\ch{NO}) and Nitrogen Dioxide (\ch{NO2}), commonly referred together as \nox,  are hazardous gases to the environment and to humans. Its main sources are combustion processes in transportation, and industrial processes such as (but not limited to) auto mobiles, trucks, boats, industrial boilers, turbines, etc. \cite{EPA_2019}.
 
-NOx exposure to humans can cause respiratory illnesses such bronchitis, emphysema and can worsen heart disease \cite{Boningari_2016}. Environmentally, NOx are deemed precursors of adverse phenomena such as smog, acid rain, and the depletion of ozone (O3) \cite{Bernabeo_2019}. It is of high interest, therefore, to reduce NOx emissions.
+\nox exposure to humans can cause respiratory illnesses such bronchitis, emphysema and can worsen heart disease \cite{Boningari_2016}. Environmentally, \nox are deemed precursors of adverse phenomena such as smog, acid rain, and the depletion of ozone (\ch{O3}) \cite{Bernabeo_2019}. It is of high interest, therefore, to reduce \nox emissions.
 
-One well studied and successful method of reducing emissions is Selective Catalytic Reduction (SCR), which consists in the reduction of NOx by ammonia (NH3) into nitrogen gas (N2) and water (H2O) \cite{Forzatti_2001}, both harmless components. The process is based in the following reactions \cite{Forzatti_2001}:
+One well studied and successful method of reducing emissions is \acrfull{scr}, which consists in the reduction of \nox by ammonia (NH3) into nitrogen gas (N2) and water (H2O) \cite{Forzatti_2001}, both harmless components. The process is based in the following reactions \cite{Forzatti_2001}:
 
-4NH3 + 4NO + O2 → 4N2 + 6H2O
+\ch{4 NH3 + 4 NO + O2 -> 4 N2 + 6 H2O}
 
-2NH3 + NO + NO2 → 2N2 + 3H2O
+\ch{2 NH3 + NO + NO2 -> 2 N2 + 3 H2O}
 
-8NH3 + 6NO2 → 7N2 + 12H2O
+\ch{8 NH3 + 6 NO2 -> 7 N2 + 12 H2O}
 
-One key element in these reactions, however, is the amount of ammonia dosed into the SCR systems. Ammonia itself is hazardous to humans, causing skin and respiratory irritation, among other illnesses \cite{ASTDRA_2004}. More importantly, ammonia is one of the main sources of nitrogen pollution and it has direct negative impact on biodiversity via nitrogen deposition in soil and water \cite{RAND_2018}. Hence it is also desired to keep ammonia emissions to a minimum. Too much ammonia in the SCR catalyst will guarantee NOx reduction at the expense of undesired ammonia emissions. Concurrently, too little ammonia will impede SCR to occur properly, beating the purpose of the catalyst and as a consequence, undesired NOx emissions.
+One key element in these reactions, however, is the amount of ammonia dosed into the \acrshort{scr} systems. Ammonia itself is hazardous to humans, causing skin and respiratory irritation, among other illnesses \cite{ASTDRA_2004}. More importantly, ammonia is one of the main sources of nitrogen pollution and it has direct negative impact on biodiversity via nitrogen deposition in soil and water \cite{RAND_2018}. Hence it is also desired to keep ammonia emissions to a minimum. Too much ammonia in the \acrshort{scr} catalyst will guarantee \nox reduction at the expense of undesired ammonia emissions. Concurrently, too little ammonia will impede \acrshort{scr} to occur properly, beating the purpose of the catalyst and as a consequence, undesired \nox emissions.
 
-To monitor gasses concentrations, chemical sensors are deployed, one of which is the Silicone Carbide Field Effect Transistor (SiC-FET). The identification and quantification of gasses is normally achieved through multiple sensor in so called sensor arrays. Ideally each sensor in the array needs to have different responses to different compounds \cite{Bastuck_2019}. The deployment of multiple sensors, on the other hand, proves itself cumbersome due to the increased chances of failure, and decalibration of the system should one or multiple sensors be replaced \cite{Bastuck_2019}.
+To monitor gasses concentrations, chemical sensors are deployed, one of which is the \acrfull{sicfet}. The identification and quantification of gasses is normally achieved through multiple sensor in so called sensor arrays. Ideally each sensor in the array needs to have different responses to different compounds \cite{Bastuck_2019}. The deployment of multiple sensors, on the other hand, proves itself cumbersome due to the increased chances of failure, and decalibration of the system should one or multiple sensors be replaced \cite{Bastuck_2019}.
 
-One solution to this problem is the cycled operation of one single sensor, referred as virtual multi-sensor \cite{Bastuck_2019}. By cycling the working point parameters of the sensor, different substances react differently in the sensor surface, which in turn produces different responses. Temperature Cycled Operation (TCO), Gate Bias Cycled Operation (GBCO), and the combination of the two have been proven to increase selectivity of SiC-FET sensors \cite{Bastuck_2019}.
+One solution to this problem is the cycled operation of one single sensor, referred as virtual multi-sensor \cite{Bastuck_2019}. By cycling the working point parameters of the sensor, different substances react differently in the sensor surface, which in turn produces different responses. \acrfull{tco}, \acrfull{gbco}, and the combination of the two have been proven to increase selectivity of \acrshort{sicfet} sensors \cite{Bastuck_2019}.
+
+
+
+\section{Aim}
+\label{sec:aim}
+
+The aim of this thesis is to investigate different regression methods, namely: \acrfull{plsr}, Ridge Regression and \textcolor{red}{(neural nets XXXX - TENTATIVE)}, and their fit to correctly quantify gas mixtures such \nox and Ammonia subjected to sensor frequency modulation.
+
+\section{Research questions}
+\label{sec:research-questions}
+
+\begin{enumerate}
+	\item Can frequency modulation be used to simultaneously quantify \nox and Ammonia?
+	\item Which method yields best predictions of gas concentrations?
+\end{enumerate}
 
 %\nocite{scigen}
 %We have included Paper \ref{art:scigen}

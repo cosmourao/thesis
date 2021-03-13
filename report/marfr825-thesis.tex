@@ -38,7 +38,14 @@
 \usepackage{rotating}
 \usepackage{color}
 
-% \usepackage{changebar}
+\include{acronyms}
+
+%% Handling NOX and chemical formulas{\tiny }
+\usepackage{chemformula}
+\usepackage{xspace}
+\usepackage{fixltx2e}% for \textsubscript
+\newcommand{\nox}{\texorpdfstring{NO\textsubscript{x}}{NOx}\xspace}
+%%
 
 \department{Institutionen för datavetenskap}
 \departmentenglish{Department of Computer and Information Science}
@@ -64,13 +71,13 @@
 
 \author{Marcos Freitas Mourão dos Santos}
 
-% Two authors
-% \author{\parbox{\textwidth}{Ola Leifler\\
-%   Alexander Sanner}}
-
 \begin{document}
 
 \chapterstyle{VZ43}
+
+% List of acronyms
+\printnoidxglossary[type=acronym]
+\printacronyms
 
 \include{intro}
 \include{theory}

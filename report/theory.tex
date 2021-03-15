@@ -33,16 +33,135 @@
 \chapter{Theory}
 \label{cha:theory}
 
+\textbf{\textcolor{blue}{Comment to teacher and opponents: I feel I should rewrite this section contextualized to the problem. Since i do not have the data yet,  (although is far from perfect) I thought it was best to keep it "pure" and not long. What do you think? It is also kinda "hard" to write these math heavy derivations by paraphrasing (and citing ,of course) the original authors. Should I just transcribe the math down using quotes ""?}}
+
+It is often the case that sensor data points are acquired in quick succession, which in turn leads to highly correlated features \cite{Bastuck_2019}, which can result in high variance \cite{friedman2001}. It is desired, then, to apply some feature selection before using the data in prediction models.
+
+\textbf{\textcolor{red}{TODO: Add section on Linear Regressin to better introduce all other methods}}
+
+\textbf{\textcolor{red}{TODO: Standardize notation.  It is all over the place.}}
+
+\textbf{\textcolor{red}{TODO: Give more details}}
+
+\textbf{\textcolor{red}{TODO: complete PLSR and Ridge section}}
+
+\textbf{\textcolor{red}{TODO: Perhaps do a separate, in depth section on Principal Components}}
+
 \section{Principal Component Regression}
 \label{sec:pcr}
 
-It is often the case that the number of inputs is large and highly correlated. This often leads to obstacles in analysis and interpretation. A 
+The idea behind \acrfull{pcr} is first to reveal more simple underlying structures in data \cite{shlens2014} via \acrfull{pca}  and then performing linear regression on them. \acrshort{pca} aims to find linear combinations of the input variables in such a way that a few of those new, derived variables can explain most of the variability in the system \cite{johnson2002}.
+
+The objective of \acrshort{pca} is find a matrix $\mathbf{P}$ such that the linear transformation
+
+\begin{equation}
+	\label{eqn:pca}
+	\mathbf{T=XP}
+\end{equation}
+
+yields new variables $(t_1, t_2, ..., t_m)$ that are uncorrelated and arranged in decreasing order of variance . $\mathbf{T}$ is named scores and $\mathbf{P}$ \acrfull{pc} of $\mathbf{X}$ \cite{ng2013}. Since the matrix $\mathbf{T}$ is ordered, it follows that most of the variance on the data $\mathbf{X}$ is captured by the first \textit{k-th} \acrshort{pc} \cite{ng2013}. This approximation of $\mathbf{X}$ is defined in Equation~\ref{eqn:pca2}:
+
+\begin{equation}
+	\label{eqn:pca2}
+	\mathbf{T_{|k}=XP_{|k}}
+\end{equation}
+
+Finally, \acrshort{pcr} is simply performing linear regression on $\mathbf{T_{|k}}$ instead of $\mathbf{X}$:
+	
+	\begin{equation}
+		\label{eqn:pcr}
+		\mathbf{y = T_{|k} \beta + \epsilon}
+	\end{equation}
+
+And the regression coefficients just as in linear regression:
+
+\begin{equation}
+	\label{eqn:beta-pcr}
+	\hat{\beta}^{\text{PCR}} = \mathbf{(T_{|k}^T T_{|k})^{-1}T_{|k}^T y}
+\end{equation}
+	
+The \acrfull{nipals} algorithm can also compute \acrlong{pc} and its scores \cite{ng2013} \cite{nipals2017}.
+
+
+\begin{algorithm}[H]
+	\SetAlgoLined
+	\KwResult{First k \acrlong{pc}s }
+	i = 1\;
+	$\mathbf{X_i = X}$\;
+	
+	\While{$i < k$ }{\Repeat{Until $\mathbf{t_i}$ converges}{
+		Choose $\mathbf{t_i}$ as any column of $\mathbf{X_i}$\;
+		Compute loadings $\mathbf{p_i = \frac{X_i^T t_i}{t_i^T t_i}}$\;
+		Let $\mathbf{p_i = \frac{p_i}{\sqrt{p_i^T p_i}}}$\;
+		Compute scores $\mathbf{t_i = \frac{X_i p_i}{p_i^T p_i}}$\;
+		
+	}
+	$\mathbf{X_{i+1} = X_i - t_i p_i^T}$ \;
+	$i \mathrel{+}= 1$\;
+}
+
+	\caption{\acrfull{nipals}}
+\end{algorithm}
+
+\newpage
 \section{Partial Least Squares Regression}
 \label{sec:plsr}
+
+\acrshort{plsr}, much like \acrshort{pcr}, also tries to reduce dimensionality via linear combinations of the inputs. In this technique, however, also takes into account the dependent variables $\mathbf{y}$. One key advantage of \acrshort{plsr} is that it seeks axes with most variance (like \acrshort{pcr}) and high correlation with the dependent variables \cite{friedman2001}.
+
+The main idea can be described as decomposing both the design matrix $\mathbf{X}$ and response matrix $\mathbf{Y}$ as follows \cite{ng2013}, similarly to what was done in Section~\ref{sec:pcr}:
+
+
+
+\begin{align}
+	\mathbf{X=TP^T} \\
+	\mathbf{Y = UQ^T}
+\end{align}
+
+Instead of simply running \acrshort{nipals} on $\mathbf{X}$ and $\mathbf{Y}$ separately. \acrshort{plsr} uses information from $\mathbf{Y}$ to decompose $\mathbf{X}$ and \textit{vice-versa} \cite{ng2013}.
+
+\begin{algorithm}[H]
+	\SetAlgoLined
+	\KwResult{First k \acrlong{pls} directions}
+	i = 1\;
+	$\mathbf{X_i = X}$\;
+	$\mathbf{Y_i = Y}$\;
+	
+	\While{$i < k$ }{\Repeat{Until $\mathbf{t_i}$ converges}{
+			Compute loading of $\mathbf{X_i}$ based on score of $\mathbf{Y_i}$: $\mathbf{p_i = \frac{X_i^Tu_i}{||X_i^Tu_i}||}$ \;
+			
+			Compute score of $\mathbf{X_i}$: $\mathbf{t_i = Xp_i}$\;
+			
+			Compute loading of $\mathbf{y_i}$ based on score of $\mathbf{X_i}$: $\mathbf{q_i = \frac{Y_i^Tt_i}{||Y_i^Tt_i}||}$ \;
+			
+			Compute score of $\mathbf{Y_i}$: $\mathbf{u_i = Yq_i}$\;
+	}
+
+	$\mathbf{X_{i+1} = X_i - t_i p_i^T}$ \;
+	$\mathbf{Y_{i+1} = Y_i - u_i q_i^T}$ \;
+	$i \mathrel{+}= 1$\;
+}
+\caption{\acrfull{pls}}
+\end{algorithm}
+
+After finding the $k$ partial least squares directions from the algorithm above, the score matrices $\mathbf{T}$ and $\mathbf{U}$ are found.
 
 \section{Ridge Regression}
 \label{sec:ridge}
 
+Another option is shrink regression coefficients via a penalty term. As stated on \cite{friedman2001}, "ridge coefficients minimize a penalized sum of squares", as shown on Equation~\ref{eqn:beta-ridge} and Equation~\ref{eqn:beta-ridge-matrix}.
+
+\begin{equation}
+	\label{eqn:beta-ridge}
+	\hat{\beta}^{\text{ridge}} = \text{argmin}_\beta \left\{ \sum_{i=1}^{N}(y_i - \beta_0 - \sum_{j=1}^{p} x_{ij}\beta_j)^2 + \lambda \sum_{j=1}^{p} \beta_j^2 \right\}
+\end{equation}
+
+Where $\lambda \geq 0$ is a parameter that controls strength of the penalization. This could also be written in matrix form:
+
+\begin{equation}
+	\label{eqn:beta-ridge-matrix}
+	\hat{\beta}^{\text{ridge}} = (\mathbf{X}^T \mathbf{X} + \lambda \mathbf{I})^{-1} \mathbf{X}^T\mathbf{y}
+\end{equation}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

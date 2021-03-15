@@ -84,6 +84,7 @@ The \acrfull{nipals} algorithm can also compute \acrlong{pc} and its scores \cit
 
 
 \begin{algorithm}[H]
+	\label{algo:pca}
 	\SetAlgoLined
 	\KwResult{First k \acrlong{pc}s }
 	i = 1\;
@@ -111,16 +112,20 @@ The \acrfull{nipals} algorithm can also compute \acrlong{pc} and its scores \cit
 
 The main idea can be described as decomposing both the design matrix $\mathbf{X}$ and response matrix $\mathbf{Y}$ as follows \cite{ng2013}, similarly to what was done in Section~\ref{sec:pcr}:
 
+\begin{equation}
+	\label{eqn:x-decomp}
+	\mathbf{X=TP^T}
+\end{equation}
 
-
-\begin{align}
-	\mathbf{X=TP^T} \\
+\begin{equation}
+	\label{eqn:y-decomp}
 	\mathbf{Y = UQ^T}
-\end{align}
+\end{equation}
 
 Instead of simply running \acrshort{nipals} on $\mathbf{X}$ and $\mathbf{Y}$ separately. \acrshort{plsr} uses information from $\mathbf{Y}$ to decompose $\mathbf{X}$ and \textit{vice-versa} \cite{ng2013}.
 
 \begin{algorithm}[H]
+	\label{algo:pls}
 	\SetAlgoLined
 	\KwResult{First k \acrlong{pls} directions}
 	i = 1\;
@@ -128,11 +133,11 @@ Instead of simply running \acrshort{nipals} on $\mathbf{X}$ and $\mathbf{Y}$ sep
 	$\mathbf{Y_i = Y}$\;
 	
 	\While{$i < k$ }{\Repeat{Until $\mathbf{t_i}$ converges}{
-			Compute loading of $\mathbf{X_i}$ based on score of $\mathbf{Y_i}$: $\mathbf{p_i = \frac{X_i^Tu_i}{||X_i^Tu_i}||}$ \;
+			Compute loading of $\mathbf{X_i}$ based on score of $\mathbf{Y_i}$: $\mathbf{p_i = \frac{X_i^Tu_i}{||X_i^Tu_i||}}$ \;
 			
 			Compute score of $\mathbf{X_i}$: $\mathbf{t_i = Xp_i}$\;
 			
-			Compute loading of $\mathbf{y_i}$ based on score of $\mathbf{X_i}$: $\mathbf{q_i = \frac{Y_i^Tt_i}{||Y_i^Tt_i}||}$ \;
+			Compute loading of $\mathbf{y_i}$ based on score of $\mathbf{X_i}$: $\mathbf{q_i = \frac{Y_i^Tt_i}{||Y_i^Tt_i||}}$ \;
 			
 			Compute score of $\mathbf{Y_i}$: $\mathbf{u_i = Yq_i}$\;
 	}
@@ -144,7 +149,19 @@ Instead of simply running \acrshort{nipals} on $\mathbf{X}$ and $\mathbf{Y}$ sep
 \caption{\acrfull{pls}}
 \end{algorithm}
 
-After finding the $k$ partial least squares directions from the algorithm above, the score matrices $\mathbf{T}$ and $\mathbf{U}$ are found.
+After finding the $k$ partial least squares directions from the Algorithm~\ref{algo:pls} above, the score matrices $\mathbf{T}$ and $\mathbf{U}$ are found. The regression coefficients  $\beta^{\text{PLS}}$ are found by the relation \cite{ng2013}:
+
+\begin{equation}
+	\label{eqn:beta-pls}
+    \mathbf{U = T} \beta^{\text{PLS}}
+\end{equation}
+
+Finally, by the substitution of Equation~\ref{eqn:beta-pls} on ~\ref{eqn:y-decomp} \cite{ng2013}:
+
+\begin{equation}
+	\label{eqn:beta-pls}
+	\mathbf{Y= XP \beta^{\text{PLS}} Q^T}
+\end{equation}
 
 \section{Ridge Regression}
 \label{sec:ridge}

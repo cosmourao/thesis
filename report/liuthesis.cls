@@ -1062,6 +1062,7 @@ refer to its www home page:
   {\pagestyle{plain}\tableofcontents\relax\cleardoublepage}
   \iftotalfigures {\pagestyle{plain}\listoffigures\relax\cleardoublepage}\fi
   \iftotaltables {\pagestyle{plain}\listoftables\relax\cleardoublepage}\fi
+  \printnoidxglossary[type=acronym, title = {List of acronyms and abbreviations}]
   \@ifpackageloaded{todonotes}{\pagestyle{plain}\listoftodos\relax\cleardoublepage}{}
   \ifprinterfriendly
     \cleartooddpage

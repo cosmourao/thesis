@@ -1,4 +1,6 @@
 ## Core latex/pdflatex auxiliary files:
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
 .DS_Store
 *.aux
 *.lof

@@ -22,10 +22,21 @@ In more detail, \ch{NO}, \ch{NO2} and \ch{NH3} had five possible concentration v
 	\caption{An example of row sensor response}
 \end{figure}
 
-For each frequency in each cycle, two slope and two average features were extracted. Finally, all 125 gas mixtures were subjected to the experiment three times, each time at a different temperature. Table~\ref{tab:measurements} summarizes the data acquisition details.
+For each frequency in each cycle, two slope and two average features were extracted. These measurements were taken during a 0.4 seconds window of time, alternating between slope and average as shown on Figure~\ref{fig:feat-window}. 
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=1\textwidth]{../figures/measurement-windows.png}
+	\label{fig:feat-window}
+	\caption{Feature measurements times per cycle.}
+\end{figure} 
+
+Finally, all 125 gas mixtures were subjected to the experiment three times, each time at a different temperature. Table~\ref{tab:measurements} summarizes the data acquisition details.
 
 \begin{table}[h]
 	\centering
+	\caption{Data acquisition details}
+	\label{tab:measurements}
 	\begin{tabular}{|c|c|}
 		\hline
 		\textbf{Parameter} & \textbf{Value} \\
@@ -53,8 +64,6 @@ For each frequency in each cycle, two slope and two average features were extrac
 		Total data points & 120.000 \\
 		\hline
 	\end{tabular}
-\caption{Data acquisition details}
-\label{tab:measurements}
 \end{table}
 
 For specific timestamps and measurement durations, the reader is referred to Appendix~\ref{sec:appendix-a}.

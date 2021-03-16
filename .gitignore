@@ -1,7 +1,9 @@
-## Core latex/pdflatex auxiliary files:
+## Stuff that I added later
 .ipynb_checkpoints
 */.ipynb_checkpoints/*
 .DS_Store
+~$*.doc*
+## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
 *.log

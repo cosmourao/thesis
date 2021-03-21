@@ -2,12 +2,15 @@
 \usetheme{default}
 \definecolor{LiUblue}{RGB}{0,185,231}
 \usecolortheme[named=LiUblue]{structure}
-
+%\beamerdefaultoverlayspecification{<+->}
 \title{Quantifying nitrogen oxides and ammonia via frequency modulation in gas sensors}
 \subtitle{Master Thesis - Mid term seminar}
 \author{Marcos F Mourão}
 \date{March 25, 2021}
  
+ 
+ \usepackage{chemformula}
+ \usepackage{url}
 \begin{document}
 	\begin{frame}
 		\titlepage
@@ -21,19 +24,56 @@
 \begin{frame}
 	\section{Problem recap}
 	\frametitle{Problem in a nutshell}
+	\framesubtitle{Motivation}
+	$\text{NO}_{\text{x}}$\footnote{Image source: \href{http://www.nbrienvis.nic.in/Database/1_2039.aspx}{ENVIS Centre on Plants and Pollution}}:
+	\begin{figure}[!htb]
+		\centering
+		\includegraphics[width=0.6\textwidth]{../../figures/nox-molecules.jpg}
+	\end{figure} 
+	\begin{itemize}
+		\item NOx are detrimental to the environment and humans.
+		
+		\item NOx are naturally ocurring in man-made processes. E.g. Combustion.
+		
+		\item Ammonia can "neutralize" NOx, producing water (\ch{H2O}) and nitrogen gas (\ch{N2}). Both harmless! - Selective catalytic reduction (SCR)
+		
+		\item But ammonia is also hazardous to the environment/humans.
+	\end{itemize}
 	
-	\subsection{Motivation}
-	NOx are detrimental to the environment
+\end{frame}
+
+\begin{frame}
+	\frametitle{Problem in a nutshell}
+	\framesubtitle{Motivation}
 	
-	Ammonia can neutralize NOx
+	\begin{itemize}
+		\item The dosing of ammonia in the catalyst is key:
+		\begin{itemize}
+			\item Too much ammonia: NOx reduction will occur $\rightarrow$ Unnecessary ammonia emissions.
+			\item Too little ammonia: NOx reduction will occur partially/will not occur $\rightarrow$ NOx emissions.
+		\end{itemize}
+		\item Gas sensors can be used to measure the concentrations of NOx to aid on ammonia dosing.
+		\item However, the sensor also responds to ammonia.
+		\item Operating the sensor in a cyclic operation (e.g. temperature) can enhance selectivity.
+		\begin{itemize}
+			\item Different gasses react differently in different stages of the cycle.
+		\end{itemize}
+		\item Temperature cycling.
+		\item \textbf{Frequency cycling}.
+	\end{itemize}
 	
-	Gas sensors can be used to quantify NOx and Ammonia
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{Problem in a nutshell}
+	\framesubtitle{Research questions}
 	
-	However, it is not trivial:
+	\begin{itemize}
+		\item Can frequency cycling be used to simultaneously quantify NOx and ammonia concentrations?
+		\item Which method yield best prediction of gas concentrations?
+	\end{itemize}
 	
-	\subsection{Research Questions}
-	
-	hey
 \end{frame}
 
 \begin{frame}
@@ -107,6 +147,7 @@
 		\item Principal Component Regression
 		\item Partial Least Squares Regression
 		\item Ridge Regression
+		\item Some non-parametric regression - tbd
 	\end{enumerate}
 	
 \end{frame}
@@ -114,24 +155,45 @@
 \begin{frame}
 	\section{(Preliminary) Results}
 	\frametitle{(Preliminary) Results}
+	
+	\begin{figure}[!htb]
+		\centering
+		\includegraphics[width=1\textwidth]{../../figures/lr_plot.png}
+	\end{figure} 
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=1\textwidth]{../../figures/pcr_plot.png}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+	\frametitle{(Preliminary) Results}
+	
+	\begin{figure}[!htb]
+		\centering
+		\includegraphics[width=1\textwidth]{../../figures/plsr_plot.png}
+	\end{figure} 
+	
+	\begin{figure}[!htb]
+		\centering
+		\includegraphics[width=1\textwidth]{../../figures/ridge_plot.png}
+	\end{figure}
 \end{frame}
 
 \begin{frame}
 	\section{Real data}
 	\frametitle{Real data will be much better!}
-	
 	\begin{itemize}
 		\item More gas mixtures
 		\item More frequencies
 		\item More cycles
 		\item Shape features directly measured
 		\end{itemize}
-	
 \end{frame}
 
 \begin{frame}
 	\frametitle{Real data will be much better!}
-	
 	\begin{table}[h]
 		\centering
 		\caption{Data acquisition details}
@@ -164,19 +226,15 @@
 			\hline
 		\end{tabular}
 	\end{table}
-
 \end{frame}
 
 \begin{frame}
-	
 	\frametitle{Real data will be much better!}
-
 	\begin{figure}[!htb]
 		\centering
 		\includegraphics[width=1\textwidth]{../../figures/measurement-windows.png}
 		\label{fig:feat-window}
 	\end{figure} 
-	
 \end{frame}
 
 \section{What is next}
@@ -186,7 +244,7 @@
 		\item Apply methods to real data
 		\item Assess results
 		\item Define what is  "good" in "good prediction levels"
-		\item Look into neural networks alternatives
+		\item Look into non-parametric alternatives
 		\item Keep writing!
 	\end{enumerate}
 \end{frame}

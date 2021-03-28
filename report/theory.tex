@@ -37,10 +37,12 @@
 
 The quantification of gases based on the sensor response can be viewed as a multivariate multiple regression problem where the predictors, i.e. features derived from the sensor signal, are used to predict multiple responses, i.e. the concentrations of pertinent gases. This chapter briefly exposes the theory behind some of these models. Their implementation, on the other hand, will be discussed in Chapter~\ref{cha:method} - Methods.
 
+The models here listed were chosen as a natural progression from a statisticians point of view: starting with simple models and progressively increasing complexity as insights from the data and the problem are gathered.
+
 \section{Ordinary Least Squares Regression}
 \label{sec:linreg}
 
-A simple, first approach would be to tackle the problem with a \acrfull{ols} regression model. As \cite{friedman2001} explains, each output  $\mathbf{Y} = [Y_1, Y_2, ... , Y_K]^\intercal$ has its own linear model. Now, given a set of $n$ observations $\mathbf{X} = [X_1, X_2, ..., X_n]^\intercal$ and each observation having $p+1$ features, e.g. $X_i = [1,x_{i1}, x_{i2}, ... x_{ip}], \; i = 1,2,...n$, the concatenation of all linear models can be written in matrix form as in Equation~\ref{eqn:ols}.
+A simple, first approach would be to tackle the problem with a \acrfull{ols} regression model. As \cite{friedman2001} explains, each output  $\mathbf{Y = [y_1, y_2, ... , y_K]^\intercal} $ has its own linear model. Now, given a set of $n$ observations $\mathbf{X = [x_1, x_2, ..., x_n]^\intercal}$ and each observation having $p+1$ features, e.g. $\mathbf{x}_i = [1,x_{i1}, x_{i2}, ... x_{ip}], \; i = 1,2,...n$, the concatenation of all linear models can be written in matrix form as in Equation~\ref{eqn:ols}.
 
 \begin{equation}
 	\label{eqn:ols}
@@ -57,7 +59,7 @@ The objective is then to find the coefficients $\mathbf{\hat{B}}$ which minimize
 
 \begin{equation}
 	\label{eqn:betahat}
-	\mathbf{\hat{B}} = \underset{\mathbf{B}}{\arg\min} 	\; \text{RSS}(\mathbf{B})
+	\mathbf{\hat{B}^\text{OLS}} = \underset{\mathbf{B}}{\arg\min} 	\; \text{RSS}(\mathbf{B})
 \end{equation}
 
 In turn, the \acrshort{rss}, as the name suggests, is defined as the difference between real and predicted values, squared, which in matrix form is written as \parencite{friedman2001}:
@@ -71,17 +73,17 @@ Finally, solving for $\mathbf{\hat{B}}$ yields \parencite{friedman2001}:
 
 \begin{equation}
 	\label{eqn:ols_beta}
-	\mathbf{\hat{B}} = \mathbf{(X^\intercal X)^{-1} X^\intercal Y}
+	\mathbf{\hat{B}^\text{OLS}} = \mathbf{(X^\intercal X)^{-1} X^\intercal Y}
 \end{equation}
 
-For the problem at hand, in addition to the high number of features, it is often the case that sensor data points are acquired in quick succession, which in turn leads to highly correlated features \parencite{Bastuck_2019}, which can result in high variance in a least squares model \parencite{friedman2001}. It is natural, therefore, to progress towards methods that incorporate dimensionality reduction such as \acrfull{pcr}.
+For the problem at hand, in addition to the high number of features, it is often the case that sensor data points are acquired in quick succession, which in turn leads to highly correlated features \parencite{Bastuck_2019}, which can result in high variance in a least squares model \parencite{friedman2001}. It is natural, therefore, to progress towards methods that incorporate dimensionality reduction such as \acrfull{pcr} and \acrfull{plsr}.
 
 \section{Principal Component Analysis}
 \label{sec:pca}
 
 One way to define \acrfull{pca} is to view it as a orthogonal projection of the data into a principal space of lower dimension such that the variance of this projection is maximized \parencite{bishop2006pattern}.
 
-Just as before, consider the  collection of $n$ observations is $\mathbf{X} = [X_1, X_2, ..., X_n]^\intercal$ with covariance matrix $\mathbf{\Sigma}$. Additionally, consider a matrix $\mathbf{P = [p_1, p_2, ..., p_n]^\intercal}$ where $\mathbf{p_i}$ is a row vector of coefficients referring to the i-th linear combination \parencite{johnson2013applied}:
+Just as before, consider the  collection of $n$ observations is $\mathbf{X = [x_1, x_2, ..., x_n]^\intercal}$ with covariance matrix $\mathbf{\Sigma}$. Additionally, consider a matrix $\mathbf{P = [p_1, p_2, ..., p_n]^\intercal}$ where $\mathbf{p_i}$ is a row vector of coefficients referring to the i-th linear combination \parencite{johnson2013applied}:
 
 \begin{equation}
 	\label{eqn:pca-lincomb}
@@ -135,7 +137,16 @@ The k-th \acrshort{pc} is then:
 	\end{split}
 \end{equation}
 
-It can be shown that these desired linear combinations can be written in terms of the eigenvalues ($\mathbf{\lambda}$) and eigenvectors ($\mathbf{e}$) of $\mathbf{\Sigma}$, the covariance matrix of $\mathbf{X}$ \parencite{johnson2013applied}. Namely, for the k-th \acrshort{pc}:
+In summary, the objective of \acrshort{pca} is find a matrix $\mathbf{P}$ such that the linear transformation
+
+\begin{equation}
+	\label{eqn:pca}
+	\mathbf{T=XP^\intercal}
+\end{equation}
+
+yields new variables that are uncorrelated and arranged in decreasing order of variance.
+
+It can be shown that these desired linear combinations can be written in terms of the eigenvalues ($\mathbf{\lambda}$) and eigenvectors ($\mathbf{e}$) of $\mathbf{\Sigma}$, the covariance matrix of $\mathbf{X}$ \parencite{johnson2013applied}. The elements of eigenvectors are called loadings, while the new variables $T$ are scores. In short, for the k-th \acrshort{pc}:
 
 \begin{equation}
 	\label{eqn:pca-eigen}
@@ -148,131 +159,175 @@ It can be shown that these desired linear combinations can be written in terms o
 
 There are several ways of computing \acrshort{pc}s. Many of which involving finding aforementioned eigenvalues and eigenvectors. These calculations can be computationally expensive, depending on the desired number of extracted \acrshort{pc}s \parencite{bishop2006pattern}. One option is the \acrfull{nipals} algorithm, also called Power Method. It has two clear advantages: "it can handle missing data and computes the components sequentially" \parencite{dunn2021pid}.
 
-
-
-
-
-
+The \acrshort{nipals} algorithm to compute the first k-th \acrshort{pc}s, $\text{PC}_i ,\;\; i =1,2,...,k$ us displayed below as Algorith~\ref{algo:pca-nipals} \parencite{dunn2021pid} \parencite{ng2013} \parencite{nipals2017}. Since it computes the loadings and scores sequentially, it is possible to stop it as early as desired. The "truncated" loadings and scores that project $\mathbf{X}$ into the principal subspace of k \acrshort{pc}s is defined in Equation~\ref{eqn:pca2} :
 
 \begin{equation}
-	\label{eqn:pca}
-	\mathbf{T=XP}
+	\label{eqn:pca2}
+	\mathbf{T_{|k}=XP_{|k}^\intercal}
 \end{equation}
+
+\begin{algorithm}[H]
+	\DontPrintSemicolon
+	\label{algo:pca-nipals}
+	\SetAlgoLined
+	\KwResult{Matrices of loadings $\mathbf{P_{|k}}$ and scores $\mathbf{T_{|k}}$  of the k-th first \acrlong{pc}s}
+	Initialize $\mathbf{T_{|k}}$ and $\mathbf{P_{|k}}$\;
+	i = 1\;
+	$\mathbf{X_1 \coloneqq X}$\;
+	
+	\While{$i < k$ }{\Repeat{$\mathbf{t_i}$ converges}{
+			Choose $\mathbf{t_i}$ as any column of $\mathbf{X_i}$\;
+			Compute loadings $\mathbf{p_i = (t_i^\intercal t_i)}^{-1} \mathbf{t_i^\intercal X_i}$\;
+			Scale $\mathbf{p_i = \frac{p_i}{\sqrt{p_i^\intercal p_i}}}$\;
+			Compute scores $\mathbf{t_i = (p_i^\intercal p_i)}^{-1}\mathbf{p_i^\intercal X_i}$\;
+		}
+	Append $\mathbf{t_i}$ to $\mathbf{T_{|k}}$\;
+	Append $\mathbf{p_i}$ to $\mathbf{P_{|k}}$\;
+	Deflate: $\mathbf{X_{i+1} = X_i - t_i p_i^\intercal}$\;
+	$i \mathrel{+}= 1$\;
+	}
+	\KwRet{$\mathbf{T_{|k}, P_{|k}}$}	
+	
+	\caption{\acrfull{nipals} for \acrshort{pca}}
+\end{algorithm}
+
+In other words:
+
+\begin{itemize}
+	\item Line 1: Initilize the algorithm taking into account all data $\mathbf{X}$;
+	
+	\item Line 6: Arbitrarily choose a column of $\mathbf{X}$ as the scores vector $\mathbf{t_i}$;
+	
+	\item Line 7: Compute the i-th loadings vector $\mathbf{p_i}$ by regressing every column of $\mathbf{X}$ via \acrshort{ols} onto the scores $\mathbf{t_i}$;
+	
+	\item Line 8: Scale the loadings vector $\mathbf{p_i}$ to have unit length;
+	
+	\item Line 9: Compute the i-th scores vector $\mathbf{t_i}$ by regressing every column of $\mathbf{X}$ via \acrshort{ols} onto the loadings $\mathbf{p_i}$;
+	
+	\item Line 10: Repeat until change in $\mathbf{t_i}$ between iterations is small enough;
+	
+	\item Lines 11 and 12: Once convergence is achieved, scores $\mathbf{t_i}$ and loadings $\mathbf{p_i}$ are stored as the i-th column of matrices $\mathbf{T}$ and $\mathbf{P}$ of Equation~\ref{eqn:pca}, respectively;
+	
+	\item Line 13: Remove the variability explained by $\mathbf{t_i}$ and $\mathbf{p_i}$ from $\mathbf{X}$. A procedure called deflation.
+\end{itemize}
 
 \section{Principal Component Regression}
 \label{sec:pcr}
 
-%The idea behind \acrshort{pcr} is first to reveal more simple underlying structures in data \parencite{shlens2014} via \acrfull{pca}  and then performing linear regression on them. \acrshort{pca} aims to find linear combinations of the input variables in such a way that a few of those new, derived variables can explain most of the variability in the system \parencite{johnson2002}.
-
-The objective of \acrshort{pca} is find a matrix $\mathbf{P}$ such that the linear transformation
-
-\begin{equation}
-	\label{eqn:pca}
-	\mathbf{T=XP}
-\end{equation}
-
-yields new variables $(t_1, t_2, ..., t_m)$ that are uncorrelated and arranged in decreasing order of variance . $\mathbf{T}$ is named scores and $\mathbf{P}$ \acrfull{pc} of $\mathbf{X}$ \parencite{ng2013}. Since the matrix $\mathbf{T}$ is ordered, it follows that most of the variance on the data $\mathbf{X}$ is captured by the first \textit{k-th} \acrshort{pc} \parencite{ng2013}. This approximation of $\mathbf{X}$ is defined in Equation~\ref{eqn:pca2}:
-
-\begin{equation}
-	\label{eqn:pca2}
-	\mathbf{T_{|k}=XP_{|k}}
-\end{equation}
-
-Finally, \acrshort{pcr} is simply performing linear regression on $\mathbf{T_{|k}}$ instead of $\mathbf{X}$:
+With the inner workings of \acrshort{pca} explained in the previous section, \acrshort{pcr} can be simply reduced to an ordinary least squares regression on the first k-th \acrshort{pc}s, i.e. performing linear regression on $\mathbf{T_{|k}}$ instead of $\mathbf{X}$:
 	
 	\begin{equation}
 		\label{eqn:pcr}
-		\mathbf{y = T_{|k} \beta + \epsilon}
+		\mathbf{Y = T_{|k} B + E}
 	\end{equation}
 
-And the regression coefficients just as in linear regression:
+And the regression coefficients are found analogously to Equation~\ref{eqn:ols_beta}:
 
 \begin{equation}
 	\label{eqn:beta-pcr}
-	\hat{\beta}^{\text{PCR}} = \mathbf{(T_{|k}^T T_{|k})^{-1}T_{|k}^T y}
+	\mathbf{\hat{B}^{\text{PCR}} = (T_{|k}^\intercal T_{|k})^{-1}T_{|k}^\intercal Y}
 \end{equation}
+
+Although useful, \acrshort{pcr} has a flaw: while the new found projection of $\mathbf{X}$ is guaranteed to best explain the variance of predictors, this cannot be said about the responses $\mathbf{Y}$ \parencite{james2013introduction}. \acrshort{plsr}, on the other hand, solves this issue by supervising the identification of \acrshort{pc}s \parencite{james2013introduction}.
 	
-The \acrfull{nipals} algorithm can also compute \acrlong{pc} and its scores \parencite{ng2013} \parencite{nipals2017}.
-
-
-\begin{algorithm}[H]
-	\label{algo:pca}
-	\SetAlgoLined
-	\KwResult{First k \acrlong{pc}s }
-	i = 1\;
-	$\mathbf{X_i = X}$\;
-	
-	\While{$i < k$ }{\Repeat{Until $\mathbf{t_i}$ converges}{
-		Choose $\mathbf{t_i}$ as any column of $\mathbf{X_i}$\;
-		Compute loadings $\mathbf{p_i = \frac{X_i^T t_i}{t_i^T t_i}}$\;
-		Let $\mathbf{p_i = \frac{p_i}{\sqrt{p_i^T p_i}}}$\;
-		Compute scores $\mathbf{t_i = \frac{X_i p_i}{p_i^T p_i}}$\;
-		
-	}
-	$\mathbf{X_{i+1} = X_i - t_i p_i^T}$ \;
-	$i \mathrel{+}= 1$\;
-}
-
-	\caption{\acrfull{nipals}}
-\end{algorithm}
-
 \section{Partial Least Squares Regression}
 \label{sec:plsr}
 
-\acrshort{plsr}, much like \acrshort{pcr}, also tries to reduce dimensionality via linear combinations of the inputs. In this technique, however, also takes into account the dependent variables $\mathbf{y}$. One key advantage of \acrshort{plsr} is that it seeks axes with most variance (like \acrshort{pcr}) and high correlation with the dependent variables \parencite{friedman2001}.
+\acrshort{plsr}, much like \acrshort{pcr}, also aims to reduce dimensionality via linear combinations of the inputs. This technique, however, also takes into account the response variables $\mathbf{Y}$. One key advantage of \acrshort{plsr} is that it seeks axes with most variance (like \acrshort{pcr}) and high correlation with response variables \parencite{friedman2001}.
 
-The main idea can be described as decomposing both the design matrix $\mathbf{X}$ and response matrix $\mathbf{Y}$ as follows \parencite{ng2013}, similarly to what was done in Section~\ref{sec:pcr}:
+The main idea can be described as decomposing both the design matrix $\mathbf{X}$ and response matrix $\mathbf{Y}$ as follows \parencite{ng2013}, similarly to what was done in Section~\ref{sec:pca}.
 
 \begin{equation}
 	\label{eqn:x-decomp}
-	\mathbf{X=TP^T}
+	\mathbf{W=XL^\intercal}
 \end{equation}
 
 \begin{equation}
 	\label{eqn:y-decomp}
-	\mathbf{Y = UQ^T}
+	\mathbf{U = YQ^\intercal}
 \end{equation}
 
-Instead of simply running \acrshort{nipals} on $\mathbf{X}$ and $\mathbf{Y}$ separately. \acrshort{plsr} uses information from $\mathbf{Y}$ to decompose $\mathbf{X}$ and \textit{vice-versa} \parencite{ng2013}.
+Instead of simply running \acrshort{nipals} on $\mathbf{X}$ and $\mathbf{Y}$ separately. \acrshort{plsr} uses information from $\mathbf{Y}$ to decompose $\mathbf{X}$ and \textit{vice-versa} \parencite{ng2013}. Algorithm~\ref{algo:pls-nipals} is an adaptation of Algorithm~\ref{algo:pca-nipals} to incorporate this intended behavior.
 
 \begin{algorithm}[H]
-	\label{algo:pls}
+	\DontPrintSemicolon
+	\label{algo:pls-nipals}
 	\SetAlgoLined
-	\KwResult{First k \acrlong{pls} directions}
+	\KwResult{Matrices of loadings $\mathbf{L_{|k}, Q_{|k}}$ and scores $\mathbf{W_{|k}, U_{|k}}$  of the k-th first \acrlong{pls} directions}
+	Initialize $\mathbf{L_{|k}, Q_{|k}}$ and $\mathbf{W_{|k}, U_{|k}}$\;
 	i = 1\;
-	$\mathbf{X_i = X}$\;
-	$\mathbf{Y_i = Y}$\;
+	$\mathbf{X_1 \coloneqq X}$\;
+	$\mathbf{Y_1 \coloneqq Y}$\;
 	
-	\While{$i < k$ }{\Repeat{Until $\mathbf{t_i}$ converges}{
-			Compute loading of $\mathbf{X_i}$ based on score of $\mathbf{Y_i}$: $\mathbf{p_i = \frac{X_i^Tu_i}{||X_i^Tu_i||}}$ \;
+	\While{$i < k$ }{\Repeat{$\mathbf{u_i}$ converges}{
+			Choose $\mathbf{u_i}$ as any column of $\mathbf{Y_i}$\;
 			
-			Compute score of $\mathbf{X_i}$: $\mathbf{t_i = Xp_i}$\;
+			Compute loadings of $\mathbf{X_i}$ based on score of $\mathbf{Y_i}$: $\mathbf{\ell_i = (u_i^\intercal u_i)}^{-1} \mathbf{u_i^\intercal X_i}$\;
 			
-			Compute loading of $\mathbf{y_i}$ based on score of $\mathbf{X_i}$: $\mathbf{q_i = \frac{Y_i^Tt_i}{||Y_i^Tt_i||}}$ \;
+			Scale $\mathbf{\ell_i = \frac{\ell_i}{\sqrt{\ell_i^\intercal \ell_i}}}$\;
 			
-			Compute score of $\mathbf{Y_i}$: $\mathbf{u_i = Yq_i}$\;
+			Compute score of $\mathbf{X_i}$: $\mathbf{w_i = (\ell_i^\intercal \ell_i)}^{-1}\mathbf{\ell_i^\intercal X_i}$\;
+			
+			Compute loadings of $\mathbf{Y_i}$ based on score of $\mathbf{X_i}$: $\mathbf{q_i = (w_i^\intercal w_i)}^{-1} \mathbf{w_i^\intercal Y_i}$\;
+			
+			Scale $\mathbf{q_i = \frac{q_i}{\sqrt{q_i^\intercal q_i}}}$\;
+			
+			Compute score of $\mathbf{Y_i}$: $\mathbf{u_i = (q_i^\intercal q_i)}^{-1}\mathbf{q_i^\intercal Y_i}$\;
+		}
+		Append $\mathbf{w_i}$ to $\mathbf{W_{|k}}$\;
+		Append $\mathbf{\ell_i}$ to $\mathbf{L_{|k}}$\;
+		Append $\mathbf{u_i}$ to $\mathbf{U_{|k}}$\;
+		Append $\mathbf{q_i}$ to $\mathbf{Q_{|k}}$\;
+		Deflate $\mathbf{X_i}$: $\mathbf{X_{i+1} = X_i - w_i \ell_i^\intercal}$ \;
+		Deflate $\mathbf{Y_i}$:	$\mathbf{Y_{i+1} = Y_i - u_i q_i^\intercal}$ \;
+		$i \mathrel{+}= 1$\;
 	}
-
-	$\mathbf{X_{i+1} = X_i - t_i p_i^T}$ \;
-	$\mathbf{Y_{i+1} = Y_i - u_i q_i^T}$ \;
-	$i \mathrel{+}= 1$\;
-}
-\caption{\acrfull{pls}}
+	\KwRet{$\mathbf{W_{|k}, L_{|k}, U_{|k}, Q_{|k}}$}	
+	\caption{\acrshort{nipals} for \acrfull{plsr}}
 \end{algorithm}
 
-After finding the $k$ partial least squares directions from the Algorithm~\ref{algo:pls} above, the score matrices $\mathbf{T}$ and $\mathbf{U}$ are found. The regression coefficients  $\beta^{\text{PLS}}$ are found by the relation \parencite{ng2013}:
+In summary, highlighting the most important parts: 
 
-\begin{equation}
-	\label{eqn:beta-pls}
-    \mathbf{U = T} \beta^{\text{PLS}}
+\begin{itemize}
+	\item  Line 7: Arbitrarily choose a column of $\mathbf{Y_i}$ as the initial response score vector $\mathbf{u_i}$;
+	
+	\item Line 8: Compute the i-th loadings vector $\mathbf{w_i}$  of $\mathbf{X}$  by regressing every column of $\mathbf{X}$ via \acrshort{ols} onto scores vector of $\mathbf{Y}$, $\mathbf{u_i}$;
+	
+	\item Line 9: Scale the data loadings vector $\mathbf{w_i}$ to have unit length;
+	
+	\item Line 10: Compute the i-th data scores vector $\mathbf{w_i}$ by regressing every column of $\mathbf{X_i}$ via \acrshort{ols} onto the column $\mathbf{\ell_i}$;
+	
+	\item 	Line 11: Compute the i-th loadings vector $\mathbf{q_i}$  of $\mathbf{Y_i}$  by regressing every column of $\mathbf{Y}$ via \acrshort{ols} onto scores vector of $\mathbf{X}$, $\mathbf{w_i}$;
+	
+	\item Line 12: Scale the response loadings vector $\mathbf{q_i}$ to have unit length;
+	
+	\item Line 13: Compute the i-th response scores vector $\mathbf{u_i}$ by regressing every column of $\mathbf{Y_i}$ via \acrshort{ols} onto the column $\mathbf{q_i}$;
+	
+	\item Line 14: Repeat until change in $\mathbf{u_i}$ between iterations is small enough;
+
+	\item Lines 15 and 16: Once convergence is achieved, $\mathbf{w_i}$ and $\mathbf{\ell_i}$ are stored as the i-th column of matrices $\mathbf{W}$ and $\mathbf{L}$ of Equation~\ref{eqn:x-decomp};
+	
+	\item Lines 17 and 18: Once convergence is achieved, $\mathbf{u_i}$ and $\mathbf{q_i}$ are stored as the i-th column of matrices $\mathbf{U}$ and $\mathbf{Q}$ of Equation~\ref{eqn:y-decomp};
+	
+	\item Lines 19 and 20: Remove the variability explained by $\mathbf{w_i, \ell_i}$ and $\mathbf{u_i, q_i}$ from $\mathbf{X_i}$ and $\mathbf{Y_i}$, respectively;
+	
+\end{itemize}
+
+After finding the $k$ partial least squares directions from Algorithm~\ref{algo:pls-nipals} above, the problem, as in Section~\ref{sec:pcr}, reduces to performing Least Squares Regression using the newfound transformations.
+
+	\begin{equation}
+	\label{eqn:plsr}
+	\mathbf{Y = W_{|k} B + E}
 \end{equation}
 
-Finally, by the substitution of Equation~\ref{eqn:beta-pls} on ~\ref{eqn:y-decomp} \parencite{ng2013}:
+Which in turn, analogously to Equations~\ref{eqn:ols_beta} and \ref{eqn:beta-pcr} yields the coefficients:
 
 \begin{equation}
-	\label{eqn:pls-y}
-	\mathbf{Y= XP \beta^{\text{PLS}} Q^T}
+	\label{eqn:beta-plsr}
+	\mathbf{\hat{B}^{\text{PLSR}} = (W_{|k}^\intercal W_{|k})^{-1}W_{|k}^\intercal Y}
 \end{equation}
+
+
 
 \section{Ridge Regression}
 \label{sec:ridge}
@@ -290,6 +345,8 @@ Where $\lambda \geq 0$ is a parameter that controls strength of the penalization
 	\label{eqn:beta-ridge-matrix}
 	\hat{\beta}^{\text{ridge}} = (\mathbf{X}^T \mathbf{X} + \lambda \mathbf{I})^{-1} \mathbf{X}^T\mathbf{y}
 \end{equation}
+
+Now, with the theoretical foundations laid out, this report proceeds to presenting the data in question, how it was acquired and its structure.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

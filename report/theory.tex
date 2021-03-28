@@ -33,27 +33,136 @@
 \chapter{Theory}
 \label{cha:theory}
 
-\textbf{\textcolor{blue}{Comment to teacher and opponents: I feel I should rewrite this section contextualized to the problem. Since i do not have the data yet,  (although is far from perfect) I thought it was best to keep it "pure" and not long. What do you think? It is also kinda "hard" to write these math heavy derivations by paraphrasing (and citing ,of course) the original authors. Should I just transcribe the math down using quotes ""?}}
+\textcolor{blue}{Question to supervisor/examiner: Do you think this chapter goes 'deep' enough?} 
 
-It is often the case that sensor data points are acquired in quick succession, which in turn leads to highly correlated features \cite{Bastuck_2019}, which can result in high variance \cite{friedman2001}. It is desired, then, to apply some feature selection before using the data in prediction models.
+The quantification of gases based on the sensor response can be viewed as a multivariate multiple regression problem where the predictors, i.e. features derived from the sensor signal, are used to predict multiple responses, i.e. the concentrations of pertinent gases. This chapter briefly exposes the theory behind some of these models. Their implementation, on the other hand, will be discussed in Chapter~\ref{cha:method} - Methods.
 
-\textbf{\textcolor{red}{TODO: Add section on Linear Regressin to better introduce all other methods}}
-
-\textbf{\textcolor{red}{TODO: Standardize notation.  It is all over the place.}}
-
-\textbf{\textcolor{red}{TODO: Give more details}}
-
-\textbf{\textcolor{red}{TODO: complete PLSR and Ridge section}}
-
-\textbf{\textcolor{red}{TODO: Perhaps do a separate, in depth section on Principal Components}}
-
-\section{Linear Regression}
+\section{Ordinary Least Squares Regression}
 \label{sec:linreg}
+
+A simple, first approach would be to tackle the problem with a \acrfull{ols} regression model. As \cite{friedman2001} explains, each output  $\mathbf{Y} = [Y_1, Y_2, ... , Y_K]^\intercal$ has its own linear model. Now, given a set of $n$ observations $\mathbf{X} = [X_1, X_2, ..., X_n]^\intercal$ and each observation having $p+1$ features, e.g. $X_i = [1,x_{i1}, x_{i2}, ... x_{ip}], \; i = 1,2,...n$, the concatenation of all linear models can be written in matrix form as in Equation~\ref{eqn:ols}.
+
+\begin{equation}
+	\label{eqn:ols}
+	\mathbf{Y = XB +  E}
+\end{equation}
+
+Where:
+\begin{itemize}
+	\item $\mathbf{B}$: ($p+1 \times K)$ matrix of regression coefficients (with the $+1$ referring to the intercept term);
+	\item $\mathbf{E}$: ($N \times K)$ matrix of residuals.
+\end{itemize}
+
+The objective is then to find the coefficients $\mathbf{\hat{B}}$ which minimizes the \acrfull{rss}, which is summarized by Equation~\ref{eqn:rss} \parencite{friedman2001}:
+
+\begin{equation}
+	\label{eqn:betahat}
+	\mathbf{\hat{B}} = \underset{\mathbf{B}}{\arg\min} 	\; \text{RSS}(\mathbf{B})
+\end{equation}
+
+In turn, the \acrshort{rss}, as the name suggests, is defined as the difference between real and predicted values, squared, which in matrix form is written as \parencite{friedman2001}:
+
+\begin{equation} 
+	\label{eqn:rss}
+	\text{RSS}(\mathbf{B}) = \Tr [\mathbf{(Y-XB)^\intercal (Y-XB)}]
+\end{equation}
+
+Finally, solving for $\mathbf{\hat{B}}$ yields \parencite{friedman2001}:
+
+\begin{equation}
+	\label{eqn:ols_beta}
+	\mathbf{\hat{B}} = \mathbf{(X^\intercal X)^{-1} X^\intercal Y}
+\end{equation}
+
+For the problem at hand, in addition to the high number of features, it is often the case that sensor data points are acquired in quick succession, which in turn leads to highly correlated features \parencite{Bastuck_2019}, which can result in high variance in a least squares model \parencite{friedman2001}. It is natural, therefore, to progress towards methods that incorporate dimensionality reduction such as \acrfull{pcr}.
+
+\section{Principal Component Analysis}
+\label{sec:pca}
+
+One way to define \acrfull{pca} is to view it as a orthogonal projection of the data into a principal space of lower dimension such that the variance of this projection is maximized \parencite{bishop2006pattern}.
+
+Just as before, consider the  collection of $n$ observations is $\mathbf{X} = [X_1, X_2, ..., X_n]^\intercal$ with covariance matrix $\mathbf{\Sigma}$. Additionally, consider a matrix $\mathbf{P = [p_1, p_2, ..., p_n]^\intercal}$ where $\mathbf{p_i}$ is a row vector of coefficients referring to the i-th linear combination \parencite{johnson2013applied}:
+
+\begin{equation}
+	\label{eqn:pca-lincomb}
+	T_i=\mathbf{Xp_i^\intercal} \;\;\;\;\;\;\;\;\;\; i = 1, 2, ..., n
+\end{equation}
+
+The variance and covariance of these new variables $T_i$ can be written as follows:
+
+\begin{equation}
+	\label{eqn:pca-var}
+	\text{Var}(T_i) = \mathbf{p_i^\intercal \Sigma p_i} \;\;\;\;\;\;\;\;\;\; i = 1, 2, ..., n
+\end{equation}
+
+\begin{equation}
+	\label{eqn:pca-cov}
+	\text{Cov}(T_i, T_k) = \mathbf{p_i^\intercal \Sigma p_k}\;\;\;\;\;\;\;\;\;\; i,k= 1, 2, ..., n
+\end{equation}
+
+The first \acrfull{pc} is then the linear combination with maximum variance, i.e. the linear combinations that maximizes $\text{Var}(T_1)$, with the constraint that the coefficient vector $\mathbf{p_1}$ has unit length. In summary, the first \acrshort{pc} is computed as \parencite{johnson2013applied}:
+
+\begin{equation}
+	\label{eqn:pca-pc1}
+	\begin{split}
+		T_1 & =\mathbf{Xp_1^\intercal} \\
+			   & \text{that maximizes Var}(\mathbf{Xp_1^\intercal}) \\
+			   & \text{ subject to }  \mathbf{p_1^\intercal p_1} = 1
+	\end{split}
+\end{equation}
+
+The second \acrshort{pc}, similarly to the first, is the linear combination with maximum variance, but with an added extra constraint: this new linear combination must be orthogonal to the previous one, i.e. they must be linearly independent:
+
+\begin{equation}
+	\label{eqn:pca-pc2}
+	\begin{split}
+		T_2 & =\mathbf{Xp_2^\intercal} \\
+		& \text{that maximizes Var}(\mathbf{Xp_2^\intercal}) \\
+		& \text{subject to }  \mathbf{p_2^\intercal p_2} = 1 \\
+		& \text{and } \text{Cov}(T_1, T_2) = 0
+	\end{split}
+\end{equation}
+
+The k-th \acrshort{pc} is then:
+
+\begin{equation}
+	\label{eqn:pca-pck}
+	\begin{split}
+		T_k & =\mathbf{Xp_k^\intercal} \\
+		& \text{that maximizes Var}(\mathbf{Xp_k^\intercal}) \\
+		& \text{subject to }  \mathbf{p_k^\intercal p_k} = 1 \\
+		& \text{and } \text{Cov}(T_j, T_k) = 0 \;\;\; \text{for } k>j
+	\end{split}
+\end{equation}
+
+It can be shown that these desired linear combinations can be written in terms of the eigenvalues ($\mathbf{\lambda}$) and eigenvectors ($\mathbf{e}$) of $\mathbf{\Sigma}$, the covariance matrix of $\mathbf{X}$ \parencite{johnson2013applied}. Namely, for the k-th \acrshort{pc}:
+
+\begin{equation}
+	\label{eqn:pca-eigen}
+	\begin{split}
+		T_k & =\mathbf{Xe_k^\intercal} \\
+		\text{Var}(T_k)& =  \mathbf{e_k^\intercal \Sigma e_k}=\lambda_k \\
+		\text{Cov}(T_j, T_k)& = \mathbf{e_k^\intercal \Sigma e_j}= 0 \;\;\; \text{for } k\neq j
+	\end{split}
+\end{equation}
+
+There are several ways of computing \acrshort{pc}s. Many of which involving finding aforementioned eigenvalues and eigenvectors. These calculations can be computationally expensive, depending on the desired number of extracted \acrshort{pc}s \parencite{bishop2006pattern}. One option is the \acrfull{nipals} algorithm, also called Power Method. It has two clear advantages: "it can handle missing data and computes the components sequentially" \parencite{dunn2021pid}.
+
+
+
+
+
+
+
+\begin{equation}
+	\label{eqn:pca}
+	\mathbf{T=XP}
+\end{equation}
 
 \section{Principal Component Regression}
 \label{sec:pcr}
 
-The idea behind \acrfull{pcr} is first to reveal more simple underlying structures in data \cite{shlens2014} via \acrfull{pca}  and then performing linear regression on them. \acrshort{pca} aims to find linear combinations of the input variables in such a way that a few of those new, derived variables can explain most of the variability in the system \cite{johnson2002}.
+%The idea behind \acrshort{pcr} is first to reveal more simple underlying structures in data \parencite{shlens2014} via \acrfull{pca}  and then performing linear regression on them. \acrshort{pca} aims to find linear combinations of the input variables in such a way that a few of those new, derived variables can explain most of the variability in the system \parencite{johnson2002}.
 
 The objective of \acrshort{pca} is find a matrix $\mathbf{P}$ such that the linear transformation
 
@@ -62,7 +171,7 @@ The objective of \acrshort{pca} is find a matrix $\mathbf{P}$ such that the line
 	\mathbf{T=XP}
 \end{equation}
 
-yields new variables $(t_1, t_2, ..., t_m)$ that are uncorrelated and arranged in decreasing order of variance . $\mathbf{T}$ is named scores and $\mathbf{P}$ \acrfull{pc} of $\mathbf{X}$ \cite{ng2013}. Since the matrix $\mathbf{T}$ is ordered, it follows that most of the variance on the data $\mathbf{X}$ is captured by the first \textit{k-th} \acrshort{pc} \cite{ng2013}. This approximation of $\mathbf{X}$ is defined in Equation~\ref{eqn:pca2}:
+yields new variables $(t_1, t_2, ..., t_m)$ that are uncorrelated and arranged in decreasing order of variance . $\mathbf{T}$ is named scores and $\mathbf{P}$ \acrfull{pc} of $\mathbf{X}$ \parencite{ng2013}. Since the matrix $\mathbf{T}$ is ordered, it follows that most of the variance on the data $\mathbf{X}$ is captured by the first \textit{k-th} \acrshort{pc} \parencite{ng2013}. This approximation of $\mathbf{X}$ is defined in Equation~\ref{eqn:pca2}:
 
 \begin{equation}
 	\label{eqn:pca2}
@@ -83,7 +192,7 @@ And the regression coefficients just as in linear regression:
 	\hat{\beta}^{\text{PCR}} = \mathbf{(T_{|k}^T T_{|k})^{-1}T_{|k}^T y}
 \end{equation}
 	
-The \acrfull{nipals} algorithm can also compute \acrlong{pc} and its scores \cite{ng2013} \cite{nipals2017}.
+The \acrfull{nipals} algorithm can also compute \acrlong{pc} and its scores \parencite{ng2013} \parencite{nipals2017}.
 
 
 \begin{algorithm}[H]
@@ -107,13 +216,12 @@ The \acrfull{nipals} algorithm can also compute \acrlong{pc} and its scores \cit
 	\caption{\acrfull{nipals}}
 \end{algorithm}
 
-\newpage
 \section{Partial Least Squares Regression}
 \label{sec:plsr}
 
-\acrshort{plsr}, much like \acrshort{pcr}, also tries to reduce dimensionality via linear combinations of the inputs. In this technique, however, also takes into account the dependent variables $\mathbf{y}$. One key advantage of \acrshort{plsr} is that it seeks axes with most variance (like \acrshort{pcr}) and high correlation with the dependent variables \cite{friedman2001}.
+\acrshort{plsr}, much like \acrshort{pcr}, also tries to reduce dimensionality via linear combinations of the inputs. In this technique, however, also takes into account the dependent variables $\mathbf{y}$. One key advantage of \acrshort{plsr} is that it seeks axes with most variance (like \acrshort{pcr}) and high correlation with the dependent variables \parencite{friedman2001}.
 
-The main idea can be described as decomposing both the design matrix $\mathbf{X}$ and response matrix $\mathbf{Y}$ as follows \cite{ng2013}, similarly to what was done in Section~\ref{sec:pcr}:
+The main idea can be described as decomposing both the design matrix $\mathbf{X}$ and response matrix $\mathbf{Y}$ as follows \parencite{ng2013}, similarly to what was done in Section~\ref{sec:pcr}:
 
 \begin{equation}
 	\label{eqn:x-decomp}
@@ -125,7 +233,7 @@ The main idea can be described as decomposing both the design matrix $\mathbf{X}
 	\mathbf{Y = UQ^T}
 \end{equation}
 
-Instead of simply running \acrshort{nipals} on $\mathbf{X}$ and $\mathbf{Y}$ separately. \acrshort{plsr} uses information from $\mathbf{Y}$ to decompose $\mathbf{X}$ and \textit{vice-versa} \cite{ng2013}.
+Instead of simply running \acrshort{nipals} on $\mathbf{X}$ and $\mathbf{Y}$ separately. \acrshort{plsr} uses information from $\mathbf{Y}$ to decompose $\mathbf{X}$ and \textit{vice-versa} \parencite{ng2013}.
 
 \begin{algorithm}[H]
 	\label{algo:pls}
@@ -152,14 +260,14 @@ Instead of simply running \acrshort{nipals} on $\mathbf{X}$ and $\mathbf{Y}$ sep
 \caption{\acrfull{pls}}
 \end{algorithm}
 
-After finding the $k$ partial least squares directions from the Algorithm~\ref{algo:pls} above, the score matrices $\mathbf{T}$ and $\mathbf{U}$ are found. The regression coefficients  $\beta^{\text{PLS}}$ are found by the relation \cite{ng2013}:
+After finding the $k$ partial least squares directions from the Algorithm~\ref{algo:pls} above, the score matrices $\mathbf{T}$ and $\mathbf{U}$ are found. The regression coefficients  $\beta^{\text{PLS}}$ are found by the relation \parencite{ng2013}:
 
 \begin{equation}
 	\label{eqn:beta-pls}
     \mathbf{U = T} \beta^{\text{PLS}}
 \end{equation}
 
-Finally, by the substitution of Equation~\ref{eqn:beta-pls} on ~\ref{eqn:y-decomp} \cite{ng2013}:
+Finally, by the substitution of Equation~\ref{eqn:beta-pls} on ~\ref{eqn:y-decomp} \parencite{ng2013}:
 
 \begin{equation}
 	\label{eqn:pls-y}
@@ -169,7 +277,7 @@ Finally, by the substitution of Equation~\ref{eqn:beta-pls} on ~\ref{eqn:y-decom
 \section{Ridge Regression}
 \label{sec:ridge}
 
-Another option is shrink regression coefficients via a penalty term. As stated on \cite{friedman2001}, "ridge coefficients minimize a penalized sum of squares", as shown on Equation~\ref{eqn:beta-ridge} and Equation~\ref{eqn:beta-ridge-matrix}.
+Another option is shrink regression coefficients via a penalty term. As stated on \parencite{friedman2001}, "ridge coefficients minimize a penalized sum of squares", as shown on Equation~\ref{eqn:beta-ridge} and Equation~\ref{eqn:beta-ridge-matrix}.
 
 \begin{equation}
 	\label{eqn:beta-ridge}

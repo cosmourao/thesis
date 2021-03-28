@@ -32,16 +32,16 @@
 		\includegraphics[width=0.6\textwidth]{../../figures/nox-molecules.jpg}
 	\end{figure} 
 
-	
+	\pause
 	\begin{itemize}
 		\item NOx are detrimental to the environment and humans.
-		
+		\pause
 		
 		\item NOx are naturally ocurring in man-made processes. E.g. Combustion.
-		
+		\pause
 		
 		\item Ammonia can "neutralize" NOx, producing water (\ch{H2O}) and nitrogen gas (\ch{N2}). Both harmless! - Selective catalytic reduction (SCR).
-		
+		\pause
 		
 		\item But ammonia is also hazardous to the environment/humans.
 	\end{itemize}
@@ -54,25 +54,25 @@
 	
 	\begin{itemize}
 		\item The dosing of ammonia in the catalyst is key:
-		
+		\pause
 		\begin{itemize}
 			\item Too much ammonia: NOx reduction will occur $\rightarrow$ Unnecessary ammonia emissions.
-			
+			\pause
 			\item Too little ammonia: NOx reduction will occur partially/will not occur $\rightarrow$ NOx emissions.
-			
+			\pause
 		\end{itemize}
 		\item Gas sensors can be used to measure the concentrations of NOx to aid on ammonia dosing.
-		
+		\pause
 		\item However, the sensor also responds to ammonia.
-		
+		\pause
 		\item Operating the sensor in a cyclic operation (e.g. temperature) can enhance selectivity.
-		
+		\pause
 		\begin{itemize}
 			\item Different gasses react differently in different stages of the cycle.
-			
+			\pause
 		\end{itemize}
 		\item Temperature cycling.
-		
+		\pause
 		\item \textbf{Frequency cycling}.
 	\end{itemize}
 	
@@ -82,11 +82,11 @@
 \begin{frame}
 	\frametitle{Problem in a nutshell}
 	\framesubtitle{Research questions}
-	
+	\pause
 	
 	\begin{itemize}
 		\item Can frequency cycling be used to simultaneously quantify NOx and ammonia concentrations?
-		
+		\pause
 		\item Which method yield best prediction of gas concentrations?
 	\end{itemize}
 	
@@ -95,27 +95,27 @@
 \section{What has been done so far}
 \begin{frame}
 	\frametitle{What has been done so far}
-	
+	\pause
 	\begin{itemize}
 		\item Writing
-		
+		\pause
 		\begin{itemize}
 			\item Introduction - Done.
-			
+			\pause
 			\item Theory - Partially done.
-			
+			\pause
 			\item Data - Partially done.
-			
+			\pause
 		\end{itemize}
 		\item Some preliminary implementation of the methods
-		
+		\pause
 		\begin{itemize}
 			\item Linear Regression
-			
+			\pause
 			\item Principal Component Regression
-			
+			\pause
 			\item Partial Least Squares Regression
-			
+			\pause
 			\item Ridge Regression
 		\end{itemize}
 	\end{itemize}
@@ -130,20 +130,20 @@
 	
 	\begin{itemize}
 		\item Real data not yet available - lab problems
-		
+		\pause
 		\item Methods used on "dummy" data
-		
+		\pause
 		\item Dummy data has problems:
-		
+		\pause
 		\begin{itemize}
 			\item Small number of observations
-			
+			\pause
 			\item Measurement of shape features
-			
+			\pause
 			\item Naïve window of measurements
-			
+			\pause
 			\item High frequencies problematic
-			
+			\pause
 		\end{itemize}
 	\end{itemize}
 	
@@ -175,16 +175,16 @@
 \begin{frame}
 	
 	\frametitle{Methods}
-	
+	\pause
 	\begin{enumerate}
 		\item Linear Regression
-		
+		\pause
 		\item Principal Component Regression
-		
+		\pause
 		\item Partial Least Squares Regression
-		
+		\pause
 		\item Ridge Regression
-		
+		\pause
 		\item Some non-parametric regression - tbd
 	\end{enumerate}
 	
@@ -194,12 +194,12 @@
 \section{(Preliminary) Results}
 \begin{frame}
 	\frametitle{(Preliminary) Results}
-	
+	\pause
 	\begin{figure}[!htb]
 		\centering
 		\includegraphics[width=1\textwidth]{../../figures/lr_plot.png}
 	\end{figure} 
-	
+	\pause
 
 \begin{figure}[!htb]
 	\centering
@@ -209,12 +209,12 @@
 
 \begin{frame}
 	\frametitle{(Preliminary) Results}
-	
+	\pause
 	\begin{figure}[!htb]
 		\centering
 		\includegraphics[width=1\textwidth]{../../figures/plsr_plot.png}
 	\end{figure} 
-	
+	\pause
 	
 	\begin{figure}[!htb]
 		\centering
@@ -227,21 +227,21 @@
 \begin{frame}
 	
 	\frametitle{Real data will be much better!}
-	
+	\pause
 	\begin{itemize}
 		\item More gas mixtures
-		
+		\pause
 		\item More frequencies
-		
+		\pause
 		\item More cycles
-		
+		\pause
 		\item Shape features directly measured
 		\end{itemize}
 \end{frame}
 
 \begin{frame}
 	\frametitle{Real data will be much better!}
-	
+	\pause
 	\begin{table}[h]
 		\centering
 		\caption{Data acquisition details}
@@ -288,16 +288,16 @@
 \section{What is next}
 \begin{frame}
 	\frametitle{What is next}
-	
+	\pause
 	\begin{enumerate}
 		\item Apply methods to real data
-		
+		\pause
 		\item Assess results
-		
+		\pause
 		\item Define what is  "good" in "good prediction levels"
-		
+		\pause
 		\item Look into non-parametric alternatives
-		
+		\pause
 		\item Keep writing!
 	\end{enumerate}
 \end{frame}

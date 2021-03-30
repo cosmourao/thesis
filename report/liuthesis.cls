@@ -290,7 +290,7 @@
 \RequirePackage{pbox}
 \RequirePackage{ifthen}
 \RequirePackage{geometry}
-\RequirePackage[pdfusetitle]{hyperref}
+\RequirePackage[pdfusetitle, hidelinks]{hyperref}
 \RequirePackage{amssymb}
 \RequirePackage{amsmath}
 \RequirePackage{etoolbox}

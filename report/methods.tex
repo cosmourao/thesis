@@ -30,8 +30,8 @@
 %% 
 %%% Code:
 
-\chapter{Theory}
-\label{cha:theory}
+\chapter{Methods}
+\label{cha:methods}
 
 \textcolor{blue}{Question to supervisor/examiner: Do you think this chapter goes 'deep' enough?} 
 
@@ -51,8 +51,8 @@ A simple, first approach would be to tackle the problem with a \acrfull{ols} reg
 
 Where:
 \begin{itemize}
-	\item $\mathbf{B}$: ($p+1 \times K)$ matrix of regression coefficients (with the $+1$ referring to the intercept term);
-	\item $\mathbf{E}$: ($N \times K)$ matrix of residuals.
+	\item $\mathbf{B}$: [$p+1 \times K]$ matrix of regression coefficients (with the $+1$ referring to the intercept term);
+	\item $\mathbf{E}$: [$N \times K]$ matrix of residuals.
 \end{itemize}
 
 The objective is then to find the coefficients $\mathbf{\hat{B}}$ which minimizes the \acrfull{rss}, which is summarized by Equation~\ref{eqn:rss} \parencite{friedman2001}:
@@ -76,7 +76,7 @@ Finally, solving for $\mathbf{\hat{B}}$ yields \parencite{friedman2001}:
 	\mathbf{\hat{B}^\text{OLS}} = \mathbf{(X^\intercal X)^{-1} X^\intercal Y}
 \end{equation}
 
-For the problem at hand, in addition to the high number of features, it is often the case that sensor data points are acquired in quick succession, which in turn leads to highly correlated features \parencite{Bastuck_2019}, which can result in high variance in a least squares model \parencite{friedman2001}. It is natural, therefore, to progress towards methods that incorporate dimensionality reduction such as \acrfull{pcr} and \acrfull{plsr}.
+For the problem at hand, in addition to the high number of features, it is often the case that sensor data points are acquired in quick succession, which in turn leads to highly correlated features \parencite{Bastuck_2019}, which can result in high variance in a least squares model \parencite{friedman2001}. It is natural, therefore, to progress towards methods that incorporate dimensionality reduction such as \acrfull{pcr} and \acrfull{plsr} or shrinkage such as Ridge Regression.
 
 \section{Principal Component Analysis}
 \label{sec:pca}
@@ -87,28 +87,28 @@ Just as before, consider the  collection of $n$ observations is $\mathbf{X = [x_
 
 \begin{equation}
 	\label{eqn:pca-lincomb}
-	T_i=\mathbf{Xp_i^\intercal} \;\;\;\;\;\;\;\;\;\; i = 1, 2, ..., n
+	t_i=\mathbf{x_i p_i^\intercal} \;\;\;\;\;\;\;\;\;\; i = 1, 2, ..., n
 \end{equation}
 
-The variance and covariance of these new variables $T_i$ can be written as follows:
+The variance and covariance of these new variables $t_i$ can be written as follows:
 
 \begin{equation}
 	\label{eqn:pca-var}
-	\text{Var}(T_i) = \mathbf{p_i^\intercal \Sigma p_i} \;\;\;\;\;\;\;\;\;\; i = 1, 2, ..., n
+	\text{Var}(t_i) = \mathbf{p_i^\intercal \Sigma p_i} \;\;\;\;\;\;\;\;\;\; i = 1, 2, ..., n
 \end{equation}
 
 \begin{equation}
 	\label{eqn:pca-cov}
-	\text{Cov}(T_i, T_k) = \mathbf{p_i^\intercal \Sigma p_k}\;\;\;\;\;\;\;\;\;\; i,k= 1, 2, ..., n
+	\text{Cov}(t_i, t_k) = \mathbf{p_i^\intercal \Sigma p_k}\;\;\;\;\;\;\;\;\;\; i,k= 1, 2, ..., n
 \end{equation}
 
-The first \acrfull{pc} is then the linear combination with maximum variance, i.e. the linear combinations that maximizes $\text{Var}(T_1)$, with the constraint that the coefficient vector $\mathbf{p_1}$ has unit length. In summary, the first \acrshort{pc} is computed as \parencite{johnson2013applied}:
+The first \acrfull{pc} is then the linear combination with maximum variance, i.e. the linear combinations that maximizes $\text{Var}(t_1)$, with the constraint that the coefficient vector $\mathbf{p_1}$ has unit length. In summary, the first \acrshort{pc} is computed as \parencite{johnson2013applied}:
 
 \begin{equation}
 	\label{eqn:pca-pc1}
 	\begin{split}
-		T_1 & =\mathbf{Xp_1^\intercal} \\
-			   & \text{that maximizes Var}(\mathbf{Xp_1^\intercal}) \\
+		t_1 & =\mathbf{x_1 p_1^\intercal} \\
+			   & \text{that maximizes Var}(\mathbf{x_1 p_1^\intercal}) \\
 			   & \text{ subject to }  \mathbf{p_1^\intercal p_1} = 1
 	\end{split}
 \end{equation}
@@ -118,10 +118,10 @@ The second \acrshort{pc}, similarly to the first, is the linear combination with
 \begin{equation}
 	\label{eqn:pca-pc2}
 	\begin{split}
-		T_2 & =\mathbf{Xp_2^\intercal} \\
-		& \text{that maximizes Var}(\mathbf{Xp_2^\intercal}) \\
+		t_2 & =\mathbf{x_2 p_2^\intercal} \\
+		& \text{that maximizes Var}(\mathbf{x_2 p_2^\intercal}) \\
 		& \text{subject to }  \mathbf{p_2^\intercal p_2} = 1 \\
-		& \text{and } \text{Cov}(T_1, T_2) = 0
+		& \text{and } \text{Cov}(t_1, t_2) = 0
 	\end{split}
 \end{equation}
 
@@ -130,10 +130,10 @@ The k-th \acrshort{pc} is then:
 \begin{equation}
 	\label{eqn:pca-pck}
 	\begin{split}
-		T_k & =\mathbf{Xp_k^\intercal} \\
-		& \text{that maximizes Var}(\mathbf{Xp_k^\intercal}) \\
+		t_k & =\mathbf{x_k p_k^\intercal} \\
+		& \text{that maximizes Var}(\mathbf{x_k p_k^\intercal}) \\
 		& \text{subject to }  \mathbf{p_k^\intercal p_k} = 1 \\
-		& \text{and } \text{Cov}(T_j, T_k) = 0 \;\;\; \text{for } k>j
+		& \text{and } \text{Cov}(t_j, t_k) = 0 \;\;\; \text{for } k>j
 	\end{split}
 \end{equation}
 
@@ -146,14 +146,14 @@ In summary, the objective of \acrshort{pca} is find a matrix $\mathbf{P}$ such t
 
 yields new variables that are uncorrelated and arranged in decreasing order of variance.
 
-It can be shown that these desired linear combinations can be written in terms of the eigenvalues ($\mathbf{\lambda}$) and eigenvectors ($\mathbf{e}$) of $\mathbf{\Sigma}$, the covariance matrix of $\mathbf{X}$ \parencite{johnson2013applied}. The elements of eigenvectors are called loadings, while the new variables $T$ are scores. In short, for the k-th \acrshort{pc}:
+It can be shown that these desired linear combinations can be written in terms of the eigenvalues ($\mathbf{\lambda}$) and eigenvectors ($\mathbf{e}$) of $\mathbf{\Sigma}$, the covariance matrix of $\mathbf{X}$ \parencite{johnson2013applied}. The elements of eigenvectors are called loadings, while the new features $\mathbf{T}$ are scores. In short, for the k-th \acrshort{pc}:
 
 \begin{equation}
 	\label{eqn:pca-eigen}
 	\begin{split}
-		T_k & =\mathbf{Xe_k^\intercal} \\
-		\text{Var}(T_k)& =  \mathbf{e_k^\intercal \Sigma e_k}=\lambda_k \\
-		\text{Cov}(T_j, T_k)& = \mathbf{e_k^\intercal \Sigma e_j}= 0 \;\;\; \text{for } k\neq j
+		t_k & =\mathbf{X_k e_k^\intercal} \\
+		\text{Var}(t_k)& =  \mathbf{e_k^\intercal \Sigma e_k}=\lambda_k \\
+		\text{Cov}(t_j, t_k)& = \mathbf{e_k^\intercal \Sigma e_j}= 0 \;\;\; \text{for } k\neq j
 	\end{split}
 \end{equation}
 
@@ -214,7 +214,7 @@ In other words:
 \section{Principal Component Regression}
 \label{sec:pcr}
 
-With the inner workings of \acrshort{pca} explained in the previous section, \acrshort{pcr} can be simply reduced to an ordinary least squares regression on the first k-th \acrshort{pc}s, i.e. performing linear regression on $\mathbf{T_{|k}}$ instead of $\mathbf{X}$:
+With the inner workings of \acrshort{pca} explained in the previous section, \acrshort{pcr} can be simply reduced to a Least Squares regression on the first k-th \acrshort{pc}s, i.e. performing linear regression on $\mathbf{T_{|k}}$ instead of $\mathbf{X}$:
 	
 	\begin{equation}
 		\label{eqn:pcr}
@@ -228,7 +228,7 @@ And the regression coefficients are found analogously to Equation~\ref{eqn:ols_b
 	\mathbf{\hat{B}^{\text{PCR}} = (T_{|k}^\intercal T_{|k})^{-1}T_{|k}^\intercal Y}
 \end{equation}
 
-Although useful, \acrshort{pcr} has a flaw: while the new found projection of $\mathbf{X}$ is guaranteed to best explain the variance of predictors, this cannot be said about the responses $\mathbf{Y}$ \parencite{james2013introduction}. \acrshort{plsr}, on the other hand, solves this issue by supervising the identification of \acrshort{pc}s \parencite{james2013introduction}.
+Although useful, \acrshort{pcr} has a potential flaw: while the new found projection of $\mathbf{X}$ is guaranteed to best explain the variance of predictors, this cannot be said about the responses $\mathbf{Y}$ \parencite{james2013introduction}. \acrshort{plsr}, on the other hand, solves this issue by supervising the identification of \acrshort{pc}s \parencite{james2013introduction}.
 	
 \section{Partial Least Squares Regression}
 \label{sec:plsr}
@@ -332,22 +332,31 @@ Which in turn, analogously to Equations~\ref{eqn:ols_beta} and \ref{eqn:beta-pcr
 \section{Ridge Regression}
 \label{sec:ridge}
 
-Another option is shrink regression coefficients via a penalty term. As stated on \parencite{friedman2001}, "ridge coefficients minimize a penalized sum of squares", as shown on Equation~\ref{eqn:beta-ridge} and Equation~\ref{eqn:beta-ridge-matrix}.
+Ridge regression is also a viable alternative to reduce the problem of highly correlated features \parencite{friedman2001}. Instead of fitting a least squares model on a subset of predictors or a transformation of them, Ridge allows the use of all features with a continuous shrinkage of its coefficients, which results in less variance \parencite{friedman2001}.
 
-\begin{equation}
-	\label{eqn:beta-ridge}
-	\hat{\beta}^{\text{ridge}} = \text{argmin}_\beta \left\{ \sum_{i=1}^{N}(y_i - \beta_0 - \sum_{j=1}^{p} x_{ij}\beta_j)^2 + \lambda \sum_{j=1}^{p} \beta_j^2 \right\}
+For the multi-output case, there are two options: use the same penalization term $\lambda$ for all variables $\mathbf{Y = [y_1, y_2, ... , y_K]^\intercal}$ or apply different penalization terms $\mathbf{\boldsymbol{\lambda} = [\lambda_1, \lambda_2, ... , \lambda_K]^\intercal}$. In this work, the latter is preferred over the former, as it allows a more fine tuned control of the regression models for each studied gas.
+
+Analogous to Section~\ref{sec:linreg}, the goal is to minimize the \acrshort{rss}, but now with the penalization term taken into account. Equation~\ref{eqn:rss-ridge} below shows this objective function in matrix form.
+
+\begin{equation} 
+	\label{eqn:rss-ridge}
+	\text{RSS}^{\text{Ridge}}(\mathbf{B, \boldsymbol{\lambda} }) = \Tr [\mathbf{(Y-XB)^\intercal (Y-XB)}] + \Tr[\mathbf{B^\intercal B + \boldsymbol{\lambda} I}]
 \end{equation}
 
-Where $\lambda \geq 0$ is a parameter that controls strength of the penalization. This could also be written in matrix form:
+\begin{equation}
+	\label{eqn:betahat-ridge}
+	\mathbf{\hat{B}^\text{Ridge}} = \underset{\mathbf{B}}{\arg\min} 	\; \text{RSS}^{\text{Ridge}}(\mathbf{B})
+\end{equation}	
+
+The coefficients that minimize the \acrshort{rss} is shown in Equation~\ref{eqn:eqn:betahat-ridge2} below.
 
 \begin{equation}
-	\label{eqn:beta-ridge-matrix}
-	\hat{\beta}^{\text{ridge}} = (\mathbf{X}^T \mathbf{X} + \lambda \mathbf{I})^{-1} \mathbf{X}^T\mathbf{y}
+	\label{eqn:eqn:betahat-ridge2}
+	\mathbf{\hat{B}^\text{Ridge}} = \mathbf{(X^\intercal X + \boldsymbol{\lambda}  I )^{-1} X^\intercal Y}
 \end{equation}
 
-Now, with the theoretical foundations laid out, this report proceeds to presenting the data in question, how it was acquired and its structure.
 
+Now, with the theoretical foundations laid out, this report proceeds to present the data in question, how it was acquired and its structure.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% lorem.tex ends here

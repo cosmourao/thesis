@@ -30,12 +30,12 @@
 %% 
 %%% Code:
 
-\chapter{Methods}
-\label{cha:methods}
+\chapter{Theory}
+\label{cha:theory}
 
 \textcolor{blue}{Question to supervisor/examiner: Do you think this chapter goes 'deep' enough?} 
 
-The quantification of gases based on the sensor response can be viewed as a multivariate multiple regression problem where the predictors, i.e. features derived from the sensor signal, are used to predict multiple responses, i.e. the concentrations of pertinent gases. This chapter briefly exposes the theory behind some of these models. Their implementation, on the other hand, will be discussed in Chapter~\ref{cha:method} - Methods.
+The quantification of gases based on the sensor response can be viewed as a multivariate multiple regression problem where the predictors, i.e. features derived from the sensor signal, are used to predict multiple responses, i.e. the concentrations of pertinent gases. This chapter briefly exposes the theory behind some of these models.
 
 The models here listed were chosen as a natural progression from a statisticians point of view: starting with simple models and progressively increasing complexity as insights from the data and the problem are gathered.
 
@@ -235,7 +235,7 @@ Although useful, \acrshort{pcr} has a potential flaw: while the new found projec
 
 \acrshort{plsr}, much like \acrshort{pcr}, also aims to reduce dimensionality via linear combinations of the inputs. This technique, however, also takes into account the response variables $\mathbf{Y}$. One key advantage of \acrshort{plsr} is that it seeks axes with most variance (like \acrshort{pcr}) and high correlation with response variables \parencite{friedman2001}.
 
-The main idea can be described as decomposing both the design matrix $\mathbf{X}$ and response matrix $\mathbf{Y}$ as follows \parencite{ng2013}, similarly to what was done in Section~\ref{sec:pca}.
+The main idea can be described as  finding  linear combinations  for the data matrix design matrix $\mathbf{X}$ and response matrix $\mathbf{Y}$ as follows \parencite{ng2013}, similarly to what was done in Section~\ref{sec:pca}.
 
 \begin{equation}
 	\label{eqn:x-decomp}
@@ -327,14 +327,14 @@ Which in turn, analogously to Equations~\ref{eqn:ols_beta} and \ref{eqn:beta-pcr
 	\mathbf{\hat{B}^{\text{PLSR}} = (W_{|k}^\intercal W_{|k})^{-1}W_{|k}^\intercal Y}
 \end{equation}
 
-
-
 \section{Ridge Regression}
 \label{sec:ridge}
 
 Ridge regression is also a viable alternative to reduce the problem of highly correlated features \parencite{friedman2001}. Instead of fitting a least squares model on a subset of predictors or a transformation of them, Ridge allows the use of all features with a continuous shrinkage of its coefficients, which results in less variance \parencite{friedman2001}.
 
-For the multi-output case, there are two options: use the same penalization term $\lambda$ for all variables $\mathbf{Y = [y_1, y_2, ... , y_K]^\intercal}$ or apply different penalization terms $\mathbf{\boldsymbol{\lambda} = [\lambda_1, \lambda_2, ... , \lambda_K]^\intercal}$. In this work, the latter is preferred over the former, as it allows a more fine tuned control of the regression models for each studied gas.
+
+
+For the multi-output case, there are two options: use the same penalization parameter $\lambda$ for all variables $\mathbf{Y = [y_1, y_2, ... , y_K]^\intercal}$ or apply different parameters $\mathbf{\boldsymbol{\lambda} = [\lambda_1, \lambda_2, ... , \lambda_K]^\intercal}$. In this work, the latter is preferred over the former, as it allows a more fine tuned control of the regression models for each studied gas.
 
 Analogous to Section~\ref{sec:linreg}, the goal is to minimize the \acrshort{rss}, but now with the penalization term taken into account. Equation~\ref{eqn:rss-ridge} below shows this objective function in matrix form.
 
@@ -355,8 +355,18 @@ The coefficients that minimize the \acrshort{rss} is shown in Equation~\ref{eqn:
 	\mathbf{\hat{B}^\text{Ridge}} = \mathbf{(X^\intercal X + \boldsymbol{\lambda}  I )^{-1} X^\intercal Y}
 \end{equation}
 
+The choice of hyper-parameters $\boldsymbol{\lambda} \geq 0$ controls how much shrinkage is applied to the coefficients: larger $\boldsymbol{\lambda}$ implies more penalization to complex models. Although the coefficients are shrunk towards zero, they never reach zero, which makes Ridge regularization unsuitable for feature selection \parencite{friedman2001}.
 
-Now, with the theoretical foundations laid out, this report proceeds to present the data in question, how it was acquired and its structure.
+This 
+
+\section{Cross Validation}
+\label{sec:crossval}
+
+\section{Bootstrapping}
+\label{sec:hypot}
+
+
+With the theoretical background laid out, this work proceeds to present the data, its acquisition and its features.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% lorem.tex ends here

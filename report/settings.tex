@@ -29,16 +29,15 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 
 %%% Code:
-
 \usepackage[linesnumbered,ruled,vlined]{algorithm2e}
 \usepackage{mathtools}
-
+\renewcommand*\cftappendixname{\appendixname~}
 \usepackage[backend=biber,hyperref, style =authoryear]{biblatex}
 %\nocite{*}
 %% To set the font of your thesis, use the \setmainfont{} command,
 %% surrounded with \ifxetex if you want to switch between xelatex and pdflatex
 \ifxetex 
-%\setmainfont [Scale=1]{Calibri}
+\setmainfont [Scale=1]{Helvetica}
 \fi
 
 %%%%%%%%%%%%
@@ -78,7 +77,7 @@
 %% To set bibliography options, refer to the biblatex manual and use
 %% the ExecuteBibliographyOptions command below to set your options
 
-\ExecuteBibliographyOptions{maxnames=99}
+\ExecuteBibliographyOptions{maxnames=120}
 
 
 %% Change this to your appropriate BibTeX reference file (.bib)

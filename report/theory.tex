@@ -35,6 +35,8 @@
 
 \textcolor{blue}{Question to supervisor/examiner: Do you think this chapter goes 'deep' enough?} 
 
+\textcolor{red}{TODO: Add bias-variance trade-off section. Complete ridge section. Add bootstrapping section} 
+
 The quantification of gases based on the sensor response can be viewed as a multivariate multiple regression problem where the predictors, i.e. features derived from the sensor signal, are used to predict multiple responses, i.e. the concentrations of pertinent gases. This chapter briefly exposes the theory behind some of these models.
 
 The models here listed were chosen as a natural progression from a statisticians point of view: starting with simple models and progressively increasing complexity as insights from the data and the problem are gathered.
@@ -332,8 +334,6 @@ Which in turn, analogously to Equations~\ref{eqn:ols_beta} and \ref{eqn:beta-pcr
 
 Ridge regression is also a viable alternative to reduce the problem of highly correlated features \parencite{friedman2001}. Instead of fitting a least squares model on a subset of predictors or a transformation of them, Ridge allows the use of all features with a continuous shrinkage of its coefficients, which results in less variance \parencite{friedman2001}.
 
-
-
 For the multi-output case, there are two options: use the same penalization parameter $\lambda$ for all variables $\mathbf{Y = [y_1, y_2, ... , y_K]^\intercal}$ or apply different parameters $\mathbf{\boldsymbol{\lambda} = [\lambda_1, \lambda_2, ... , \lambda_K]^\intercal}$. In this work, the latter is preferred over the former, as it allows a more fine tuned control of the regression models for each studied gas.
 
 Analogous to Section~\ref{sec:linreg}, the goal is to minimize the \acrshort{rss}, but now with the penalization term taken into account. Equation~\ref{eqn:rss-ridge} below shows this objective function in matrix form.
@@ -357,16 +357,38 @@ The coefficients that minimize the \acrshort{rss} is shown in Equation~\ref{eqn:
 
 The choice of hyper-parameters $\boldsymbol{\lambda} \geq 0$ controls how much shrinkage is applied to the coefficients: larger $\boldsymbol{\lambda}$ implies more penalization to complex models. Although the coefficients are shrunk towards zero, they never reach zero, which makes Ridge regularization unsuitable for feature selection \parencite{friedman2001}.
 
-This 
-
 \section{Cross Validation}
 \label{sec:crossval}
+
+There are several choices to make for the aforementioned models: what polynomial degree fits the data best? How many \acrshort{pc}s/\acrshort{pls} components to use? How much penalization to impose in Ridge regression? 
+
+A first answer to this would be to split the data into training and validation sets. After fitting models to the former, the latter is used to measure the prediction error via some scoring function. In that sense, it is important to distinguish test error rate from training error rate. The first, also called generalization error, is the score of the fit on an independent, previously unseen test sample. The second, on the other hand, is the average score over the training sample \parencite{friedman2001}.
+
+Scoring functions measure how much the data deviates from the fit and can be used as a qualitative tool for model selection and comparison.  Once this is done, the choice of the model that yields minimum error is trivial. Two examples of wildly used score functions are \acrfull{mse} and \acrfull{rmse}. For the multi-output case of $m$ responses and $n$ observations, they are defined respectively as :
+
+\begin{equation} 
+	\label{eqn:mse}
+	\text{MSE} = \frac{1}{n}  \sum_{i=1}^{n} \left(\sum_{j=1}^{m}(y_{ij} - \hat{y}_{ij})\right)^2
+\end{equation}
+
+\begin{equation} 
+	\label{eqn:rmse}
+	\text{RMSE} = \sqrt{\text{MSE}}
+\end{equation}
+ 
+This approach, however,  is sensitive to the choice of these sets. Additionally, reserving part of the data just for validation might be detrimental for the model fitting process, specially if the number of observations is low \parencite{james2013introduction}.
+
+One tool that can help alleviating these problems is \acrfull{cv}. Dividing
+
+
+
+
 
 \section{Bootstrapping}
 \label{sec:hypot}
 
 
-With the theoretical background laid out, this work proceeds to present the data, its acquisition and its features.
+With the theoretical background laid out, this work proceeds to apply them to the problem at hand.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% lorem.tex ends here

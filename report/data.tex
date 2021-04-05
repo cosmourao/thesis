@@ -4,7 +4,7 @@
 \section{Data acquisition}
 \label{sec:data-acquisition}
 
-The data was acquired at the \acrfull{sas} laboratory at Linköping University. The experiment --- as shown on Figure~\ref{fig:experimental-setup} --- consisted of exposing different gas combinations to the \acrshort{sicfet} sensor under a certain frequency cycle and recording its response, measured in \acrfull{ma}. The is then used to extract secondary features, namely average and slope values from certain regions of the frequency cycle.
+The data was acquired at the \acrfull{sas} laboratory at Linköping University. The experiment --- as shown on Figure~\ref{fig:experimental-setup} --- consisted of exposing different gas combinations to two \acrshort{sicfet} sensors under a particular frequency cycle and recording its response, measured in \acrfull{ma}. The is then used to extract secondary features, namely average and slope values from certain regions of the frequency cycle.
 
 \begin{figure}[!htb]
 	\centering
@@ -13,7 +13,7 @@ The data was acquired at the \acrfull{sas} laboratory at Linköping University. 
 	\label{fig:experimental-setup}
 \end{figure}
 
-In more detail, \ch{NO}, \ch{NO2} and \ch{NH3} had five possible concentration values each: 10, 20, 40, 80 and 160 \acrfull{ppm}. The experiment was designed to encompass all possible combinations of these gasses, which totals to 125 different gas mixtures. Each feature was submitted to the same frequency cycle five times. The cycle consists of 16 unique frequencies: 0.05, 0.1, 0.25, 0.5, 1, 2, 5, 10, 25, 50, 100, 200, 500, 1000, 2500 and 5000 \acrfull{hertz}. A typical raw sensor response for frequency modulation experiments is shown on Figure~\ref{fig:raw}.
+In more detail, \ch{NO}, \ch{NO2} and \ch{NH3} had five possible concentration values each: 5, 10, 20, 40, and 80 \acrfull{ppm}. The experiment was designed to encompass all possible combinations of these gasses, which totals to 125 different gas mixtures. Each feature was submitted to the same frequency cycle four times. The cycle consists of 16 unique frequencies: 0.05, 0.1, 0.25, 0.5, 1, 2, 5, 10, 25, 50, 100, 200, 500, 1000, 2500 and 5000 \acrfull{hertz}. A typical raw sensor response for frequency modulation experiments is shown on Figure~\ref{fig:raw}.
 
 \begin{figure}[!htb]
 	\centering
@@ -21,6 +21,8 @@ In more detail, \ch{NO}, \ch{NO2} and \ch{NH3} had five possible concentration v
 	\caption{An example of row sensor response}
 	\label{fig:raw}
 \end{figure}
+
+
 
 For each frequency in each cycle, two slope and two average features were extracted. These measurements were taken during a 0.4 second window, alternating between slope and average as shown on Figure~\ref{fig:feat-window}. Note that the y-axis of Figure~\ref{fig:feat-window} is in log-scale due to the different orders of magnitude that frequency achieves. Moreover, Figure~\ref{fig:experiment} gives more insight into feature measurement.
 

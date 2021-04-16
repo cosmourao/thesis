@@ -13,7 +13,7 @@ The data was acquired at the \acrfull{sas} laboratory at Linköping University. 
 	\label{fig:experimental-setup}
 \end{figure}
 
-In more detail, \ch{NO}, \ch{NO2} and \ch{NH3} had five possible concentration values each: 5, 10, 20, 40, and 80 \acrfull{ppm}. The experiment was designed to encompass all possible combinations of these gasses, amounting to 125 different gas mixtures. Each feature was submitted to the same frequency cycle four times. The cycle consists of 16 unique frequencies: 0.05, 0.1, 0.25, 0.5, 1, 2, 5, 10, 25, 50, 100, 200, 500, 1000, 2500 and 5000 \acrfull{hertz}. A typical raw sensor response for frequency modulation experiments is shown on Figure~\ref{fig:raw}.
+In more detail, \ch{NO}, \ch{NO2} and \ch{NH3} had five possible concentration values each: 5, 10, 20, 40, and 80 \acrfull{ppm}. The experiment was designed to encompass all possible combinations of these gases, amounting to 125 different gas mixtures. Each feature was submitted to the same frequency cycle four times. The cycle consists of 16 unique frequencies: 0.05, 0.1, 0.25, 0.5, 1, 2, 5, 10, 25, 50, 100, 200, 500, 1000, 2500 and 5000 \acrfull{hertz}. A typical raw sensor response for frequency modulation experiments is shown on Figure~\ref{fig:raw}.
 
 \begin{figure}[!htb]
 	\centering
@@ -84,7 +84,9 @@ The experiments were run between 26th and 29th March, 2021. The experiment data 
 	\centering
 	\caption{Raw data column details}
 	\label{tab:raw-cols}
-	\begin{tabular}{|c|c|c|}
+	
+	\resizebox{\textwidth}{!}{%
+		\begin{tabular}{|c|c|c|}
 		\hline
 		\textbf{Name} & \textbf{Description} & \textbf{Unit} \\
 		\hline
@@ -112,7 +114,7 @@ The experiments were run between 26th and 29th March, 2021. The experiment data 
 		\hline
 		Sensor temperature & Temperature & degrees Celsius ($^{\circ}$C) \\
 		\hline
-	\end{tabular}
+	\end{tabular}}
 \end{table}
 
 \begin{table}
@@ -156,5 +158,74 @@ The experiments were run between 26th and 29th March, 2021. The experiment data 
 	\end{tabular}}
 \end{table}
 
+\newpage
 \section{Pre-processing}
 \label{sec:preprocessing}
+
+The features (slopes and averages) from the same target (a particular exposure) in the raw data file  are spread across multiple rows, which is not suitable for analysis. Opposed to \acrshort{tco}, the experiments were conducted at constant temperature and therefore the temperature column is discarded. The data was, subsequently, modified to have the desired format: each row containing the predictors for one particular combination of gases. Additionally, the data from each sensor was split into  two datasets. 
+
+The naming convention for the features is shown in Figure~\ref{fig:feat-naming}. First, the frequency in which the measurement was taken followed by the sensor number. After that, the feature name itself is followed by its index, i.e. where in the frequency cycle the measurement was made. This convention allows for easy identification of key information of the cycle and measurement.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1\textwidth]{../figures/feat-naming.pdf}
+	\caption{Feature naming convention.}
+	\label{fig:feat-naming}
+\end{figure}
+
+The pre-processing results in the format shown in Figure~\ref{fig:preprocessed-data}. Recalling that there are 125 possible mixtures of gases, it is important to note that there are repeated exposures in the data set and those are treated as individual observations. Since each unique gas mixture was exposed 4 times during a cycle, and the experiment was repeated 3 times. This yields a total of $4 \times 3 \times 125 = 1500$ exposures.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1\textwidth]{../figures/preprocessed-data.pdf}
+	\caption{Pre-processed data structure.}
+	\label{fig:preprocessed-data}
+\end{figure}
+
+Finally, the majority of models proposed are scale variant, with the exception of \acrshort{ols}. The data, therefore, was centered and scaled to have unit variance and zero mean. A snippet of the final data set is shown in Table~\ref{tab:prepro-sample}
+
+
+\begin{table}
+	\centering
+	\caption{Sample of pre-processed data.}
+	\label{tab:prepro-sample}
+	\resizebox{\textwidth}{!}{%
+	\begin{tabular}{cp{1.3cm}p{0.8cm}p{0.8cm}p{0.8cm}p{1.8cm}p{1.8cm}p{0.3cm}p{1.6cm}p{1.6cm}p{1.6cm}p{1.6cm}p{0.3cm}p{1.6cm}p{1.6cm}}
+		\toprule[0.5mm]
+		Index &  exposure &    NO &   NO2 &   NH3 &  0.05-1-slope-0 &  0.05-1-slope-1 & $\dots$&  5000.0-1-slope-239 &  0.05-1-avg-0 &  0.05-1-avg-1 &  0.05-1-avg-2 & $\dots$&  5000.0-1-avg-238 &  5000.0-1-avg-239 \\
+		\midrule[0.5mm]
+		0 &       1.0 &  10.0 &   5.0 &  20.0 &        2.033884 &       -2.024181 &$\dots$&            1.256538 &      2.619349 &      1.757883 &      1.728610 & $\dots$&         2.276652 &          2.301890 \\
+		1 &       1.0 &  10.0 &   5.0 &  20.0 &       -0.661288 &        0.869532 &$\dots$&           -0.846043 &      0.567699 &      2.477401 &      2.449619 & $\dots$&          2.522155 &          2.496103 \\
+		2 &       1.0 &  10.0 &   5.0 &  20.0 &        0.232116 &        0.038766 &$\dots$&            1.546549 &      1.389922 &      2.716136 &      2.746701 & $\dots$&         2.637892 &          2.669321 \\
+		3 &       1.0 &  10.0 &   5.0 &  20.0 &       -0.854716 &        1.071274 &$\dots$&            1.546549 &      0.592878 &      2.848766 &      2.866869 & $\dots$&         2.722064 &          2.753305 \\
+		4 &       2.0 &  20.0 &  40.0 &  40.0 &        1.876790 &       -1.808299 &$\dots$&           -1.063551 &      2.963172 &      2.760346 &      2.746701 & $\dots$&         2.213523 &          2.182912 \\
+		\bottomrule
+		&&&&&&&&&&&&&&\\
+		&&&&&&&\sbox0{\dots}\makebox[\wd0]{\vdots}&&&&&&&\\
+		&&&&&&&&&&&&&&\\
+		\toprule
+		
+		700 &     176.0 &  40.0 &  20.0 &  40.0 &        1.735014 &       -1.850717 & $\dots$&            -2.151093 &      1.590775 &      0.071822 &      0.072959 & $\dots$&          0.098694 &          0.046562 \\
+		701 &     176.0 &  40.0 &  20.0 &  40.0 &       -0.466435 &        0.439147 & $\dots$&           -1.208557 &     -0.393152 &     -0.046993 &     -0.033022 &$\dots$&           0.084665 &          0.055310 \\
+		702 &     176.0 &  40.0 &  20.0 &  40.0 &       -0.509181 &        0.495187 &  $\dots$&          -0.725205 &     -0.423540 &     -0.015217 &     -0.020505 & $\dots$&          0.078820 &          0.061143 \\
+		703 &     176.0 &  40.0 &  20.0 &  40.0 &       -0.494932 &        0.467598 & $\dots$&           -2.296098 &     -0.409070 &     -0.031795 &     -0.043871 & $\dots$&          0.070052 &          0.014485 \\
+		704 &     177.0 &  80.0 &  40.0 &  40.0 &        1.763512 &       -1.868305 &  $\dots$&           2.005733 &      1.608140 &      0.076796 &      0.059607 &$\dots$&           0.074144 &          0.122381 \\
+		
+		\bottomrule
+		&&&&&&&&&&&&&&\\
+		&&&&&&&\sbox0{\dots}\makebox[\wd0]{\vdots}&&&&&&&\\
+		&&&&&&&&&&&&&&\\
+		\toprule
+		
+		1495 &     374.0 &  80.0 &  80.0 &  40.0 &       -0.429032 &        0.485703 & $\dots$&          -0.725205 &     -1.122473 &     -1.365005 &     -1.369615 &$\dots$&         -1.476030 &         -1.490233 \\
+		1496 &     375.0 &  20.0 &  80.0 &   5.0 &        1.083129 &       -1.205831 & $\dots$&          -1.426065 &      0.366557 &     -1.232375 &     -1.238876 & $\dots$&        -1.479537 &         -1.510646 \\
+		1497 &     375.0 &  20.0 &  80.0 &   5.0 &       -0.635640 &        0.696067 & $\dots$&           0.507342 &     -1.303357 &     -1.373294 &     -1.352369 & $\dots$&        -1.461417 &         -1.445908 \\
+		1498 &     375.0 &  20.0 &  80.0 &   5.0 &       -0.016883 &        0.086357 &  $\dots$&          0.120661 &     -0.768521 &     -1.329084 &     -1.358488 & $\dots$&        -1.481875 &         -1.475653 \\
+		1499 &     375.0 &  20.0 &  80.0 &   5.0 &       -0.588619 &        0.638821 &  $\dots$ &          0.676515 &     -1.247789 &     -1.358926 &     -1.369615 & $\dots$&        -1.486551 &         -1.466904 \\
+		\bottomrule[0.5mm]
+	\end{tabular}}
+\end{table}
+
+
+
+

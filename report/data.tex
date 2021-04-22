@@ -18,7 +18,7 @@ In more detail, \ch{NO}, \ch{NO2} and \ch{NH3} had five possible concentration v
 \begin{figure}[!htb]
 	\centering
 	\includegraphics[width=1\textwidth]{../figures/raw-response.png}
-	\caption{An example of row sensor response}
+	\caption{An example of raw sensor response}
 	\label{fig:raw}
 \end{figure}
 
@@ -30,7 +30,7 @@ One way to visualize this process is shown in Figures~\ref{fig:feat-window}. Not
 	\centering
 	\includegraphics[width=1\textwidth]{../figures/measurement-windows.png}
 	
-	\caption{Feature measurements times per cycle.}
+	\caption{Feature measurements times per cycle. The width of the red line indicates the duration of one of the feature measurement windows as an example.}
 	\label{fig:feat-window}
 \end{figure} 
 
@@ -162,7 +162,7 @@ The experiments were run between 26th and 29th March, 2021. The experiment data 
 \section{Pre-processing}
 \label{sec:preprocessing}
 
-The features (slopes and averages) from the same target (a particular exposure) in the raw data file  are spread across multiple rows, which is not suitable for analysis. Opposed to \acrshort{tco}, the experiments were conducted at constant temperature and therefore the temperature column is discarded. The data was, subsequently, modified to have the desired format: each row containing the predictors for one particular combination of gases. Additionally, the data from each sensor was split into  two datasets. 
+The features (slopes and averages) from the same target (a particular exposure) in the raw data file in Table~\ref{tab:raw-sample} are spread across multiple rows, which is not suitable for analysis. Opposed to \acrshort{tco}, the experiments were conducted at constant temperature and therefore the temperature column is discarded. The data was, subsequently, modified to have the desired format: each row containing the predictors for one particular combination of gases. Additionally, the data from each sensor was split into  two datasets. 
 
 The naming convention for the features is shown in Figure~\ref{fig:feat-naming}. First, the frequency in which the measurement was taken followed by the sensor number. After that, the feature name itself is followed by its index, i.e. where in the frequency cycle the measurement was made. This convention allows for easy identification of key information of the cycle and measurement.
 
@@ -173,7 +173,7 @@ The naming convention for the features is shown in Figure~\ref{fig:feat-naming}.
 	\label{fig:feat-naming}
 \end{figure}
 
-The pre-processing results in the format shown in Figure~\ref{fig:preprocessed-data}. Recalling that there are 125 possible mixtures of gases, it is important to note that there are repeated exposures in the data set and those are treated as individual observations. Since each unique gas mixture was exposed 4 times during a cycle, and the experiment was repeated 3 times. This yields a total of $4 \times 3 \times 125 = 1500$ exposures.
+The pre-processing results in the format shown in Figure~\ref{fig:preprocessed-data}. Recalling that there are 125 possible mixtures of gases, it is important to note that there are repeated exposures in the data set and those are treated as individual observations. Since each unique gas mixture was exposed 4 times during a cycle, and the experiment was repeated 3 times, this yields a total of $4 \times 3 \times 125 = 1500$ exposures.
 
 \begin{figure}[h]
 	\centering

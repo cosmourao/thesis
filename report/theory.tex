@@ -33,18 +33,42 @@
 \chapter{Theory}
 \label{cha:theory}
 
-\textcolor{blue}{Question to supervisor/examiner: Do you think this chapter goes 'deep' enough?} 
-
-\textcolor{red}{TODO: Add bias-variance trade-off section. Complete ridge section. Add bootstrapping section} 
-
-The quantification of gases based on the sensor response can be viewed as a multivariate multiple regression problem where the predictors, i.e. features derived from the sensor signal, are used to predict multiple responses, i.e. the concentrations of pertinent gases. This chapter briefly exposes the theory behind some of these models.
+The quantification of gases based on the sensor response can be viewed as a multivariate multiple regression problem where the predictors, i.e. features derived from the sensor signal, are used to predict multiple responses, i.e. the concentrations of pertinent gases. This chapter exposes the theory behind some of these models.
 
 The models here listed were chosen as a natural progression from a statisticians point of view: starting with simple models and progressively increasing complexity as insights from the data and the problem are gathered.
+\section{Notation}
+\label{sec:notation}
+
+In favor of consistency and clarity, the notation used throughout this work is presented here. Bold capital letters, e.g. $\mathbf{A}$, are matrices while bold lower case letters are row vectors, e.g. $\mathbf{a}$. Scalars, on the other hand, are denoted as standard lower case letters, e.g. $a_{i1}$. Transposes and inverses are denoted, respectively with $\cdot^\intercal $ and $\cdot^{-1}$. An example is shown below.
+
+\begin{equation*}
+	\mathbf{A = [a_1, a_2, ..., a_n]^\intercal}
+\end{equation*}
+
+\begin{equation*}
+	\mathbf{A} = 
+	\begin{bmatrix}
+		
+		\mathbf{a_1}\\
+		\mathbf{a_2}\\
+		\vdots \\
+		\mathbf{a_n}
+	\end{bmatrix}
+	=
+	\begin{bmatrix}
+		
+		a_{11} & a_{12} & \dots & a_{1p}\\
+		a_{21} & a_{22} & \dots & a_{2p}\\
+		\vdots  & \vdots & \ddots &\vdots\\
+		a_{n1} & a_{n2} & \dots & a_{np}\\
+	\end{bmatrix}
+\end{equation*}
+
 
 \section{Ordinary Least Squares Regression}
 \label{sec:linreg}
 
-A simple, first approach would be to tackle the problem with a \acrfull{ols} regression model. As \cite{friedman2001} explains, each output  $\mathbf{Y = [y_1, y_2, ... , y_K]^\intercal} $ has its own linear model. Now, given a set of $n$ observations $\mathbf{X = [x_1, x_2, ..., x_n]^\intercal}$ and each observation having $p+1$ features, e.g. $\mathbf{x}_i = [1,x_{i1}, x_{i2}, ... x_{ip}], \; i = 1,2,...n$, the concatenation of all linear models can be written in matrix form as in Equation~\ref{eqn:ols}.
+A simple, first approach would be to tackle the problem with a \acrfull{ols} regression model. As \cite{friedman2001} explains, each output  $\mathbf{Y = [y_1, y_2, ... , y_K]^\intercal} $ has its own linear model. Now, given a set of $n$ observations $\mathbf{X = [x_1, x_2, ..., x_n]^\intercal}$ and each observation having $p$ features, e.g. $\mathbf{x}_i = [x_{i1}, x_{i2}, ... x_{ip}], \; i = 1,2,...n$, the concatenation of all linear models can be written in matrix form as in Equation~\ref{eqn:ols}.
 
 \begin{equation}
 	\label{eqn:ols}
@@ -85,7 +109,7 @@ For the problem at hand, in addition to the high number of features, it is often
 
 One way to define \acrfull{pca} is to view it as a orthogonal projection of the data into a principal space of lower dimension such that the variance of this projection is maximized \parencite{bishop2006pattern}.
 
-Just as before, consider the  collection of $n$ observations is $\mathbf{X = [x_1, x_2, ..., x_n]^\intercal}$ with covariance matrix $\mathbf{\Sigma}$. Additionally, consider a matrix $\mathbf{P = [p_1, p_2, ..., p_n]^\intercal}$ where $\mathbf{p_i}$ is a row vector of coefficients referring to the i-th linear combination \parencite{johnson2013applied}:
+Just as before, consider the  collection of $n$ observations  $\mathbf{X}$ with covariance matrix $\mathbf{\Sigma}$. Additionally, consider a matrix $\mathbf{P = [p_1, p_2, ..., p_n]^\intercal}$ where $\mathbf{p_i}$ is a row vector of coefficients referring to the i-th linear combination \parencite{johnson2013applied}:
 
 \begin{equation}
 	\label{eqn:pca-lincomb}
@@ -148,7 +172,8 @@ In summary, the objective of \acrshort{pca} is find a matrix $\mathbf{P}$ such t
 
 yields new variables that are uncorrelated and arranged in decreasing order of variance.
 
-It can be shown that these desired linear combinations can be written in terms of the eigenvalues ($\mathbf{\lambda}$) and eigenvectors ($\mathbf{e}$) of $\mathbf{\Sigma}$, the covariance matrix of $\mathbf{X}$ \parencite{johnson2013applied}. The elements of eigenvectors are called loadings, while the new features $\mathbf{T}$ are scores. In short, for the k-th \acrshort{pc}:
+It can be shown that these desired linear combinations can be written in terms of the eigenvalues ($\mathbf{\lambda}$) and eigenvectors ($\mathbf{e}$) of $\mathbf{\Sigma}$, the covariance matrix of $\mathbf{X}$ \parencite{johnson2013applied}. The elements of eigenvectors are called loadings, while the new features $\mathbf{T}$ are 
+. In short, for the k-th \acrshort{pc}:
 
 \begin{equation}
 	\label{eqn:pca-eigen}
@@ -193,25 +218,7 @@ The \acrshort{nipals} algorithm to compute the first k-th \acrshort{pc}s, $\text
 	\caption{\acrfull{nipals} for \acrshort{pca}}
 \end{algorithm}
 
-In other words:
-
-\begin{itemize}
-	\item Line 1: Initilize the algorithm taking into account all data $\mathbf{X}$;
-	
-	\item Line 6: Arbitrarily choose a column of $\mathbf{X}$ as the scores vector $\mathbf{t_i}$;
-	
-	\item Line 7: Compute the i-th loadings vector $\mathbf{p_i}$ by regressing every column of $\mathbf{X}$ via \acrshort{ols} onto the scores $\mathbf{t_i}$;
-	
-	\item Line 8: Scale the loadings vector $\mathbf{p_i}$ to have unit length;
-	
-	\item Line 9: Compute the i-th scores vector $\mathbf{t_i}$ by regressing every column of $\mathbf{X}$ via \acrshort{ols} onto the loadings $\mathbf{p_i}$;
-	
-	\item Line 10: Repeat until change in $\mathbf{t_i}$ between iterations is small enough;
-	
-	\item Lines 11 and 12: Once convergence is achieved, scores $\mathbf{t_i}$ and loadings $\mathbf{p_i}$ are stored as the i-th column of matrices $\mathbf{T}$ and $\mathbf{P}$ of Equation~\ref{eqn:pca}, respectively;
-	
-	\item Line 13: Remove the variability explained by $\mathbf{t_i}$ and $\mathbf{p_i}$ from $\mathbf{X}$. A procedure called deflation.
-\end{itemize}
+In words, the main idea of the algorithm can be summarized as choosing an arbitrary column of $\mathbf{X}$ as the scores vector $\mathbf{t_i}$, shown in line 6. Next, the computation of the i-th loadings vector $\mathbf{p_i}$ by regressing every column of $\mathbf{X}$ via \acrshort{ols} onto the scores $\mathbf{t_i}$.  $\mathbf{p_i}$ is then scaled to have unit length in Line 8, which in turn is used to compute the i-th scores vector $\mathbf{t_i}$ by regressing every column of $\mathbf{X}$ via \acrshort{ols} onto the loadings $\mathbf{p_i}$, shown in Line 9. This procedure is repeated until change in $\mathbf{t_i}$ between iterations is small enough. Once convergence is achieved, scores $\mathbf{t_i}$ and loadings $\mathbf{p_i}$ are stored as the i-th column of matrices $\mathbf{T}$ and $\mathbf{P}$ of Equation~\ref{eqn:pca}, respectively. Finally, the variability explained by $\mathbf{t_i}$ and $\mathbf{p_i}$ from $\mathbf{X}$ is subtracted in a procedure called deflation.
 
 \section{Principal Component Regression}
 \label{sec:pcr}
@@ -237,7 +244,7 @@ Although useful, \acrshort{pcr} has a potential flaw: while the new found projec
 
 \acrshort{plsr}, much like \acrshort{pcr}, also aims to reduce dimensionality via linear combinations of the inputs. This technique, however, also takes into account the response variables $\mathbf{Y}$. One key advantage of \acrshort{plsr} is that it seeks axes with most variance (like \acrshort{pcr}) and high correlation with response variables \parencite{friedman2001}.
 
-The main idea can be described as  finding  linear combinations  for the data matrix design matrix $\mathbf{X}$ and response matrix $\mathbf{Y}$ as follows \parencite{ng2013}, similarly to what was done in Section~\ref{sec:pca}.
+The main idea can be described as  finding  linear combinations  for the data matrix $\mathbf{X}$ and response matrix $\mathbf{Y}$ as follows \parencite{ng2013}, similarly to what was done in Section~\ref{sec:pca}. Here, the matrices $\mathbf{W}$ and $\mathbf{U}$ are score matrices, i.e. the transformed \acrshort{pls} variables, and $\mathbf{L}$ and $\mathbf{Q}$ are loading matrices, i.e. the weights of this transformation (projection).
 
 \begin{equation}
 	\label{eqn:x-decomp}
@@ -288,32 +295,9 @@ Instead of simply running \acrshort{nipals} on $\mathbf{X}$ and $\mathbf{Y}$ sep
 	\caption{\acrshort{nipals} for \acrfull{plsr}}
 \end{algorithm}
 
-In summary, highlighting the most important parts: 
+As with Algorithm~\ref{algo:pca-nipals}, Algorithm~\ref{algo:pls-nipals} can be summarized as choosing a column of $\mathbf{Y_i}$ as the initial response score vector $\mathbf{u_i}$. After that, the i-th loadings vector $\mathbf{w_i}$  of $\mathbf{X}$ is computed in Line 8 by regressing every column of $\mathbf{X}$ via \acrshort{ols} onto scores vector of $\mathbf{Y}$, $\mathbf{u_i}$. Similarly to before, the data loadings vector $\mathbf{w_i}$ is scaled to have unit length, which in turn is used to compute the i-th data scores vector $\mathbf{w_i}$ by regressing every column of $\mathbf{X_i}$ via \acrshort{ols} onto the column $\mathbf{\ell_i}$ in Line 10. Now, the i-th response loadings vector $\mathbf{q_i}$  of $\mathbf{Y_i}$  by regressing every column of $\mathbf{Y}$ via \acrshort{ols} onto scores vector of $\mathbf{X}$, $\mathbf{w_i}$, shown in Line 11; This loadings vector is also scaled to have unit length. 
 
-\begin{itemize}
-	\item  Line 7: Arbitrarily choose a column of $\mathbf{Y_i}$ as the initial response score vector $\mathbf{u_i}$;
-	
-	\item Line 8: Compute the i-th loadings vector $\mathbf{w_i}$  of $\mathbf{X}$  by regressing every column of $\mathbf{X}$ via \acrshort{ols} onto scores vector of $\mathbf{Y}$, $\mathbf{u_i}$;
-	
-	\item Line 9: Scale the data loadings vector $\mathbf{w_i}$ to have unit length;
-	
-	\item Line 10: Compute the i-th data scores vector $\mathbf{w_i}$ by regressing every column of $\mathbf{X_i}$ via \acrshort{ols} onto the column $\mathbf{\ell_i}$;
-	
-	\item 	Line 11: Compute the i-th loadings vector $\mathbf{q_i}$  of $\mathbf{Y_i}$  by regressing every column of $\mathbf{Y}$ via \acrshort{ols} onto scores vector of $\mathbf{X}$, $\mathbf{w_i}$;
-	
-	\item Line 12: Scale the response loadings vector $\mathbf{q_i}$ to have unit length;
-	
-	\item Line 13: Compute the i-th response scores vector $\mathbf{u_i}$ by regressing every column of $\mathbf{Y_i}$ via \acrshort{ols} onto the column $\mathbf{q_i}$;
-	
-	\item Line 14: Repeat until change in $\mathbf{u_i}$ between iterations is small enough;
-
-	\item Lines 15 and 16: Once convergence is achieved, $\mathbf{w_i}$ and $\mathbf{\ell_i}$ are stored as the i-th column of matrices $\mathbf{W}$ and $\mathbf{L}$ of Equation~\ref{eqn:x-decomp};
-	
-	\item Lines 17 and 18: Once convergence is achieved, $\mathbf{u_i}$ and $\mathbf{q_i}$ are stored as the i-th column of matrices $\mathbf{U}$ and $\mathbf{Q}$ of Equation~\ref{eqn:y-decomp};
-	
-	\item Lines 19 and 20: Remove the variability explained by $\mathbf{w_i, \ell_i}$ and $\mathbf{u_i, q_i}$ from $\mathbf{X_i}$ and $\mathbf{Y_i}$, respectively;
-	
-\end{itemize}
+Following in Line 13, the i-th response scores vector $\mathbf{u_i}$ is computed by regressing every column of $\mathbf{Y_i}$ via \acrshort{ols} onto the column $\mathbf{q_i}$. This procedure is repeated until change in $\mathbf{u_i}$ between iterations is small enough. In that case the results $\mathbf{w_i}$ and $\mathbf{\ell_i}$ are stored as the i-th column of matrices $\mathbf{W}$ and $\mathbf{L}$ of Equation~\ref{eqn:x-decomp} and $\mathbf{u_i}$ and $\mathbf{q_i}$ are stored as the i-th column of matrices $\mathbf{U}$ and $\mathbf{Q}$ of Equation~\ref{eqn:y-decomp}. Finally, the variability explained by $\mathbf{w_i, \ell_i}$ and $\mathbf{u_i, q_i}$ from $\mathbf{X_i}$ and $\mathbf{Y_i}$, respectively, are removed.
 
 After finding the $k$ partial least squares directions from Algorithm~\ref{algo:pls-nipals} above, the problem, as in Section~\ref{sec:pcr}, reduces to performing Least Squares Regression using the newfound transformations.
 
@@ -322,7 +306,7 @@ After finding the $k$ partial least squares directions from Algorithm~\ref{algo:
 	\mathbf{Y = W_{|k} B + E}
 \end{equation}
 
-Which in turn, analogously to Equations~\ref{eqn:ols_beta} and \ref{eqn:beta-pcr} yields the coefficients:
+Which in turn, analogously to Equations~\ref{eqn:ols_beta} and \ref{eqn:beta-pcr}, yields the coefficients:
 
 \begin{equation}
 	\label{eqn:beta-plsr}
@@ -360,7 +344,7 @@ The choice of hyper-parameters $\boldsymbol{\lambda} \geq 0$ controls how much s
 \section{Cross Validation}
 \label{sec:crossval}
 
-There are several choices to make for the aforementioned models: what polynomial degree fits the data best? How many \acrshort{pc}s/\acrshort{pls} components to use? How much penalization to impose in Ridge regression? 
+There are several choices to make for the aforementioned models: How many \acrshort{pc}s/\acrshort{pls} components to use? How much penalization to impose in Ridge regression? 
 
 A first answer to this would be to split the data into training and validation sets. After fitting models to the former, the latter is used to measure the prediction error via some scoring function. In that sense, it is important to distinguish test error rate from training error rate. The first, also called generalization error, is the score of the fit on an independent, previously unseen test sample. The second, on the other hand, is the average score over the training sample \parencite{friedman2001}.
 
@@ -378,10 +362,7 @@ Scoring functions measure how much the data deviates from the fit and can be use
  
 This approach, however,  is sensitive to the choice of these sets. Additionally, reserving part of the data just for validation might be detrimental for the model fitting process, specially if the number of observations is low \parencite{james2013introduction}.
 
-One tool that can help alleviating these problems is \acrfull{cv}. Dividing
-
-With the theoretical background laid out, this work proceeds to apply it to the problem at hand.
-
+One tool that can help alleviating these problems is \acrfull{cv}. More specifically,  K-fold \acrshort{cv}: it involves equally dividing the training data into $K$ sets. For each subset, the desired model is trained using $k-1$ folds and the prediction error is computed on the remaining fold \parencite{friedman2001}. As for the final evaluation, it is performed in the held-out test set.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

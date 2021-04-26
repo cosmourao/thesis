@@ -1,35 +1,3 @@
-%%% lorem.tex --- 
-%% 
-%% Filename: lorem.tex
-%% Description: 
-%% Author: Ola Leifler
-%% Maintainer: 
-%% Created: Wed Nov 10 09:59:23 2010 (CET)
-%% Version: $Id$
-%% Version: 
-%% Last-Updated: Tue Oct  4 11:58:17 2016 (+0200)
-%%           By: Ola Leifler
-%%     Update #: 7
-%% URL: 
-%% Keywords: 
-%% Compatibility: 
-%% 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% 
-%%% Commentary: 
-%% 
-%% 
-%% 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% 
-%%% Change log:
-%% 
-%% 
-%% RCS $Log$
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% 
-%%% Code:
-
 \chapter{Theory}
 \label{cha:theory}
 
@@ -328,18 +296,55 @@ Analogous to Section~\ref{sec:linreg}, the goal is to minimize the \acrshort{rss
 \end{equation}
 
 \begin{equation}
-	\label{eqn:betahat-ridge}
+	\label{eqn:ridgebetahat}
 	\mathbf{\hat{B}^\text{Ridge}} = \underset{\mathbf{B}}{\arg\min} 	\; \text{RSS}^{\text{Ridge}}(\mathbf{B})
 \end{equation}	
 
 The coefficients that minimize the \acrshort{rss} is shown in Equation~\ref{eqn:eqn:betahat-ridge2} below.
 
 \begin{equation}
-	\label{eqn:eqn:betahat-ridge2}
+	\label{eqn:ridgebetahat2}
 	\mathbf{\hat{B}^\text{Ridge}} = \mathbf{(X^\intercal X + \boldsymbol{\lambda}  I )^{-1} X^\intercal Y}
 \end{equation}
 
+It is important to note that the parameters $\boldsymbol{\beta}_0$ are calculated separately as the response mean $\bar{Y}$ \parencite{friedman2001}, i.e.:
+
+\begin{equation}
+	\label{eqn:ridge-betazero}
+		\mathbf{\hat{B_0}^\text{Ridge}} 
+		\begin{bmatrix}
+			
+			\beta_{0,1}\\
+			\beta_{0,2}\\
+			\vdots \\
+			\beta_{0,K}\\
+		\end{bmatrix}
+	=
+	\begin{bmatrix}
+		
+		\mathbf{\bar{y_1}}\\
+		\mathbf{\bar{y_2}}\\
+		\vdots \\
+		\mathbf{\bar{y_K}}\\
+	\end{bmatrix}
+	=
+	\begin{bmatrix}
+		
+		\frac{1}{n}\sum_{i = 1}^{n} y_{i,1}\\
+		\frac{1}{n}\sum_{i = 1}^{n} y_{i,2}\\
+		\vdots \\
+		\frac{1}{n}\sum_{i = 1}^{n} y_{i,K}\\
+	\end{bmatrix} 
+\end{equation}
+
 The choice of hyper-parameters $\boldsymbol{\lambda} \geq 0$ controls how much shrinkage is applied to the coefficients: larger $\boldsymbol{\lambda}$ implies more penalization to complex models. Although the coefficients are shrunk towards zero, they never reach zero, which makes Ridge regularization unsuitable for feature selection \parencite{friedman2001}.
+ 
+ Finally, predictions in a ridge regression setting are computed as:
+ 
+ \begin{equation}
+ 	\label{eqn:ridge-yhat}
+ 	\mathbf{\hat{Y}^\text{Ridge}} = \mathbf{\hat{B_0}^\text{Ridge}} + \mathbf{\hat{B}^\text{Ridge}} \mathbf{X}
+ \end{equation}
 
 \section{Cross Validation}
 \label{sec:crossval}
@@ -363,12 +368,3 @@ Scoring functions measure how much the data deviates from the fit and can be use
 This approach, however,  is sensitive to the choice of these sets. Additionally, reserving part of the data just for validation might be detrimental for the model fitting process, specially if the number of observations is low \parencite{james2013introduction}.
 
 One tool that can help alleviating these problems is \acrfull{cv}. More specifically,  K-fold \acrshort{cv}: it involves equally dividing the training data into $K$ sets. For each subset, the desired model is trained using $k-1$ folds and the prediction error is computed on the remaining fold \parencite{friedman2001}. As for the final evaluation, it is performed in the held-out test set.
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% lorem.tex ends here
-
-%%% Local Variables: 
-%%% mode: latex
-%%% TeX-master: "demothesis"
-%%% End: 

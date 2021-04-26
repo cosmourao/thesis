@@ -1,35 +1,3 @@
-%%% lorem.tex --- 
-%% 
-%% Filename: lorem.tex
-%% Description: 
-%% Author: Ola Leifler
-%% Maintainer: 
-%% Created: Wed Nov 10 09:59:23 2010 (CET)
-%% Version: $Id$
-%% Version: 
-%% Last-Updated: Wed Nov 10 09:59:47 2010 (CET)
-%%           By: Ola Leifler
-%%     Update #: 2
-%% URL: 
-%% Keywords: 
-%% Compatibility: 
-%% 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% 
-%%% Commentary: 
-%% 
-%% 
-%% 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% 
-%%% Change log:
-%% 
-%% 
-%% RCS $Log$
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% 
-%%% Code:
-
 \chapter{Results}
 \label{cha:results}
 
@@ -37,11 +5,11 @@ This chapter is dedicated to show the analysis' results. In favor of clarity and
 
 Initially the regression analysis was done in the pre-processed data presented in Chapter~\ref{cha:data}, i.e. each observation corresponds to a gas exposure. It is important to remind the reader that in this data, each unique gas mixture was exposed (i.e. an exposure) twelve times: four frequency cycles through three experiment repetitions, yielding 1500 observations. 
 
-An assessment of correlation between features is first conducted and shown in Figure~\ref{fig:cor-mat}.
+Before beginning analysis, an assessment of correlation between features is first conducted and shown in Figure~\ref{fig:cor-mat}.
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=0.7\textwidth]{../figures/correlation-matrix.png}
+	\includegraphics[width=0.6\textwidth]{../figures/correlation-matrix.png}
 	\caption{Correlation matrix of features.}
 	\label{fig:cor-mat}
 \end{figure}
@@ -168,22 +136,152 @@ Finally, after the choice of $\lambda$, the actual vs. predicted plot is present
 	\label{fig:ridge-exposures}
 \end{figure}
 
+\newpage
+\section{Averaging features by gas mixture}
 
-%\section{Averaged exposures} 
-%
-%\subsection{OLS}
-%
-%\subsection{PCR}
-%
-%\subsection{PLSR}
-%
-%\subsection{Ridge Regression}
+Following the process depicted in Figure~\ref{fig:averaging-process}, the averaged features data set is shown below on Table~\ref{tab:averaged-data}. Now it is now possible to plot slope and average features through time, as shown in Figures~\ref{fig:slopes} and \ref{fig:averages}. Furthermore, for the following analysis, only average features were selected, i.e. slopes were discarded, which is shown in Table~\ref{tab:only-avgs}
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% lorem.tex ends here
 
-%%% Local Variables: 
-%%% mode: latex
-%%% TeX-master: "demothesis"
-%%% End: 
+\begin{table}
+	\centering
+	\caption{Sample of averaged mixture data.}
+	\label{tab:averaged-data}
+	\resizebox{\textwidth}{!}{%
+\begin{tabular}{cp{0.3cm}p{0.8cm}p{0.8cm}p{1.8cm}p{1.8cm}p{1.8cm}p{0.3cm}p{1.8cm}p{1.8cm}p{1.8cm}p{0.3cm}p{1.6cm}p{1.6cm}}
+	\toprule[0.5mm]
+	Index &NO &  NO2 &   NH3 &  0.05-1-slope-0 &  0.05-1-slope-1 &  0.05-1-slope-2 & $\dots$&   5000.0-1-slope-239 &  0.05-1-avg-0 &  0.05-1-avg-1 & $\dots$&   5000.0-1-avg-238 &  5000.0-1-avg-239 \\
+	\midrule[0.5mm]
+	0&5.0 &  5.0 &   5.0 &      -26.386178 &      -14.165356 &       -0.234640 & $\dots$&            -0.041897 &     28.983749 &     25.442410 & $\dots$&          35.162932 &         35.152458 \\
+	1&5.0 &  5.0 &  10.0 &      -26.294332 &      -14.421532 &       -0.216090 & $\dots$&             0.004524 &     28.538652 &     24.933269 & $\dots$&          34.622460 &         34.623591 \\
+	2&5.0 &  5.0 &  20.0 &      -25.514491 &      -15.174588 &       -0.253371 & $\dots$&            -0.010135 &     29.038925 &     25.245278 & $\dots$&          35.025637 &         35.023103 \\
+	3&5.0 &  5.0 &  40.0 &      -25.906221 &      -14.565139 &       -0.306851 & $\dots$&             0.003801 &     28.698684 &     25.057399 &  $\dots$&         34.575699 &         34.576649 \\
+	4&5.0 &  5.0 &  80.0 &      -26.731849 &      -13.795072 &       -0.241065 & $\dots$&            -0.022803 &     28.738748 &     25.289980 & $\dots$&          34.860040 &         34.854340 \\
+	\bottomrule
+	&&&&&&&&&&&&&\\
+	&&&&&&&&\sbox0{\dots}\makebox[\wd0]{\vdots}&&&&&\\
+	&&&&&&&&&&&&&\\
+	\toprule
+	
+	50&20.0 &  5.0 &   5.0 &      -25.541819 &      -15.120475 &       -0.228034 &$\dots$&            -0.004344 &     28.490467 &     24.710348 &$\dots$&          34.279956 &         34.278870 \\
+	51&20.0 &  5.0 &  10.0 &      -26.036798 &      -14.578261 &       -0.202154 &$\dots$&            -0.067958 &     28.623668 &     24.979102 &$\dots$&          34.562216 &         34.545227 \\
+	52&20.0 &  5.0 &  20.0 &      -25.982142 &      -14.508765 &       -0.221338 &$\dots$&            -0.022622 &     28.764243 &     25.137052 & $\dots$&         34.752584 &         34.746928 \\
+	53&20.0 &  5.0 &  40.0 &      -25.964768 &      -14.674361 &       -0.179532 &$\dots$&             0.007601 &     28.229947 &     24.561356 & $\dots$&         34.258736 &         34.260636 \\
+	54&20.0 &  5.0 &  80.0 &      -25.317133 &      -15.287429 &       -0.308570 &$\dots$&            -0.052484 &     29.162557 &     25.340699 &$\dots$&          35.015909 &         35.002788 \\
+	
+	\bottomrule
+	&&&&&&&&&&&&&\\
+	&&&&&&&&\sbox0{\dots}\makebox[\wd0]{\vdots}&&&&&\\
+	&&&&&&&&&&&&&\\
+	\toprule
+	
+	 120&80.0 &  80.0 &   5.0 &      -27.073901 &      -13.562242 &       -0.218533 &$\dots$&             0.028142 &     28.548244 &     25.157684 &$\dots$&          34.742313 &         34.749349 \\
+	121&80.0 &  80.0 &  10.0 &      -26.329623 &      -14.337196 &       -0.120442 &$\dots$&            -0.012669 &     28.630183 &     25.045884 &$\dots$&          34.678857 &         34.675690 \\
+	122&80.0 &  80.0 &  20.0 &      -25.935631 &      -14.734990 &       -0.196363 &$\dots$&            -0.027690 &     28.420835 &     24.737087 &$\dots$&          34.354338 &         34.347416 \\
+	123&80.0 &  80.0 &  40.0 &      -25.821070 &      -14.855702 &       -0.241336 &$\dots$&            -0.032395 &     28.457189 &     24.743263 &$\dots$&          34.327938 &         34.319839 \\
+	124&80.0 &  80.0 &  80.0 &      -26.503363 &      -14.087625 &       -0.186228 &$\dots$&            -0.038820 &     28.615161 &     25.093255 &$\dots$&          34.743829 &         34.734124 \\
+	
+	\bottomrule[0.5mm]
+\end{tabular}}
+\end{table}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1\textwidth]{../figures/slopes.png}
+	\caption{Slope features. Each line represents one of the 125 unique exposures. }
+	\label{fig:slopes}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1\textwidth]{../figures/averages.png}
+	\caption{Average features. Each line represents one of the 125 unique exposures.}
+	\label{fig:averages}
+\end{figure}
+
+
+\begin{table}
+	\centering
+	\caption{Sample of only average features.}
+	\label{tab:only-avgs}
+	\resizebox{\textwidth}{!}{%
+	\begin{tabular}{ccccp{2cm}p{2cm}p{0.3cm}p{2cm}p{2cm}}
+		\toprule[0.5mm]
+		Index & NO &  NO2 &   NH3 &  0.05-1-avg-0 &  0.05-1-avg-1 & $\dots$&   5000.0-1-avg-238 &  5000.0-1-avg-239 \\
+		\midrule[0.5mm]
+		0&5.0 &  5.0 &   5.0 &     28.983749 &     25.442410 & $\dots$ &         35.162932 &         35.152458 \\
+		1&5.0 &  5.0 &  10.0 &     28.538652 &     24.933269 &$\dots$&           34.622460 &         34.623591 \\
+		2&5.0 &  5.0 &  20.0 &     29.038925 &     25.245278 &$\dots$&           35.025637 &         35.023103 \\
+		3&5.0 &  5.0 &  40.0 &     28.698684 &     25.057399 &$\dots$&           34.575699 &         34.576649 \\
+		4&5.0 &  5.0 &  80.0 &     28.738748 &     25.289980 &$\dots$&           34.860040 &         34.854340 \\
+		
+		\bottomrule
+		&&&&&&\\
+		&&&&&\sbox0{\dots}\makebox[\wd0]{\vdots}&\\
+		&&&&&&\\
+		\toprule
+		
+		50&20.0 &  5.0 &   5.0 &     28.490467 &     24.710348 & $\dots$&          34.279956 &         34.278870 \\
+		51&20.0 &  5.0 &  10.0 &     28.623668 &     24.979102 &$\dots$&           34.562216 &         34.545227 \\
+		52&20.0 &  5.0 &  20.0 &     28.764243 &     25.137052 &$\dots$&           34.752584 &         34.746928 \\
+		53&20.0 &  5.0 &  40.0 &     28.229947 &     24.561356 &$\dots$&           34.258736 &         34.260636 \\
+		54&20.0 &  5.0 &  80.0 &     29.162557 &     25.340699 &$\dots$&           35.015909 &         35.002788 \\
+		
+		\bottomrule
+		&&&&&&\\
+		&&&&&\sbox0{\dots}\makebox[\wd0]{\vdots}&\\
+		&&&&&&\\
+		\toprule
+		
+		 120&80.0 &  80.0 &   5.0 &     28.548244 &     25.157684 &$\dots$&         34.742313 &         34.749349 \\
+		121&80.0 &  80.0 &  10.0 &     28.630183 &     25.045884 &$\dots$&         34.678857 &         34.675690 \\
+		122&80.0 &  80.0 &  20.0 &     28.420835 &     24.737087 &$\dots$&         34.354338 &         34.347416 \\
+		123&80.0 &  80.0 &  40.0 &     28.457189 &     24.743263 &$\dots$&         34.327938 &         34.319839 \\
+		124&80.0 &  80.0 &  80.0 &     28.615161 &     25.093255 &$\dots$&         34.743829 &         34.734124 \\
+		\bottomrule[0.5mm]
+	\end{tabular}}
+\end{table}
+
+Following that, all models were fit again to this new data set. The results are shown in the following subsections.
+
+\newpage
+\subsection{OLS - Average only}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1\textwidth]{../figures/ols-avg-only.png}
+	\caption{OLS prediction for unique gas mixtures.}
+	\label{fig:ols-avg-only}
+\end{figure}
+
+\newpage
+\subsection{PCR - Average only}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1\textwidth]{../figures/pcr-avg-only.png}
+	\caption{PCR predictionfor unique gas mixtures.}
+	\label{fig:pcr-avg-only}
+\end{figure}
+
+\newpage
+\subsection{PLSR - Average only}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1\textwidth]{../figures/plsr-avg-only.png}
+	\caption{PLSR prediction for unique gas mixtures.}
+	\label{fig:plsr-avg-only}
+\end{figure}
+
+\newpage
+\subsection{Ridge Regression - Average only}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1\textwidth]{../figures/ridge-avg-only.png}
+	\caption{Ridge prediction for unique gas mixtures.}
+	\label{fig:ridge-avg-only}
+\end{figure}
+
+

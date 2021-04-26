@@ -1,35 +1,3 @@
-%%% lorem.tex --- 
-%% 
-%% Filename: lorem.tex
-%% Description: 
-%% Author: Ola Leifler
-%% Maintainer: 
-%% Created: Wed Nov 10 09:59:23 2010 (CET)
-%% Version: $Id$
-%% Version: 
-%% Last-Updated: Wed Nov 10 09:59:47 2010 (CET)
-%%           By: Ola Leifler
-%%     Update #: 2
-%% URL: 
-%% Keywords: 
-%% Compatibility: 
-%% 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% 
-%%% Commentary: 
-%% 
-%% 
-%% 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% 
-%%% Change log:
-%% 
-%% 
-%% RCS $Log$
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% 
-%%% Code:
-
 \chapter{Discussion}
 \label{cha:discussion}
 
@@ -38,11 +6,11 @@ This chapter is dedicated to explain the results obtained in the previous sectio
 \section{Results}
 \label{sec:discussion-results}
 
-From the results shown in Chapter~\ref{cha:results}, it is clear that all models fail in predicting gas concentrations. As a first visual assessment, it can be seen from Figures~\ref{fig:features} and *************** that there seems to be no clear order of response variables, i.e. simultaneous gas concentrations.
+From the results shown in Chapter~\ref{cha:results}, it is clear that all models fail in predicting gas concentrations. As a first visual assessment, it can be seen from Figures~\ref{fig:slopes} and \ref{fig:averages} that there seems to be no clear order of response variables, i.e. simultaneous gas concentrations.
 
- Slope features, for example, are approximately zero throughout the cycle, with the exception of some particular measurements. Even then, visual inspection indicates that this feature is not informative of gas concentrations. For this reason, the second part of the analysis was done without these features.
+ Slope features, for example, are approximately zero throughout the cycle, with the exception of some particular measurements as seen in Figure~\ref{fig:slopes}. Even then, visual inspection indicates that this feature is not informative of gas concentrations. For this reason, the second part of the analysis was done without these features.
  
- Average features, on the other hand, seem to have some separation and indicate that gas concentrations might be explained by it. Nonetheless, it is not possible to order in any clear way. For example, mixtures with high concentrations of NO have average features that vary wildly, and it does not seem to follow any particular linear order of NO or \nox concentration levels. 
+ Average features, on the other hand, seem to have some separation and indicate that gas concentrations might be explained by it. Nonetheless, it is not possible to order in any clear way. For example, mixtures with high concentrations of NO have average features that vary wildly, and it does not seem to follow any particular linear order of ammonia or \nox concentration levels. Further attempts at ordering the data can be found in Appendix B. (\textcolor{red}{Note to Annika: I'll add those attempts we discussed (4 colors, etc.) in the appendix to avoid too much clutter. What do you think?})
  
 \acrlong{ols} was expected to perform poorly, due to the high correlation of average features evidenced in Figure~\ref{fig:cor-mat}. Indeed, the results fail to predict gas concentrations at a reasonable level as seen on Figure~\ref{fig:ols-exposures}. Looking at the actual vs. predicted plot, it can be seen that the predictions are centered at the mean of concentrations (31 ppm) and have high variance, indicated by the wide range of prediction in all concentration levels.
 
@@ -50,7 +18,7 @@ From the results shown in Chapter~\ref{cha:results}, it is clear that all models
 
 \acrshort{plsr}, a method that has been shown to work in this type of problem, also performed poorly. Once again, there is not clear separation of concentration levels as shown in Figure~\ref{fig:pls}, and \acrshort{cv} shows that only one component, again, yields minimal \acrshort{rmse}. Prediction results in Figure~\ref{fig:plsr-exposures} is very similar to predictions from \acrshort{pcr}: centered around the mean with lower variance than \acrshort{ols}.
 
-The final proposed model, Ridge regression, also fails completely in prediction, but brings meaningful insights for analysis. The \acrshort{cv} plot for the shrinkage factor $\lambda$ shows a curious behavior: with low values of $\lambda$, regression seems to fit training data well, with a relatively low \acrshort{rmse} of approximately 23. However, this is not the case for validation set. From the plot, extremely high values of regularization yields lowest \acrshort{rmse} in the test set, around 27. From Equation*****, it can be seen that for high $\lambda$, the regression converges to a model that only predicts the mean (in this case, 31 ppm). A virtually "infinite" regularization would achieve best prediction in this case.
+The final proposed model, Ridge regression, also fails completely in prediction, but brings meaningful insights for analysis. The \acrshort{cv} plot for the shrinkage factor $\lambda$ shows a curious behavior: with low values of $\lambda$, regression seems to fit training data well, with a relatively low \acrshort{rmse} of approximately 23. However, this is not the case for validation set. From the plot, extremely high values of regularization yields lowest \acrshort{rmse} in the test set, around 27. From Equations~\ref{eqn:ridgebetahat2}, \ref{eqn:ridge-betazero} and \ref{eqn:ridge-yhat}, it can be seen that for high $\lambda$, the regression converges to a model that only predicts the mean (in this case, 31 ppm). A virtually "infinite" regularization would achieve best prediction in this case.
 
 \section{Method}
 \label{sec:discussion-method}

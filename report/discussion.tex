@@ -33,15 +33,38 @@
 \chapter{Discussion}
 \label{cha:discussion}
 
+This chapter is dedicated to explain the results obtained in the previous sections and relating them to statistical theory. The main objective here is to explain why the results are not satisfactory for gas concentration predictions.
+
 \section{Results}
 \label{sec:discussion-results}
+
+From the results shown in Chapter~\ref{cha:results}, it is clear that all models fail in predicting gas concentrations. As a first visual assessment, it can be seen from Figures~\ref{fig:features} and *************** that there seems to be no clear order of response variables, i.e. simultaneous gas concentrations.
+
+ Slope features, for example, are approximately zero throughout the cycle, with the exception of some particular measurements. Even then, visual inspection indicates that this feature is not informative of gas concentrations. For this reason, the second part of the analysis was done without these features.
+ 
+ Average features, on the other hand, seem to have some separation and indicate that gas concentrations might be explained by it. Nonetheless, it is not possible to order in any clear way. For example, mixtures with high concentrations of NO have average features that vary wildly, and it does not seem to follow any particular linear order of NO or \nox concentration levels. 
+ 
+\acrlong{ols} was expected to perform poorly, due to the high correlation of average features evidenced in Figure~\ref{fig:cor-mat}. Indeed, the results fail to predict gas concentrations at a reasonable level as seen on Figure~\ref{fig:ols-exposures}. Looking at the actual vs. predicted plot, it can be seen that the predictions are centered at the mean of concentrations (31 ppm) and have high variance, indicated by the wide range of prediction in all concentration levels.
+
+\acrshort{pca} with two components confirmed previous suspicions: there is no clear separation of gas concentrations for any of the gasses. Although Figure~\ref{fig:pcr-exp-var} shows that 80\% of the variance can be explained by approximately 80 components, cross-validation indicate that only one \acrshort{pc} yields minimal error before it starts to over fit the training data. Predictions in Figure~\ref{fig:pcr-exposures} are poor, but have significantly less variance around the concentration mean than \acrshort{ols}. This is expected from this method, as the extraction of \acrshort{pc}s is tightly related to the explained variability of the predictors, selecting linear combinations ordered by "importance" to the result.
+
+\acrshort{plsr}, a method that has been shown to work in this type of problem, also performed poorly. Once again, there is not clear separation of concentration levels as shown in Figure~\ref{fig:pls}, and \acrshort{cv} shows that only one component, again, yields minimal \acrshort{rmse}. Prediction results in Figure~\ref{fig:plsr-exposures} is very similar to predictions from \acrshort{pcr}: centered around the mean with lower variance than \acrshort{ols}.
+
+The final proposed model, Ridge regression, also fails completely in prediction, but brings meaningful insights for analysis. The \acrshort{cv} plot for the shrinkage factor $\lambda$ shows a curious behavior: with low values of $\lambda$, regression seems to fit training data well, with a relatively low \acrshort{rmse} of approximately 23. However, this is not the case for validation set. From the plot, extremely high values of regularization yields lowest \acrshort{rmse} in the test set, around 27. From Equation*****, it can be seen that for high $\lambda$, the regression converges to a model that only predicts the mean (in this case, 31 ppm). A virtually "infinite" regularization would achieve best prediction in this case.
 
 \section{Method}
 \label{sec:discussion-method}
 
+In hindsight, the results indicate that the selection of linear models was ill-advised. Although \acrshort{plsr} seems to work well for problems using \acrshort{tco}, this is not the case for frequency modulation with \nox and ammonia. For future work, non-parametric models are recommended. Perhaps their high flexibility and lack of assumptions about data could be of aid in achieving better prediction metrics.
+
+Additionally, the frequency cycle itself could be changed. Most notably, instead of a square wave signal, a triangular wave could be more desired, as it would imply in less "stable" sections of the sensor response, possibly yielding more meaningful features, specially slopes.
+
 \section{The work in a wider context}
 \label{sec:work-wider-context}
 
+From a statisticians point of view, it is always a misfortune when analysis' results are not "good" in the sense of high accuracy or low prediction error. These arbitrarily "bad" results, however, bring more insight to the problem, and knowing what does not work might be as valuable as knowing what works.
+
+The quantification of \nox and Ammonia, as shown in Chapter~\ref{cha:introduction}, is of paramount importance in the current world, where combustion processes are still commonplace. Although the advent of ever-improving electric vehicles is a silver lining regarding gas emissions and combustion processes, some industrial processes cannot avoid it. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% lorem.tex ends here

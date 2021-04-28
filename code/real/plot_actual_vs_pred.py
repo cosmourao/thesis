@@ -4,6 +4,7 @@ import matplotlib.lines as mlines
 import matplotlib.transforms as mtransforms
 import matplotlib.ticker as ticker
 import matplotlib.pylab as pl
+import numpy as np
 
 def plot_actual_vs_pred(actual, pred, title, info):
     
@@ -38,9 +39,14 @@ def plot_actual_vs_pred(actual, pred, title, info):
         line.set_transform(transform)
         ax.add_line(line)
         
+        # Average horizontal line of prediction
+        pred_mean = np.mean(pred[:,i])
+        ax.axhline(y = pred_mean, color = 'blue', ls = '--')
+        ax.text(x = 60, y = pred_mean + 1 , s = f'Mean=\n {str(round(pred_mean,2))}', fontsize = 20, color = 'blue')
+        
         # Text box with information of the fit
         props = dict(boxstyle='round', facecolor='wheat', alpha=0.6)
-        textstr = info
+        textstr = info[i]
         ax.text(0.05, 0.95,
                 textstr,
                 transform = ax.transAxes,

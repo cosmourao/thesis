@@ -173,7 +173,7 @@ The naming convention for the features is shown in Figure~\ref{fig:feat-naming}.
 	\label{fig:feat-naming}
 \end{figure}
 
-The pre-processing results in the format shown in Figure~\ref{fig:preprocessed-data}. Recalling that there are 125 possible mixtures of gases, it is important to note that there are repeated exposures in the data set and those are treated as individual observations. Since each unique gas mixture was exposed 4 times during a cycle, and the experiment was repeated 3 times, this yields a total of $4 \times 3 \times 125 = 1500$ exposures.
+The pre-processing results in the format shown in Figure~\ref{fig:preprocessed-data}. Recalling that there are 125 possible mixtures of gases, it is important to note that there are repeated exposures in the data set and those are treated as individual observations. Since each unique gas mixture was exposed 4 times during a cycle, and the experiment was repeated 3 times, this yields a total of $4 \times 3 \times 125 = 1500$ exposures. A snippet of the final data set is shown in Table~\ref{tab:prepro-sample}.
 
 \begin{figure}[h]
 	\centering
@@ -181,8 +181,6 @@ The pre-processing results in the format shown in Figure~\ref{fig:preprocessed-d
 	\caption{Pre-processed data structure.}
 	\label{fig:preprocessed-data}
 \end{figure}
-
-Finally, the majority of models proposed are scale variant, with the exception of \acrshort{ols}. The data, therefore, was centered and scaled to have unit variance and zero mean. A snippet of the final data set is shown in Table~\ref{tab:prepro-sample}.
 
 \begin{table}
 	\centering

@@ -1,287 +1,304 @@
 \chapter{Results}
 \label{cha:results}
 
-This chapter is dedicated to show the analysis' results. In favor of clarity and organization, this chapter will be divided into two main sections: the first treating each gas exposure individually and the other averaging exposures of the same gas mixture. Subsections on the models used also are present. The plots presented in this section were made using \textit{ad-hoc} plotting functions.
+This chapter is dedicated to show the analysis' results. In favor of clarity and organization, this chapter will be divided into sections, each corresponding to a different model.The plots presented in this section were made using \textit{ad-hoc} plotting functions.
 
-Initially the regression analysis was done in the pre-processed data presented in Chapter~\ref{cha:data}, i.e. each observation corresponds to a gas exposure. It is important to remind the reader that in this data, each unique gas mixture was exposed (i.e. an exposure) twelve times: four frequency cycles through three experiment repetitions, yielding 1500 observations. 
+Initially the regression analysis was done in the pre-processed data presented in Table~\ref{tab:prepro-sample}, i.e. each observation corresponds to a gas exposure. It is important to remind the reader that in this data, each unique gas mixture was exposed (i.e. an exposure) twelve times: four frequency cycles through three experiment repetitions, yielding 1500 observations. Subsequently, the same analysis was conducted, but this time using the only average features of the mixture averages, shown in Table~\ref{tab:prepro-sample-unique-mixtures}.
 
 Before beginning analysis, an assessment of correlation between features is first conducted and shown in Figure~\ref{fig:cor-mat}.
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=0.6\textwidth]{../figures/correlation-matrix.png}
+	\includegraphics[width=0.35\textwidth]{../figures/correlation-matrix.png}
 	\caption{Correlation matrix of features.}
+	
 	\label{fig:cor-mat}
 \end{figure}
 
-\section{Individual exposures}
+In Figure~\ref{fig:cor-mat}, the first, mainly green, quadrant correspond to slope features, while the fourth, mainly yellow, quadrant, averages.
 
-\subsection{OLS}
+\clearpage
+\section{\acrlong{ols}}
+\label{sec:results-ols}
 
-As explained in Chapter~\ref{cha:methods}, \acrshort{ols} is treated here as a baseline. The actual vs. predicted plot in Figure~\ref{fig:ols-exposures} shows the predictions of this model.
-
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=1\textwidth]{../figures/ols-exposures.png}
-	\caption{OLS prediction for individual exposures}
-	\label{fig:ols-exposures}
-\end{figure}
-
-\subsection{PCR}
-\label{subsec:pcr1}
-
-Following the methodology of Chapter~\ref{cha:methods}, a \acrshort{pca} is conducted with two components in an attempt to visualize the data in a lower dimensional space in Figure~\ref{fig:pca}. 
+As explained in Chapter~\ref{cha:methods}, \acrshort{ols} is treated here as a baseline. The actual vs. predicted plot in Figure~\ref{fig:ols-exposures} shows the predictions for both data sets.
 
 \begin{figure}[!htb]
 	\centering
+	
+	\begin{subfigure}[b]{1\textwidth}
+		\includegraphics[width=1\linewidth]{../figures/ols-act-vs-pred.png}
+		\caption{}
+		\label{fig:ols-exposures} 
+	\end{subfigure}
+	
+	\begin{subfigure}[b]{1\textwidth}
+		\includegraphics[width=1\linewidth]{../figures/ols-avg-act-vs-pred.png}
+		\caption{}
+		\label{fig:ols-averaged}
+	\end{subfigure}
+	
+	\caption{Actual vs. Predicted for (a) slopes and averages through exposures and (b) only averaged average features through mixtures.}
+	\label{fig:ols-both}
+\end{figure}
+
+Each subplot  in Figure~\ref{fig:ols-both} corresponds to predictions of \nox and ammonia concentrations, respectively. The red diagonal line is the $y = f(x) = x$ identity line. The blue line is the mean of predicted concentrations. The text box contains more information regarding the model fit.
+\label{fig:OLS-ACTUAL-VS-PRED}
+
+\clearpage
+\section{\acrlong{pcr}}
+\label{sec:results-pcr}
+
+Following the methodology of Chapter~\ref{cha:methods}, a \acrshort{pca} is conducted with two components in an attempt to visualize the data in a lower dimensional space in Figure~\ref{fig:pca-2components}. 
+
+\begin{figure}[!htb]
+	\centering
+	
+	\begin{subfigure}[b]{1\textwidth}
 	\includegraphics[width=0.30\textwidth]{../../figures/pcaNO.png}
 	\hfill
 	\includegraphics[width=0.30\textwidth]{../../figures/pcaNO2.png}
 	\hfill
 	\includegraphics[width=0.30\textwidth]{../../figures/pcaNH3.png}
-	\caption{\acrshort{pca} with two components for the three gases.}
+	\caption{}
+	\label{fig:pca}
+	\end{subfigure}
 	
-\label{fig:pca}
+	\begin{subfigure}[b]{1\textwidth}
+	\includegraphics[width=0.30\textwidth]{../../figures/pcaNO-avg-feat.png}
+	\hfill
+	\includegraphics[width=0.30\textwidth]{../../figures/pcaNO2-avg-feat.png}
+	\hfill
+	\includegraphics[width=0.30\textwidth]{../../figures/pcaNH3-avg-feat.png}
+	\caption{}
+	\label{fig:pca-avg-only}
+	\end{subfigure}
+	
+	\caption{\acrshort{pca} for (a) slopes and averages through exposures and (b) only averaged average features through mixtures.}
+	\label{fig:pca-both}
 \end{figure}
 
-Furthermore, an explained variance plot is shown in Figure~\ref{fig:pcr-exp-var}. The first two \acrshort{pc}s explain approximately 40\% of the total variance, reaching 80\% around 100 components.
-
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=1\textwidth]{../figures/pcr-explained-variance.png}
-	\caption{Explained variance}
-	\label{fig:pcr-exp-var}
-\end{figure}
-
-After this exploration of \acrshort{pca}, the analysis proceeds to fit a \acrshort{pcr} model to the data. The choice of number of \acrshort{pc}s was made via cross-validation using \acrshort{rmse} as the loss function, as can be seen in Figure~\ref{fig:pcr-cv-exposures}. Choosing only one components yields the minimum loss, around 27.
-
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=1\textwidth]{../figures/pcr-cv-exposures.png}
-	\caption{Number of \acrshort{pc}s selection via \acrshort{cv}.}
-	\label{fig:pcr-cv-exposures}
-\end{figure}
-
-After the choosing the number of components, the regression line was fit to the training data and used to predict unseen validation data. A quick way to visualize and assess the quality of the fit is an actual vs. predicted plot,  shown in Figure~\ref{fig:pcr-exposures}.
-
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=1\textwidth]{../figures/pcr-exposures.png}
-	\caption{PCR prediction for individual exposures}
-	\label{fig:pcr-exposures}
-\end{figure}
-
-\newpage
-\subsection{PLSR}
-
-Following the proposed model progression, the analysis proceeds to fit the \acrshort{plsr} model. A similar pipeline to Section~\ref{subsec:pcr1} was used. First, in Figure~\ref{fig:pls}, the choice of only two \acrshort{pls} components allowed visualization of data in a two dimensional plot. Moreover, total explained variance is shown in Figure~\ref{fig:pls-exp-var}. Once again, cross-validation using \acrshort{rmse} yields a single component as the best choice, which is then used to fit and predict gas concentrations in Figure~\ref{fig:plsr-exposures}.
+Furthermore, an explained variance plot is shown in Figure~\ref{fig:pcr-exp-var-both}. For the first case, the first two \acrshort{pc}s explain approximately 40\% of the total variance, reaching 80\% around 100 components. On the other hand, the second case achieves 90\% of explained variability with two components.
 
 \begin{figure}[!htb]
 	\centering
-	\includegraphics[width=0.32\textwidth]{../../figures/plsNO.png}
-	\hfill
-	\includegraphics[width=0.32\textwidth]{../../figures/plsNO2.png}
-	\hfill
-	\includegraphics[width=0.32\textwidth]{../../figures/plsNH3.png}
-	\caption{\acrshort{pls} with two components for the three gases.}
-	\label{fig:pls}
-\end{figure}
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=1\textwidth]{../figures/pls-explained-variance.png}
-	\caption{PLS - Explained variance of X}
-	\label{fig:pls-exp-var}
-\end{figure}
-
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=1\textwidth]{../figures/pls-cv-exposures.png}
-	\caption{Number of \acrshort{pls} components selection via \acrshort{cv}.}
-	\label{fig:pls-cv-exposures}
-\end{figure}
-
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=1\textwidth]{../figures/pls-exposures.png}
-	\caption{\acrshort{plsr} prediction for individual exposures}
-	\label{fig:plsr-exposures}
-\end{figure}
-
-\newpage
-\subsection{Ridge Regression}
-
-For Ridge regression, the regularization term $\lambda$ was chosen via cross-validation, as shown in Figure~\ref{fig:ridge-cv-exposures}. Additionally, the shrinkage of coefficients can be seen in Figure~\ref{fig:ridge-shrink}. As expected, the coefficients shrink asymptotically towards zero.
-
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=1\textwidth]{../figures/ridge-cv-exposures.png}
-	\caption{\acrshort{cv} of shrinkage factor $\lambda$}
-	\label{fig:ridge-cv-exposures}
-\end{figure}
-
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=1\textwidth]{../figures/ridge-coefs.png}
-	\caption{Shrinkage of ridge coefficients.}
-	\label{fig:ridge-shrink}
-\end{figure}
-
-Finally, after the choice of $\lambda$, the actual vs. predicted plot is presented if Figure~\ref{fig:ridge-exposures}.
-
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=1\textwidth]{../figures/ridge-exposures.png}
-	\caption{Ridge prediction for individual exposures}
-	\label{fig:ridge-exposures}
-\end{figure}
-
-\newpage
-\section{Averaging features by gas mixture}
-
-Following the process depicted in Figure~\ref{fig:averaging-process}, the averaged features data set is shown below on Table~\ref{tab:averaged-data}. Now it is now possible to plot slope and average features through time, as shown in Figures~\ref{fig:slopes} and \ref{fig:averages}. Furthermore, for the following analysis, only average features were selected, i.e. slopes were discarded, which is shown in Table~\ref{tab:only-avgs}
-
-
-
-\begin{table}
-	\centering
-	\caption{Sample of averaged mixture data.}
-	\label{tab:averaged-data}
-	\resizebox{\textwidth}{!}{%
-\begin{tabular}{cp{0.3cm}p{0.8cm}p{0.8cm}p{1.8cm}p{1.8cm}p{1.8cm}p{0.3cm}p{1.8cm}p{1.8cm}p{1.8cm}p{0.3cm}p{1.6cm}p{1.6cm}}
-	\toprule[0.5mm]
-	Index &NO &  NO2 &   NH3 &  0.05-1-slope-0 &  0.05-1-slope-1 &  0.05-1-slope-2 & $\dots$&   5000.0-1-slope-239 &  0.05-1-avg-0 &  0.05-1-avg-1 & $\dots$&   5000.0-1-avg-238 &  5000.0-1-avg-239 \\
-	\midrule[0.5mm]
-	0&5.0 &  5.0 &   5.0 &      -26.386178 &      -14.165356 &       -0.234640 & $\dots$&            -0.041897 &     28.983749 &     25.442410 & $\dots$&          35.162932 &         35.152458 \\
-	1&5.0 &  5.0 &  10.0 &      -26.294332 &      -14.421532 &       -0.216090 & $\dots$&             0.004524 &     28.538652 &     24.933269 & $\dots$&          34.622460 &         34.623591 \\
-	2&5.0 &  5.0 &  20.0 &      -25.514491 &      -15.174588 &       -0.253371 & $\dots$&            -0.010135 &     29.038925 &     25.245278 & $\dots$&          35.025637 &         35.023103 \\
-	3&5.0 &  5.0 &  40.0 &      -25.906221 &      -14.565139 &       -0.306851 & $\dots$&             0.003801 &     28.698684 &     25.057399 &  $\dots$&         34.575699 &         34.576649 \\
-	4&5.0 &  5.0 &  80.0 &      -26.731849 &      -13.795072 &       -0.241065 & $\dots$&            -0.022803 &     28.738748 &     25.289980 & $\dots$&          34.860040 &         34.854340 \\
-	\bottomrule
-	&&&&&&&&&&&&&\\
-	&&&&&&&&\sbox0{\dots}\makebox[\wd0]{\vdots}&&&&&\\
-	&&&&&&&&&&&&&\\
-	\toprule
+	\begin{subfigure}[t]{0.5\textwidth}
+		\includegraphics[width=1\linewidth]{../figures/pcr-explained-variance.png}
+		\caption{}
+		\label{fig:pca-exp-var} 
+	\end{subfigure}
 	
-	50&20.0 &  5.0 &   5.0 &      -25.541819 &      -15.120475 &       -0.228034 &$\dots$&            -0.004344 &     28.490467 &     24.710348 &$\dots$&          34.279956 &         34.278870 \\
-	51&20.0 &  5.0 &  10.0 &      -26.036798 &      -14.578261 &       -0.202154 &$\dots$&            -0.067958 &     28.623668 &     24.979102 &$\dots$&          34.562216 &         34.545227 \\
-	52&20.0 &  5.0 &  20.0 &      -25.982142 &      -14.508765 &       -0.221338 &$\dots$&            -0.022622 &     28.764243 &     25.137052 & $\dots$&         34.752584 &         34.746928 \\
-	53&20.0 &  5.0 &  40.0 &      -25.964768 &      -14.674361 &       -0.179532 &$\dots$&             0.007601 &     28.229947 &     24.561356 & $\dots$&         34.258736 &         34.260636 \\
-	54&20.0 &  5.0 &  80.0 &      -25.317133 &      -15.287429 &       -0.308570 &$\dots$&            -0.052484 &     29.162557 &     25.340699 &$\dots$&          35.015909 &         35.002788 \\
+	\begin{subfigure}[t]{0.5\textwidth}
+		\includegraphics[width=1\linewidth]{../figures/pcr-explained-variance-avg-feat.png}
+		\caption{}
+		\label{fig:pca-exp-var-averaged}
+	\end{subfigure}
 	
-	\bottomrule
-	&&&&&&&&&&&&&\\
-	&&&&&&&&\sbox0{\dots}\makebox[\wd0]{\vdots}&&&&&\\
-	&&&&&&&&&&&&&\\
-	\toprule
+	\caption{Explained variance of \acrshort{pc} for (a) slopes and averages through exposures and (b) only averaged average features through mixtures.}
+	\label{fig:pca-exp-var-both}
+\end{figure}
+
+After this exploration of \acrshort{pca}, the analysis proceeds to fit a \acrshort{pcr} model to the data. The choice of number of \acrshort{pc}s was made via cross-validation using \acrshort{rmse} as the loss function, as can be seen in Figure~\ref{fig:pcr-cv-both}. Choosing only one components yields the minimum loss for both cases, around 27.
+
+\begin{figure}[!htb]
+	\centering
 	
-	 120&80.0 &  80.0 &   5.0 &      -27.073901 &      -13.562242 &       -0.218533 &$\dots$&             0.028142 &     28.548244 &     25.157684 &$\dots$&          34.742313 &         34.749349 \\
-	121&80.0 &  80.0 &  10.0 &      -26.329623 &      -14.337196 &       -0.120442 &$\dots$&            -0.012669 &     28.630183 &     25.045884 &$\dots$&          34.678857 &         34.675690 \\
-	122&80.0 &  80.0 &  20.0 &      -25.935631 &      -14.734990 &       -0.196363 &$\dots$&            -0.027690 &     28.420835 &     24.737087 &$\dots$&          34.354338 &         34.347416 \\
-	123&80.0 &  80.0 &  40.0 &      -25.821070 &      -14.855702 &       -0.241336 &$\dots$&            -0.032395 &     28.457189 &     24.743263 &$\dots$&          34.327938 &         34.319839 \\
-	124&80.0 &  80.0 &  80.0 &      -26.503363 &      -14.087625 &       -0.186228 &$\dots$&            -0.038820 &     28.615161 &     25.093255 &$\dots$&          34.743829 &         34.734124 \\
+	\begin{subfigure}[t]{0.5\textwidth}
+		\includegraphics[width=1\linewidth]{../figures/pcr-cv.png}
+		\caption{}
+		\label{fig:pcr-cv} 
+	\end{subfigure}
 	
-	\bottomrule[0.5mm]
-\end{tabular}}
-\end{table}
-
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=1\textwidth]{../figures/slopes.png}
-	\caption{Slope features. Each line represents one of the 125 unique exposures. }
-	\label{fig:slopes}
+	\begin{subfigure}[t]{0.5\textwidth}
+		\includegraphics[width=1\linewidth]{../figures/pcr-cv-avg-feat.png}
+		\caption{}
+		\label{fig:pcr-cv-averaged}
+	\end{subfigure}
+	
+	\caption{Cross-validation results for (a) slopes and averages through exposures and (b) only averaged average features through mixtures.}
+	\label{fig:pcr-cv-both}
 \end{figure}
 
-\begin{figure}[h]
+After the choosing the number of components, the regression was fit to the training data and used to predict unseen validation data. The results are shown in Figure~\ref{fig:pcr-both}.
+
+\begin{figure}[!htb]
 	\centering
-	\includegraphics[width=1\textwidth]{../figures/averages.png}
-	\caption{Average features. Each line represents one of the 125 unique exposures.}
-	\label{fig:averages}
+	
+	\begin{subfigure}[t]{1\textwidth}
+		\includegraphics[width=1\linewidth]{../figures/pcr-act-vs-pred.png}
+		\caption{}
+		\label{fig:pcr-act-vs-pred} 
+	\end{subfigure}
+	
+	\begin{subfigure}[t]{1\textwidth}
+		\includegraphics[width=1\linewidth]{../figures/pcr-act-vs-pred-avg-feat.png}
+		\caption{}
+		\label{fig:pcr-act-vs-pred-avg-feat}
+	\end{subfigure}
+	
+	\caption{\acrshort{pcr} for (a) slopes and averages through exposures and (b) only averaged average features through mixtures.}
+	\label{fig:pcr-both}
+\end{figure}
+
+\clearpage
+\section{\acrlong{plsr}}
+\label{sec:results-plsr}
+
+Following the proposed model progression, the analysis proceeds to fit the \acrshort{plsr} model. A similar pipeline to Section~\ref{sec:results-pcr} was used. First, in Figure~\ref{fig:pls-both}, the choice of only two \acrshort{pls} components allowed visualization of data in a two dimensional plot. Moreover, total explained variance is shown in Figure~\ref{fig:pls-exp-var-both}. Once again, cross-validation using \acrshort{rmse} yields a single component as the best choice, which is then used to fit and predict gas concentrations in Figure~\ref{fig:plsr-actual-vs-pred-both}.
+
+\begin{figure}[!htb]
+	\centering
+	
+	\begin{subfigure}[b]{1\textwidth}
+		\includegraphics[width=0.30\textwidth]{../../figures/plsNO.png}
+		\hfill
+		\includegraphics[width=0.30\textwidth]{../../figures/plsNO2.png}
+		\hfill
+		\includegraphics[width=0.30\textwidth]{../../figures/plsNH3.png}
+		\caption{}
+		\label{fig:pls}
+	\end{subfigure}
+	
+	\begin{subfigure}[b]{1\textwidth}
+		\includegraphics[width=0.30\textwidth]{../../figures/plsNO-avg-feat.png}
+		\hfill
+		\includegraphics[width=0.30\textwidth]{../../figures/plsNO2-avg-feat.png}
+		\hfill
+		\includegraphics[width=0.30\textwidth]{../../figures/plsNH3-avg-feat.png}
+		\caption{}
+		\label{fig:pls-avg-only}
+	\end{subfigure}
+	
+	\caption{\acrshort{pls} scores for (a) slopes and averages through exposures and (b) only averaged average features through mixtures.}
+	\label{fig:pls-both}
+\end{figure}
+
+\begin{figure}[!htb]
+	\centering
+	
+	\begin{subfigure}[t]{0.5\textwidth}
+		\includegraphics[width=1\linewidth]{../figures/pls-explained-variance.png}
+		\caption{}
+		\label{fig:pls-exp-var} 
+	\end{subfigure}
+	
+	\begin{subfigure}[t]{0.5\textwidth}
+		\includegraphics[width=1\linewidth]{../figures/pls-explained-variance-avg-feat.png}
+		\caption{}
+		\label{fig:pls-exp-var-avg-feat}
+	\end{subfigure}
+	
+	\caption{Explained variance of \acrshort{pls} components for (a) slopes and averages through exposures and (b) only averaged average features through mixtures.}
+	\label{fig:pls-exp-var-both}
 \end{figure}
 
 
-\begin{table}
+\begin{figure}[!htb]
 	\centering
-	\caption{Sample of only average features.}
-	\label{tab:only-avgs}
-	\resizebox{\textwidth}{!}{%
-	\begin{tabular}{ccccp{2cm}p{2cm}p{0.3cm}p{2cm}p{2cm}}
-		\toprule[0.5mm]
-		Index & NO &  NO2 &   NH3 &  0.05-1-avg-0 &  0.05-1-avg-1 & $\dots$&   5000.0-1-avg-238 &  5000.0-1-avg-239 \\
-		\midrule[0.5mm]
-		0&5.0 &  5.0 &   5.0 &     28.983749 &     25.442410 & $\dots$ &         35.162932 &         35.152458 \\
-		1&5.0 &  5.0 &  10.0 &     28.538652 &     24.933269 &$\dots$&           34.622460 &         34.623591 \\
-		2&5.0 &  5.0 &  20.0 &     29.038925 &     25.245278 &$\dots$&           35.025637 &         35.023103 \\
-		3&5.0 &  5.0 &  40.0 &     28.698684 &     25.057399 &$\dots$&           34.575699 &         34.576649 \\
-		4&5.0 &  5.0 &  80.0 &     28.738748 &     25.289980 &$\dots$&           34.860040 &         34.854340 \\
-		
-		\bottomrule
-		&&&&&&\\
-		&&&&&\sbox0{\dots}\makebox[\wd0]{\vdots}&\\
-		&&&&&&\\
-		\toprule
-		
-		50&20.0 &  5.0 &   5.0 &     28.490467 &     24.710348 & $\dots$&          34.279956 &         34.278870 \\
-		51&20.0 &  5.0 &  10.0 &     28.623668 &     24.979102 &$\dots$&           34.562216 &         34.545227 \\
-		52&20.0 &  5.0 &  20.0 &     28.764243 &     25.137052 &$\dots$&           34.752584 &         34.746928 \\
-		53&20.0 &  5.0 &  40.0 &     28.229947 &     24.561356 &$\dots$&           34.258736 &         34.260636 \\
-		54&20.0 &  5.0 &  80.0 &     29.162557 &     25.340699 &$\dots$&           35.015909 &         35.002788 \\
-		
-		\bottomrule
-		&&&&&&\\
-		&&&&&\sbox0{\dots}\makebox[\wd0]{\vdots}&\\
-		&&&&&&\\
-		\toprule
-		
-		 120&80.0 &  80.0 &   5.0 &     28.548244 &     25.157684 &$\dots$&         34.742313 &         34.749349 \\
-		121&80.0 &  80.0 &  10.0 &     28.630183 &     25.045884 &$\dots$&         34.678857 &         34.675690 \\
-		122&80.0 &  80.0 &  20.0 &     28.420835 &     24.737087 &$\dots$&         34.354338 &         34.347416 \\
-		123&80.0 &  80.0 &  40.0 &     28.457189 &     24.743263 &$\dots$&         34.327938 &         34.319839 \\
-		124&80.0 &  80.0 &  80.0 &     28.615161 &     25.093255 &$\dots$&         34.743829 &         34.734124 \\
-		\bottomrule[0.5mm]
-	\end{tabular}}
-\end{table}
-
-Following that, all models were fit again to this new data set. The results are shown in the following subsections.
-
-\newpage
-\subsection{OLS - Average only}
-
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=1\textwidth]{../figures/ols-avg-only.png}
-	\caption{OLS prediction for unique gas mixtures.}
-	\label{fig:ols-avg-only}
+	
+	\begin{subfigure}[t]{0.5\textwidth}
+		\includegraphics[width=1\linewidth]{../figures/pls-cv.png}
+		\caption{}
+		\label{fig:pls-cv} 
+	\end{subfigure}
+	
+	\begin{subfigure}[t]{0.5\textwidth}
+		\includegraphics[width=1\linewidth]{../figures/pls-cv-avg-feat.png}
+		\caption{}
+		\label{fig:pls-cv-avg-feat}
+	\end{subfigure}
+	
+	\caption{Cross-validation results for (a) slopes and averages through exposures and (b) only averaged average features through mixtures.}
+	\label{fig:pls-cv-both}
 \end{figure}
 
-\newpage
-\subsection{PCR - Average only}
-
-\begin{figure}[h]
+\begin{figure}[!htb]
 	\centering
-	\includegraphics[width=1\textwidth]{../figures/pcr-avg-only.png}
-	\caption{PCR predictionfor unique gas mixtures.}
-	\label{fig:pcr-avg-only}
+	
+	\begin{subfigure}[t]{1\textwidth}
+		\includegraphics[width=1\linewidth]{../figures/plsr-act-vs-pred.png}
+		\caption{}
+		\label{fig:pls-act-vs-pred} 
+	\end{subfigure}
+	
+	\begin{subfigure}[t]{1\textwidth}
+		\includegraphics[width=1\linewidth]{../figures/plsr-act-vs-pred-avg-feat.png}
+		\caption{}
+		\label{fig:pls-act-vs-pred-avg-feat}
+	\end{subfigure}
+	
+	\caption{\acrshort{plsr} for (a) slopes and averages through exposures and (b) only averaged average features through mixtures.}
+	\label{fig:plsr-actual-vs-pred-both}
 \end{figure}
 
-\newpage
-\subsection{PLSR - Average only}
+\clearpage
+\section{Ridge Regression}
+\label{sec:results-ridge}
 
-\begin{figure}[h]
+For Ridge regression, the regularization term $\lambda$ was chosen via cross-validation, as shown in Figure~\ref{fig:ridge-cv-both}. Additionally, the shrinkage of coefficients can be seen in Figure~\ref{fig:ridge-shrink-both}. As expected, the coefficients shrink asymptotically towards zero.
+
+\begin{figure}[!htb]
 	\centering
-	\includegraphics[width=1\textwidth]{../figures/plsr-avg-only.png}
-	\caption{PLSR prediction for unique gas mixtures.}
-	\label{fig:plsr-avg-only}
+	
+	\begin{subfigure}[t]{0.6\textwidth}
+		\includegraphics[width=1\linewidth]{../figures/ridge-cv.png}
+		\caption{}
+		\label{ridge:pls-cv} 
+	\end{subfigure}
+	
+	\begin{subfigure}[t]{0.6\textwidth}
+		\includegraphics[width=1\linewidth]{../figures/ridge-cv-avg-feat.png}
+		\caption{}
+		\label{fig:ridge-cv-avg-feat}
+	\end{subfigure}
+	
+	\caption{Cross-validation results for (a) slopes and averages through exposures and (b) only averaged average features through mixtures.}
+	\label{fig:ridge-cv-both}
 \end{figure}
 
-\newpage
-\subsection{Ridge Regression - Average only}
-
-\begin{figure}[h]
+\begin{figure}[!htb]
 	\centering
-	\includegraphics[width=1\textwidth]{../figures/ridge-avg-only.png}
-	\caption{Ridge prediction for unique gas mixtures.}
-	\label{fig:ridge-avg-only}
+	
+	\begin{subfigure}[t]{0.6\textwidth}
+		\includegraphics[width=1\linewidth]{../figures/ridge-shrink.png}
+		\caption{}
+		\label{fig:ridge-shrink} 
+	\end{subfigure}
+	
+	\begin{subfigure}[t]{0.6\textwidth}
+		\includegraphics[width=1\linewidth]{../figures/ridge-shrink-avg-feat.png}
+		\caption{}
+		\label{fig:ridge-shrink-avg-feat}
+	\end{subfigure}
+	
+	\caption{Coefficient shrinkage given $\lambda$ (a) slopes and averages through exposures and (b) only averaged average features through mixtures. Each line corresponds to a coefficient/feature}
+
+	\label{fig:ridge-shrink-both}
 \end{figure}
+
+\clearpage
+Finally, after the choice of $\lambda$, the actual vs. predicted plot is presented if Figure~\ref{fig:ridge-actual-vs-pred-both}.
+
+\begin{figure}[!htb]
+	\centering
+	
+	\begin{subfigure}[t]{1\textwidth}
+		\includegraphics[width=1\linewidth]{../figures/ridge-act-vs-pred.png}
+		\caption{}
+		\label{fig:ridge-act-vs-pred} 
+	\end{subfigure}
+	
+	\begin{subfigure}[t]{1\textwidth}
+		\includegraphics[width=1\linewidth]{../figures/ridge-act-vs-pred-avg-feat.png}
+		\caption{}
+		\label{fig:ridge-act-vs-pred-avg-feat}
+	\end{subfigure}
+	
+	\caption{Ridge regression predictions for (a) slopes and averages through exposures and (b) only averaged average features through mixtures.}
+	\label{fig:ridge-actual-vs-pred-both}
+\end{figure}
+
+
 
 

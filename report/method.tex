@@ -31,16 +31,5 @@ Here, a similar procedure to Section~\ref{sec:met-pcr} was conducted. Initially,
 
 Once again, cross-validation was use to select the amount of shrinkage, i.e. $\lambda$. After setting $\lambda$, analysis proceeded as usual: fitting the regression line via \texttt{Ridge} to training data and evaluating it using the validation set.
 
-\section{Averaging features}
-\label{sec:met-avg}
-
-In efforts to further analyze the data, the previous 1500 observations are averaged by unique mixtures, i.e. for each mixture, the features are averaged from its twelve exposures, yielding 125 observations. Figure~\ref{fig:averaging-process} clarifies this further.
-
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=1\textwidth]{../figures/averaging-process.pdf}
-	\caption{A visualization of the feature averaging process.}
-	\label{fig:averaging-process}
-\end{figure}
 
 

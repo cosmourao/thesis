@@ -35,7 +35,7 @@
 
 Given previous discussions and analysis, the answer to the research question "Can frequency modulation be used to simultaneously quantify \nox and Ammonia concentrations?" seems to be: "perhaps not". Although poor predictions, the methods used here are far from exhausting the several other, possibly more flexible, models in the statisticians toolbox. Moreover, experiments using different frequency modulations (e.g. triangular waves instead of square) and/or different sensor calibrations and/or different temperatures could be further investigated in order to answer this question conclusively.
 
-As for the second question "Which method yields best predictions of gas concentrations?", the correct answer would be "none". Nonetheless, out of all proposed methods, \acrshort{plsr} has best relative performance in terms of \acrshort{rmse}.
+As for the second question "Does quality of fit vary over different prediction models?", the correct answer would be "no". All models failed to predict gas concentrations in every concentration and \acrshort{cv} results indicate that an underfitted, predict-the-mean model seems to work best in every situation, indicating that the models were not suitable for the regression analysis, as indicated by the $\text{R}^2$ tending to zero in most models.
 
 The author finds comfort in perhaps pointing future work towards better methods and possibly better quantification of these gases in hopes of addressing the problem more efficiently than current practices. In this sense, this thesis work is considered successful.
 

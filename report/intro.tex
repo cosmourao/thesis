@@ -60,8 +60,6 @@ One solution to this problem is the cycled operation of one single sensor, refer
 
 Frequency modulation tries to achieve the same goal: avoid steady state responses in exchange of unique signatures that could help identify/quantify the gasses at hand. It consists on operating the sensor in \acrfull{ac}. One then can regulate the frequency of this operation and create cycles of different frequencies, similar to what is done in \acrshort{tco}. This is equivalent to \acrshort{gbco}, but with more frequency changes and achieving overall higher frequencies.
 
-The main question is: given these set of unique sensor responses, how one can quantify the gasses that produced them? Multivariate regression techniques have been shown to be successful: \acrfull{plsr} has been used in chemometrics extensively and it has been proven to be good at this task \parencite{Bastuck_2019} \parencite{wold2011}. Other multivariate regression methods, naturally, can also be used.
-
 \section{Aim}
 \label{sec:aim}
 
@@ -73,7 +71,7 @@ The aim of this thesis is to investigate if frequency modulation can be used to 
 \begin{enumerate}
 	\item Can frequency modulation be used to simultaneously quantify \nox and Ammonia concentrations?
 	%\item Is it possible to achieve acceptable prediction levels for \nox and Ammonia using frequency modulation?
-	\item Which method yields best predictions of gas concentrations?
+	\item Does quality of fit vary over different prediction models?
 \end{enumerate}
 
 %\nocite{scigen}

@@ -1,35 +1,40 @@
 \chapter{Methods}
 \label{cha:methods}
 
-This chapter describes the application of theory shown in Chapter~\ref{cha:theory} applied to the pre-processed data described in Chapter~\ref{cha:data}. For further details regarding coding and implementation, the reader is referred to this work's \href{https://github.com/cosmourao/thesis}{\textcolor{blue}{repository}}.
+This work's main question is: given sensor responses, how one can quantify the gasses that produced them? Multivariate regression techniques have been shown to be successful, namely \acrfull{plsr} has been used in chemometrics extensively and it has been proven to be good at this task \parencite{Bastuck_2019} \parencite{wold2011}.
 
-In general, the use of Scikit-Learn's \texttt{pipeline} class alongside linear models made analysis straightforward. Additionally, Scikit-Learn's \texttt{GridSearchCV} allowed for a faster evaluation of different hyperparameters such as number of components and shrinkage factor.
+As examples, \textcite{BUR2015225} uses \acrshort{tco} of \acrshort{sicfet} sensors alongside \acrshort{plsr} to quantify naphthalene sufficiently enough to monitor its concentration for indoor air quality monitoring. Additionally, \textcite{BASTUCK2016263} shows that, also using \acrshort{tco}, \acrshort{plsr} can  quantify ethanol and naphthalene mixtures down to the \acrfull{ppb} level.
 
-Throughout all methods, training, test and validation sets were split using \texttt{train\_test\_split}. Out of all 1500 exposures, 1200 (80\%) were assigned to the training set and 300 (20\%) to the validation set. The test set is embedded in the training set, as k-fold cross-validation is used. A fixed random seed of 42 was set to ensure reproducibility of results. 
+All code was done in Python, namely in Jupyter notebooks both for it's simplicity and for its easiness in code and data exploration. In general, the use of Python's library Scikit-Learn and its \texttt{pipeline} class alongside linear models made analysis straightforward. Additionally, Scikit-Learn's \texttt{GridSearchCV} allowed for a faster evaluation of different hyper parameters such as number of components and shrinkage factors. 
 
-For reasons that will become clear in Chapter~\ref{cha:discussion} - Discussions, regression analysis was done with two sets of predictor variables: first with all features, i.e. slopes and averages for each exposure, and second with only averages for unique mixtures (averaged features).
+Throughout all methods, training, test and validation sets were split using Python's \texttt{train\_test\_split} function. 80\% of observations were assigned to the training set and the remaining 20\% to the validation set. The test set is embedded in the training set, as k-fold cross-validation is used. A fixed random seed of 42 was set to ensure reproducibility of results. 
+
+Before any model implementation, however, the data needed to be pre-processed as described in Section~\ref{sec:preprocessing}. This was done by "transposing" the row-based, per sample  measurements into column-based, per exposure features. This reduce the number of row significantly: from 360.000 to 1500. The features were named according to Figure~\ref{fig:feat-naming}.
+
+The evaluation and comparison of different models was done via the actual vs. predicted  plot. In this plot, it is possible to qualitatively see how good the predictions are. Additionally, fit metrics such as $\text{R}^2$ and \acrshort{rmse} are shown as a quantitative means of comparison.
+
+This methodology was carried out using data from both sensors: 1 and 2. Moreover, two variations of the data from these sensors were used: first using 1500 exposures and all 480 features. The second variation was done by averaging all exposures into unique mixtures as described in Figure~\ref{fig:averaging-process} and only using average features. The reasoning behind this will become apparent in the following chapters.
+
+For further details regarding coding and implementation, the reader is referred to this work's \href{https://github.com/cosmourao/thesis}{\textcolor{blue}{repository}} where all notebooks can be found.
 
 \section{\acrlong{ols}}
 \label{sec:met-ols}
 
-Here treated as a baseline, \acrshort{ols} is fit using \texttt{LinearRegression} then evaluated using the validation set.
+Here treated as a baseline, \acrshort{ols} is fit using all 480 features and evaluated using the validation set. 
 
 \section{\acrlong{pcr}}
 \label{sec:met-pcr}
 
-First, a \acrshort{pca} was conducted via Scikit-Learn's \texttt{PCA}. With that, cumulative variance and score plots were made in an attempt of better visualizing and understanding the data.
+First, a \acrshort{pca} with two \acrshort{pc}s was performed. With that, cumulative variance and score plots were made in an attempt of better visualizing and understanding the data.
 
-Following that, a linear regression on the \acrshort{pc}s was made. The number of components to use in it was found via \acrshort{cv} with \acrshort{rmse} as the scoring function. After training, the model was evaluated in a held-out validation set and a actual vs. predicted plot was constructed.
+Following that, a linear regression on the \acrshort{pc}s was made. The number of components was set to be between 1 and 200, and the ideal number of components was chosen via cross-validation with \acrshort{rmse} as the scoring function. Just as before, the ideal model was evaluated in a held-out validation set and a actual vs predicted plot was constructed.
 
 \section{\acrlong{plsr}}
 \label{sec:met-plsr}
 
-Here, a similar procedure to Section~\ref{sec:met-pcr} was conducted. Initially, \acrshort{pls} components were extracted via Scikit-learn's \texttt{PLSRegression} and some informative plots were made: cumulative explained variance (for both predictors $\mathbf{X}$ and response $\mathbf{Y}$), as well as score plots for the first two \acrshort{pls} components in an attempt to better visualize the data. The regression model was trained with the ideal number of components given by \acrshort{cv} and later evaluated in the held-out validation set.
+Here, a similar procedure to Section~\ref{sec:met-pcr} was conducted. Initially, two \acrshort{pls} components were extracted and some informative plots were made: cumulative explained variance and score plots in an attempt to better visualize the data. Here, once more, the grid of the number of \acrshort{pls} components was set between 1 and 200. The regression model was trained with the ideal number of components given by \acrshort{cv} and later evaluated in the held-out validation set.
 
 \section{Ridge Regression}
 \label{sec:met-ridge}
 
-Once again, cross-validation was use to select the amount of shrinkage, i.e. $\lambda$. After setting $\lambda$, analysis proceeded as usual: fitting the regression line via \texttt{Ridge} to training data and evaluating it using the validation set.
-
-
-
+For the shrinkage factor $\phi$, a logarithmic grid of 1000 values of  $\phi$, ranging from $10^{-10} $ to $10^4$ was set. This deliberate choice of  unusually high values of $\phi$ are further explained in the following sections. Regardless of that, \acrshort{cv} was used to find the best fit and that was evaluated in the held-out validation set.

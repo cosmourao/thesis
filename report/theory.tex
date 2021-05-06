@@ -7,36 +7,46 @@ The models here listed were chosen as a natural progression from a statisticians
 \section{Notation}
 \label{sec:notation}
 
-In favor of consistency and clarity, the notation used throughout this work is presented here. Bold capital letters, e.g. $\mathbf{A}$, are matrices while bold lower case letters are row vectors, e.g. $\mathbf{a}$. Scalars, on the other hand, are denoted as standard lower case letters, e.g. $a_{i1}$. Transposes and inverses are denoted, respectively with $\cdot^\intercal $ and $\cdot^{-1}$. An example is shown below.
+In favor of consistency and clarity, the notation used throughout this work is presented here. Bold capital letters, e.g. $\mathbf{A}$, are matrices while bold lower case letters are column vectors, e.g. $\mathbf{a}_1$. Scalars, on the other hand, are denoted as standard lower case letters, e.g. $a_{11}$. Transposes and inverses are denoted, respectively with $\cdot^\intercal $ and $\cdot^{-1}$. This is valid unless explicitly noted. An example is shown below.
+
+The data matrix $\mathbf{X}$:
 
 \begin{equation*}
-	\mathbf{A = [a_1, a_2, ..., a_n]^\intercal}
-\end{equation*}
-
-\begin{equation*}
-	\mathbf{A} = 
+	\mathbf{X} = 
 	\begin{bmatrix}
-		
-		\mathbf{a_1}\\
-		\mathbf{a_2}\\
-		\vdots \\
-		\mathbf{a_n}
-	\end{bmatrix}
+		\mathbf{x_1} & \mathbf{x_2} &\dots &\mathbf{x_p}\\
+	\end{bmatrix} 
 	=
 	\begin{bmatrix}
 		
-		a_{11} & a_{12} & \dots & a_{1p}\\
-		a_{21} & a_{22} & \dots & a_{2p}\\
+		x_{11} & x_{12} & \dots & x_{1p}\\
+		x_{21} & x_{22} & \dots & x_{2p}\\
 		\vdots  & \vdots & \ddots &\vdots\\
-		a_{n1} & a_{n2} & \dots & a_{np}\\
+		x_{n1} & x_{n2} & \dots & x_{np}\\
 	\end{bmatrix}
 \end{equation*}
 
+The response matrix $\mathbf{Y}$:
+
+\begin{equation*}
+	\mathbf{Y} = 
+	\begin{bmatrix}
+		\mathbf{y_1} & \mathbf{y_2} &\dots &\mathbf{y_m}\\
+	\end{bmatrix} 
+	=
+	\begin{bmatrix}
+		
+		y_{11} & y_{12} & \dots & y_{1m}\\
+		y_{21} & y_{22} & \dots & y_{2m}\\
+		\vdots  & \vdots & \ddots &\vdots\\
+		y_{n1} & y_{n2} & \dots & y_{nm}\\
+	\end{bmatrix}
+\end{equation*}
 
 \section{Ordinary Least Squares Regression}
 \label{sec:linreg}
 
-A simple, first approach would be to tackle the problem with a \acrfull{ols} regression model. As \cite{friedman2001} explains, each output  $\mathbf{Y = [y_1, y_2, ... , y_K]^\intercal} $ has its own linear model. Now, given a set of $n$ observations $\mathbf{X = [x_1, x_2, ..., x_n]^\intercal}$ and each observation having $p$ features, e.g. $\mathbf{x}_i = [x_{i1}, x_{i2}, ... x_{ip}], \; i = 1,2,...n$, the concatenation of all linear models can be written in matrix form as in Equation~\ref{eqn:ols}.
+A simple, first approach would be to tackle the problem with a \acrfull{ols} regression model. As \cite{friedman2001} explains, each output in  $\mathbf{Y}$ has its own linear model. Now, given $\mathbf{X}$, a set of $n$ observations  and $p$ features,  the concatenation of all linear models can be written in matrix form as in Equation~\ref{eqn:ols}.
 
 \begin{equation}
 	\label{eqn:ols}
@@ -45,22 +55,22 @@ A simple, first approach would be to tackle the problem with a \acrfull{ols} reg
 
 Where:
 \begin{itemize}
-	\item $\mathbf{B}$: [$p+1 \times K]$ matrix of regression coefficients (with the $+1$ referring to the intercept term);
-	\item $\mathbf{E}$: [$N \times K]$ matrix of residuals.
+	\item $\mathbf{B}$: [$p+1 \times m]$ matrix of regression coefficients (with the $+1$ referring to the intercept term);
+	\item $\mathbf{E}$: [$n \times m]$ matrix of random noise.
 \end{itemize}
 
-The objective is then to find the coefficients $\mathbf{\hat{B}}$ which minimizes the \acrfull{rss}, which is summarized by Equation~\ref{eqn:rss} \parencite{friedman2001}:
-
-\begin{equation}
-	\label{eqn:betahat}
-	\mathbf{\hat{B}^\text{OLS}} = \underset{\mathbf{B}}{\arg\min} 	\; \text{RSS}(\mathbf{B})
-\end{equation}
-
-In turn, the \acrshort{rss}, as the name suggests, is defined as the difference between real and predicted values, squared, which in matrix form is written as \parencite{friedman2001}:
+The \acrfull{rss}, as the name suggests, is defined as the difference between real and predicted values, squared, which in matrix form is written as \parencite{friedman2001}:
 
 \begin{equation} 
 	\label{eqn:rss}
 	\text{RSS}(\mathbf{B}) = \Tr [\mathbf{(Y-XB)^\intercal (Y-XB)}]
+\end{equation}
+
+In turn, the objective is then to find the coefficients $\mathbf{\hat{B}}$ which minimizes the \acrshort{rss}, which is summarized by Equation~\ref{eqn:betahat} \parencite{friedman2001}:
+
+\begin{equation}
+	\label{eqn:betahat}
+	\mathbf{\hat{B}^\text{OLS}} = \underset{\mathbf{B}}{\arg\min} 	\; \text{RSS}(\mathbf{B})
 \end{equation}
 
 Finally, solving for $\mathbf{\hat{B}}$ yields \parencite{friedman2001}:
@@ -77,32 +87,32 @@ For the problem at hand, in addition to the high number of features, it is often
 
 One way to define \acrfull{pca} is to view it as a orthogonal projection of the data into a principal space of lower dimension such that the variance of this projection is maximized \parencite{bishop2006pattern}.
 
-Just as before, consider the  collection of $n$ observations  $\mathbf{X}$ with covariance matrix $\mathbf{\Sigma}$. Additionally, consider a matrix $\mathbf{P = [p_1, p_2, ..., p_n]^\intercal}$ where $\mathbf{p_i}$ is a row vector of coefficients referring to the i-th linear combination \parencite{johnson2013applied}:
+Just as before, consider the  collection of $n$ observations  $\mathbf{X}$ with covariance matrix $\mathbf{\Sigma}$. Additionally, consider a matrix $\mathbf{P = [p_1, p_2, ..., p_p]}$ where $\mathbf{p_j}, j=1,2,...,p$ is a vector of weights of the linear combination \parencite{johnson2013applied}:
 
 \begin{equation}
 	\label{eqn:pca-lincomb}
-	t_i=\mathbf{x_i p_i^\intercal} \;\;\;\;\;\;\;\;\;\; i = 1, 2, ..., n
+	\mathbf{t_i}=\mathbf{p_i}^\intercal \mathbf{X} \;\;\;\;\;\;\;\;\;\; i = 1, 2, ..., p
 \end{equation}
 
-The variance and covariance of these new variables $t_i$ can be written as follows:
+The variance and covariance of these new variables $\mathbf{t}_i$ can be written as follows:
 
 \begin{equation}
 	\label{eqn:pca-var}
-	\text{Var}(t_i) = \mathbf{p_i^\intercal \Sigma p_i} \;\;\;\;\;\;\;\;\;\; i = 1, 2, ..., n
+	\text{Var}(\mathbf{t}_i) = \mathbf{p_i^\intercal \Sigma p_i} \;\;\;\;\;\;\;\;\;\; i = 1, 2, ..., p
 \end{equation}
 
 \begin{equation}
 	\label{eqn:pca-cov}
-	\text{Cov}(t_i, t_k) = \mathbf{p_i^\intercal \Sigma p_k}\;\;\;\;\;\;\;\;\;\; i,k= 1, 2, ..., n
+	\text{Cov}(\mathbf{t}_i, \mathbf{t}_k) = \mathbf{p_i^\intercal \Sigma p_k}\;\;\;\;\;\;\;\;\;\; i,k= 1, 2, ..., p
 \end{equation}
 
-The first \acrfull{pc} is then the linear combination with maximum variance, i.e. the linear combinations that maximizes $\text{Var}(t_1)$, with the constraint that the coefficient vector $\mathbf{p_1}$ has unit length. In summary, the first \acrshort{pc} is computed as \parencite{johnson2013applied}:
+The first \acrfull{pc} is then the linear combination with maximum variance, i.e. the linear combinations that maximizes $\text{Var}(\mathbf{t}_1)$, with the constraint that the coefficient vector $\mathbf{p_1}$ has unit length. In summary, the first \acrshort{pc} is computed as \parencite{johnson2013applied}:
 
 \begin{equation}
 	\label{eqn:pca-pc1}
 	\begin{split}
-		t_1 & =\mathbf{x_1 p_1^\intercal} \\
-			   & \text{that maximizes Var}(\mathbf{x_1 p_1^\intercal}) \\
+		PC_1  = \mathbf{t}_1 & =\mathbf{p_1}^\intercal \mathbf{X}\\
+			   & \text{that maximizes Var}(\mathbf{t_1}=\mathbf{p_1}^\intercal \mathbf{X}) \\
 			   & \text{ subject to }  \mathbf{p_1^\intercal p_1} = 1
 	\end{split}
 \end{equation}
@@ -112,10 +122,10 @@ The second \acrshort{pc}, similarly to the first, is the linear combination with
 \begin{equation}
 	\label{eqn:pca-pc2}
 	\begin{split}
-		t_2 & =\mathbf{x_2 p_2^\intercal} \\
-		& \text{that maximizes Var}(\mathbf{x_2 p_2^\intercal}) \\
-		& \text{subject to }  \mathbf{p_2^\intercal p_2} = 1 \\
-		& \text{and } \text{Cov}(t_1, t_2) = 0
+		\mathbf{t}_2 & =\mathbf{p_2}^\intercal \mathbf{X}\\
+		& \text{that maximizes Var}(\mathbf{t_2}=\mathbf{p_2}^\intercal \mathbf{X}) \\
+		& \text{ subject to }  \mathbf{p_2^\intercal p_2} = 1\\
+		& \text{ and } \;\;\; \text{Cov}(\mathbf{t}_1, \mathbf{t}_2) = 0
 	\end{split}
 \end{equation}
 
@@ -124,10 +134,10 @@ The k-th \acrshort{pc} is then:
 \begin{equation}
 	\label{eqn:pca-pck}
 	\begin{split}
-		t_k & =\mathbf{x_k p_k^\intercal} \\
-		& \text{that maximizes Var}(\mathbf{x_k p_k^\intercal}) \\
-		& \text{subject to }  \mathbf{p_k^\intercal p_k} = 1 \\
-		& \text{and } \text{Cov}(t_j, t_k) = 0 \;\;\; \text{for } k>j
+		\mathbf{t}_k & =\mathbf{p_k}^\intercal \mathbf{X}\\
+		& \text{that maximizes Var}(\mathbf{t_k}=\mathbf{p_k}^\intercal \mathbf{X}) \\
+		& \text{ subject to }  \mathbf{p_k^\intercal p_k} = 1\\
+		& \text{ and } \;\;\; \text{Cov}(\mathbf{t}_i, \mathbf{t}_k) = 0 \;\;\; \text{for} \;\;\;\; k<i
 	\end{split}
 \end{equation}
 
@@ -140,15 +150,15 @@ In summary, the objective of \acrshort{pca} is find a matrix $\mathbf{P}$ such t
 
 yields new variables that are uncorrelated and arranged in decreasing order of variance.
 
-It can be shown that these desired linear combinations can be written in terms of the eigenvalues ($\mathbf{\lambda}$) and eigenvectors ($\mathbf{e}$) of $\mathbf{\Sigma}$, the covariance matrix of $\mathbf{X}$ \parencite{johnson2013applied}. The elements of eigenvectors are called loadings, while the new features $\mathbf{T}$ are 
+It can be shown that these desired linear combinations can be written in terms of the eigenvalues ($\mathbf{\phi}$) and eigenvectors ($\mathbf{e}$) of $\mathbf{\Sigma}$, the covariance matrix of $\mathbf{X}$ \parencite{johnson2013applied}. The elements of eigenvectors are called loadings, while the new features $\mathbf{T}$ are 
 . In short, for the k-th \acrshort{pc}:
 
 \begin{equation}
 	\label{eqn:pca-eigen}
 	\begin{split}
-		t_k & =\mathbf{X_k e_k^\intercal} \\
-		\text{Var}(t_k)& =  \mathbf{e_k^\intercal \Sigma e_k}=\lambda_k \\
-		\text{Cov}(t_j, t_k)& = \mathbf{e_k^\intercal \Sigma e_j}= 0 \;\;\; \text{for } k\neq j
+		\mathbf{t}_k & =\mathbf{e_k^\intercal X_k } \\
+		\text{Var}(\mathbf{t}_k)& =  \mathbf{e_k^\intercal \Sigma e_k}=\phi_k \\
+		\text{Cov}(\mathbf{t}_k, \mathbf{t}_j)& = \mathbf{e_k^\intercal \Sigma e_j}= 0 \;\;\; \text{for } k\neq j
 	\end{split}
 \end{equation}
 
@@ -212,17 +222,29 @@ Although useful, \acrshort{pcr} has a potential flaw: while the new found projec
 
 \acrshort{plsr}, much like \acrshort{pcr}, also aims to reduce dimensionality via linear combinations of the inputs. This technique, however, also takes into account the response variables $\mathbf{Y}$. One key advantage of \acrshort{plsr} is that it seeks axes with most variance (like \acrshort{pcr}) and high correlation with response variables \parencite{friedman2001}.
 
-The main idea can be described as  finding  linear combinations  for the data matrix $\mathbf{X}$ and response matrix $\mathbf{Y}$ as follows \parencite{ng2013}, similarly to what was done in Section~\ref{sec:pca}. Here, the matrices $\mathbf{W}$ and $\mathbf{U}$ are score matrices, i.e. the transformed \acrshort{pls} variables, and $\mathbf{L}$ and $\mathbf{Q}$ are loading matrices, i.e. the weights of this transformation (projection).
+The main idea can be described as  finding  linear combinations  for the data matrix $\mathbf{X}$ and response matrix $\mathbf{Y}$ as follows \parencite{ng2013}, similarly to what was done in Section~\ref{sec:pca}. Here, the matrices $\mathbf{W}$ and $\mathbf{U}$ are score matrices, i.e. the transformed \acrshort{pls} variables, and $\mathbf{L}$ and $\mathbf{Q}$ are loading matrices, i.e. the weights of this transformation (projection), similar to Equation~\ref{eqn:pca}.
 
 \begin{equation}
 	\label{eqn:x-decomp}
 	\mathbf{W=XL^\intercal}
 \end{equation}
 
+Where:
+\begin{itemize}
+	\item $\mathbf{W}$: [$n \times k]$ matrix of \acrshort{pls} scores referring to the data $\mathbf{X}$;
+	\item $\mathbf{L}$: [$k\times p]$ matrix \acrshort{pls} coefficients referring to the data $\mathbf{X}$ .
+\end{itemize}
+
 \begin{equation}
 	\label{eqn:y-decomp}
 	\mathbf{U = YQ^\intercal}
 \end{equation}
+
+Where:
+\begin{itemize}
+	\item $\mathbf{U}$: [$n \times k]$ matrix of \acrshort{pls} scores referring to the  response $\mathbf{Y}$;
+	\item $\mathbf{Q}$: [$k \times m]$ matrix \acrshort{pls} coefficients referring to the response $\mathbf{Y}$ .
+\end{itemize}
 
 Instead of simply running \acrshort{nipals} on $\mathbf{X}$ and $\mathbf{Y}$ separately. \acrshort{plsr} uses information from $\mathbf{Y}$ to decompose $\mathbf{X}$ and \textit{vice-versa} \parencite{ng2013}. Algorithm~\ref{algo:pls-nipals} is an adaptation of Algorithm~\ref{algo:pca-nipals} to incorporate this intended behavior.
 
@@ -286,7 +308,7 @@ Which in turn, analogously to Equations~\ref{eqn:ols_beta} and \ref{eqn:beta-pcr
 
 Ridge regression is also a viable alternative to reduce the problem of highly correlated features \parencite{friedman2001}. Instead of fitting a least squares model on a subset of predictors or a transformation of them, Ridge allows the use of all features with a continuous shrinkage of its coefficients, which results in less variance \parencite{friedman2001}.
 
-For the multi-output case, there are two options: use the same penalization parameter $\lambda$ for all variables $\mathbf{Y = [y_1, y_2, ... , y_K]^\intercal}$ or apply different parameters $\mathbf{\boldsymbol{\lambda} = [\lambda_1, \lambda_2, ... , \lambda_K]^\intercal}$. In this work, the latter is preferred over the former, as it allows a more fine tuned control of the regression models for each studied gas.
+For the multi-output case, there are two options: use the same penalization parameter $\lambda$ for all outputs $\mathbf{Y = [y_1, y_2, ... , y_m]^\intercal}$ or apply different parameters $\mathbf{\boldsymbol{\lambda} = [\lambda_1, \lambda_2, ... , \lambda_m]^\intercal}$. In this work, the latter is preferred over the former, as it allows a more fine tuned control of the regression models for each studied gas.
 
 Analogous to Section~\ref{sec:linreg}, the goal is to minimize the \acrshort{rss}, but now with the penalization term taken into account. Equation~\ref{eqn:rss-ridge} below shows this objective function in matrix form.
 
@@ -295,12 +317,14 @@ Analogous to Section~\ref{sec:linreg}, the goal is to minimize the \acrshort{rss
 	\text{RSS}^{\text{Ridge}}(\mathbf{B, \boldsymbol{\lambda} }) = \Tr [\mathbf{(Y-XB)^\intercal (Y-XB)}] + \Tr[\mathbf{B^\intercal B + \boldsymbol{\lambda} I}]
 \end{equation}
 
+Where $\mathbf{I}$ is the $[m \times m]$ identity matrix.
+
 \begin{equation}
 	\label{eqn:ridgebetahat}
 	\mathbf{\hat{B}^\text{Ridge}} = \underset{\mathbf{B}}{\arg\min} 	\; \text{RSS}^{\text{Ridge}}(\mathbf{B})
 \end{equation}	
 
-The coefficients that minimize the \acrshort{rss} is shown in Equation~\ref{eqn:eqn:betahat-ridge2} below.
+The coefficients that minimize the \acrshort{rss} is shown in Equation~\ref{eqn:ridgebetahat2} below.
 
 \begin{equation}
 	\label{eqn:ridgebetahat2}
@@ -311,13 +335,13 @@ It is important to note that the parameters $\boldsymbol{\beta}_0$ are calculate
 
 \begin{equation}
 	\label{eqn:ridge-betazero}
-		\mathbf{\hat{B_0}^\text{Ridge}} 
+		\boldsymbol{\hat{\beta_0}^\text{Ridge}} =
 		\begin{bmatrix}
 			
-			\beta_{0,1}\\
-			\beta_{0,2}\\
+			\hat{\beta}_{0,1}\\
+			\hat{\beta}_{0,2}\\
 			\vdots \\
-			\beta_{0,K}\\
+			\hat{\beta}_{0,m}\\
 		\end{bmatrix}
 	=
 	\begin{bmatrix}
@@ -325,7 +349,7 @@ It is important to note that the parameters $\boldsymbol{\beta}_0$ are calculate
 		\mathbf{\bar{y_1}}\\
 		\mathbf{\bar{y_2}}\\
 		\vdots \\
-		\mathbf{\bar{y_K}}\\
+		\mathbf{\bar{y_m}}\\
 	\end{bmatrix}
 	=
 	\begin{bmatrix}
@@ -333,7 +357,7 @@ It is important to note that the parameters $\boldsymbol{\beta}_0$ are calculate
 		\frac{1}{n}\sum_{i = 1}^{n} y_{i,1}\\
 		\frac{1}{n}\sum_{i = 1}^{n} y_{i,2}\\
 		\vdots \\
-		\frac{1}{n}\sum_{i = 1}^{n} y_{i,K}\\
+		\frac{1}{n}\sum_{i = 1}^{n} y_{i,m}\\
 	\end{bmatrix} 
 \end{equation}
 
@@ -343,7 +367,7 @@ The choice of hyper-parameters $\boldsymbol{\lambda} \geq 0$ controls how much s
  
  \begin{equation}
  	\label{eqn:ridge-yhat}
- 	\mathbf{\hat{Y}^\text{Ridge}} = \mathbf{\hat{B_0}^\text{Ridge}} + \mathbf{\hat{B}^\text{Ridge}} \mathbf{X}
+ 	\mathbf{\hat{Y}^\text{Ridge}} = \boldsymbol{\hat{\beta}_0^\text{Ridge}} + \mathbf{\hat{B}^\text{Ridge}} \mathbf{X}
  \end{equation}
 
 \section{Cross Validation}
@@ -367,4 +391,4 @@ Scoring functions measure how much the data deviates from the fit and can be use
  
 This approach, however,  is sensitive to the choice of these sets. Additionally, reserving part of the data just for validation might be detrimental for the model fitting process, specially if the number of observations is low \parencite{james2013introduction}.
 
-One tool that can help alleviating these problems is \acrfull{cv}. More specifically,  K-fold \acrshort{cv}: it involves equally dividing the training data into $K$ sets. For each subset, the desired model is trained using $k-1$ folds and the prediction error is computed on the remaining fold \parencite{friedman2001}. As for the final evaluation, it is performed in the held-out test set.
+One tool that can help alleviating these problems is \acrfull{cv}. More specifically,  F-fold \acrshort{cv}: it involves equally dividing the training data into $F$ sets. For each subset, the desired model is trained using $F-1$ folds and the prediction error is computed on the remaining fold \parencite{friedman2001}. As for the final evaluation, it is performed in the held-out test set.

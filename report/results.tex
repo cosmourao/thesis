@@ -17,7 +17,6 @@ Before beginning analysis, an assessment of correlation between features is firs
 
 In Figure~\ref{fig:cor-mat}, the first, mainly green, quadrant correspond to slope features, while the fourth, mainly yellow, quadrant, averages.
 
-\clearpage
 \section{\acrlong{ols}}
 \label{sec:results-ols}
 
@@ -42,8 +41,10 @@ As explained in Chapter~\ref{cha:methods}, \acrshort{ols} is treated here as a b
 	\label{fig:ols-both}
 \end{figure}
 
-Each subplot  in Figure~\ref{fig:ols-both} corresponds to predictions of \nox and ammonia concentrations, respectively. The red diagonal line is the identity line. The blue line is the mean of predicted concentrations. The text box contains more information regarding the model fit.
-\label{fig:OLS-ACTUAL-VS-PRED}
+Each subplot  in Figure~\ref{fig:ols-both} corresponds to predictions of \nox and ammonia concentrations, respectively. The red diagonal line is the identity line. The blue line is the mean of predicted concentrations. The text box contains more information regarding the model fit. 
+
+From Figure~\ref{fig:ols-both}, it can be seen that predictions are centered around the response mean for each gas, which is approximately 31\acrshort{ppm}. No prediction trend, however, is noticed, i.e. prediction concentrations have no relation with actual gas concentrations.
+
 
 \clearpage
 \section{\acrlong{pcr}}

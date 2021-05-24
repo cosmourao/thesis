@@ -1,11 +1,11 @@
 \chapter{Results}
 \label{cha:results}
 
-This chapter is dedicated to show the analysis' results. In favor of clarity and organization, this chapter will be divided into sections, each corresponding to a different model.The plots presented in this section were made using \textit{ad-hoc} plotting functions.
+This chapter is dedicated to showing the analysis' results. In favor of clarity and organization, this chapter will be divided into sections, each corresponding to a different model.The plots presented in this section were made using \textit{ad-hoc} plotting functions.
 
-Initially the regression analysis was done in the pre-processed data presented in Table~\ref{tab:prepro-sample}, i.e. each observation corresponds to a gas exposure. It is important to remind the reader that in this data, each unique gas mixture was exposed (i.e. an exposure) twelve times: four frequency cycles through three experiment repetitions, yielding 1500 observations. Subsequently, the same analysis was conducted, but this time using the only average features of the mixture averages, shown in Table~\ref{tab:prepro-sample-unique-mixtures}.
+Initially, the regression analysis was done with the pre-processed data presented in Table~\ref{tab:prepro-sample}, i.e. each observation corresponds to a gas exposure. It is important to remind the reader that in this data, each unique gas mixture was exposed (i.e. an exposure) twelve times: four frequency cycles through three experiment repetitions, yielding 1500 observations. Subsequently, the same analysis was conducted, but this time using the only average features of the mixture averages, shown in Table~\ref{tab:prepro-sample-unique-mixtures}.
 
-Before beginning analysis, an assessment of correlation between features is first conducted and shown in Figure~\ref{fig:cor-mat}. From the correlation matrix, it is possible to see that slope features are not correlated at all with one another, while average features, on the other hand, are mostly perfectly positively correlated.
+Before beginning analysis, an assessment of correlation between features is first conducted and shown in Figure~\ref{fig:cor-mat}. From the correlation matrix, it is possible to see that slope features are not correlated at all with one another, while average features, on the other hand, are mostly perfectly positively correlated. Slopes, as seen before in Figure~\ref{fig:slopes}, are either zero or "virtually infinite" and its values are the same for all mixtures, up to the inherent noise of the measuring system, which explains this complete lack of correlation.
 
 \begin{figure}[h]
 	\centering
@@ -41,7 +41,7 @@ As explained in Chapter~\ref{cha:methods}, \acrshort{ols} is treated here as a b
 	\label{fig:ols-both}
 \end{figure}
 
-Each subplot  in Figure~\ref{fig:ols-both} corresponds to predictions of \nox and ammonia concentrations, respectively. The red diagonal line is the identity line. The blue line is the mean of predicted concentrations. The text box contains more information regarding the model fit. 
+Each subplot  in Figure~\ref{fig:ols-both} corresponds to predictions of \nox and ammonia concentrations, respectively. The red diagonal line is the  identity line. The blue line is the mean of predicted concentrations. The text box contains more information regarding the model fit, one being \acrshort{rmse}, which measures the error in the same scale as the targets, i.e. \acrshort{ppm} 
 
 From Figure~\ref{fig:ols-both}, it can be seen that predictions are centered around the response mean for each gas, which is approximately 31\acrshort{ppm}. No prediction trend, however, is noticed, i.e. prediction concentrations have no relation with actual gas concentrations.
 
@@ -50,7 +50,7 @@ From Figure~\ref{fig:ols-both}, it can be seen that predictions are centered aro
 \section{\acrlong{pcr}}
 \label{sec:results-pcr}
 
-Following the methodology of Chapter~\ref{cha:methods}, a \acrshort{pca} is conducted with two components in an attempt to visualize the data in a lower dimensional space in Figure~\ref{fig:pca-both}.  It is not possible to see any separation between the levels (i.e. concentrations) in both attempts.
+Following the methodology of Chapter~\ref{cha:methods}, a \acrshort{pca} is conducted with two components in an attempt to visualize the data in a lower-dimensional space in Figure~\ref{fig:pca-both}.  It is not possible to see any separation between the levels (i.e. concentrations) in both attempts.
 
 \begin{figure}[!htb]
 	\centering
@@ -100,7 +100,7 @@ Furthermore, an explained variance plot is shown in Figure~\ref{fig:pca-exp-var-
 	\label{fig:pca-exp-var-both}
 \end{figure}
 
-After this exploration of \acrshort{pca}, the analysis proceeds to fit a \acrshort{pcr} model to the data. The choice of number of \acrshort{pc}s was made via cross-validation using \acrshort{rmse} as the loss function, as can be seen in Figure~\ref{fig:pcr-cv-both}. Choosing only one components yields the minimum loss for both cases, around 27.
+After this exploration of \acrshort{pca}, the analysis proceeds to fit a \acrshort{pcr} model to the data. The choice of number of \acrshort{pc}s was made via cross-validation using \acrshort{rmse} as the loss function, as can be seen in Figure~\ref{fig:pcr-cv-both}. Choosing only one component yields the minimum loss for both cases, around 27.
 
 \begin{figure}[!htb]
 	\centering
@@ -121,7 +121,7 @@ After this exploration of \acrshort{pca}, the analysis proceeds to fit a \acrsho
 	\label{fig:pcr-cv-both}
 \end{figure}
 
-After the choosing the number of components, the regression was fit to the training data and used to predict unseen validation data. The results are shown in Figure~\ref{fig:pcr-both}. Once again, predicted concentrations are evenly spread around the mean .
+After choosing the number of components, the regression was fit to the training data and used to predict unseen validation data. The results are shown in Figure~\ref{fig:pcr-both}. Once again, predicted concentrations are evenly spread around the mean.
 
 \begin{figure}[!htb]
 	\centering
@@ -146,7 +146,7 @@ After the choosing the number of components, the regression was fit to the train
 \section{\acrlong{plsr}}
 \label{sec:results-plsr}
 
-Following the proposed model progression, the analysis proceeds to fit the \acrshort{plsr} model. A similar pipeline to Section~\ref{sec:results-pcr} was used. First, in Figure~\ref{fig:pls-both}, the choice of only two \acrshort{pls} components allowed visualization of data in a two dimensional plot. Moreover, total explained variance is shown in Figure~\ref{fig:pls-exp-var-both}. Once again, cross-validation using \acrshort{rmse} yields a single component as the best choice with a \acrshort{rmse} of approximately 27, which is then used to fit and predict gas concentrations in Figure~\ref{fig:plsr-actual-vs-pred-both}.
+Following the proposed model progression, the analysis proceeds to fit the \acrshort{plsr} model. A similar pipeline to Section~\ref{sec:results-pcr} was used. First, in Figure~\ref{fig:pls-both}, the choice of only two \acrshort{pls} components allowed visualization of data in a two-dimensional plot. Moreover, the total explained variance is shown in Figure~\ref{fig:pls-exp-var-both}. Once again, cross-validation using \acrshort{rmse} yields a single component as the best choice with an \acrshort{rmse} of approximately 27, which is then used to fit and predict gas concentrations in Figure~\ref{fig:plsr-actual-vs-pred-both}.
 
 \begin{figure}[!htb]
 	\centering
@@ -233,7 +233,7 @@ Following the proposed model progression, the analysis proceeds to fit the \acrs
 	\label{fig:plsr-actual-vs-pred-both}
 \end{figure}
 
-The results here are similar to \acrshort{pcr}, with significant smaller variance in predictions in comparison to \acrshort{ols} and equally spread around the mean (blue lines).
+The results here are similar to \acrshort{pcr}, with a significant smaller variance in predictions in comparison to \acrshort{ols} and equally spread around the mean (blue lines).
 
 \clearpage
 \section{Ridge Regression}
@@ -281,7 +281,7 @@ For Ridge regression, the regularization term $\lambda$ was chosen via cross-val
 \end{figure}
 
 \clearpage
-Finally, after the choice of $\lambda = 10000$, the actual vs. predicted plot is presented if Figure~\ref{fig:ridge-actual-vs-pred-both}. Results here, one more time, seem to be centered around the concentration mean of approximately 31 \acrshort{ppm}.
+Finally, after the choice of $\lambda = 10000$ (from a grid ranging from $10^{-10}$ to $10^4$), the actual vs. predicted plot is presented in Figure~\ref{fig:ridge-actual-vs-pred-both}. Results here, one more time, seem to be centered around the concentration mean of approximately 31 \acrshort{ppm}.
 
 \begin{figure}[!htb]
 	\centering

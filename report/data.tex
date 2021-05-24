@@ -4,7 +4,7 @@
 \section{Data acquisition}
 \label{sec:data-acquisition}
 
-The data was acquired at the \acrfull{sas} laboratory at Linköping University. The experiment --- as shown on Figure~\ref{fig:experimental-setup} --- consisted of exposing different gas combinations to two \acrshort{sicfet} sensors under a particular frequency cycle and recording its response, measured in \acrfull{ma}. The is then used to extract secondary features, namely average and slope values from certain regions of the frequency cycle.
+The data was acquired at the \acrfull{sas} laboratory at Linköping University. The experiment --- as shown in Figure~\ref{fig:experimental-setup} --- consisted of exposing different gas combinations to two \acrshort{sicfet} sensors under a particular frequency cycle and recording its response, measured in \acrfull{ma}. The response is then used to extract secondary features, namely average and slope values from certain regions of the frequency cycle. These shape-defining features were not chosen randomly; they are staples in the literature and are promising to this type of problem \parencite{Bastuck_2019} \parencite{Bur791934}.
 
 \begin{figure}[!htb]
 	\centering
@@ -13,7 +13,7 @@ The data was acquired at the \acrfull{sas} laboratory at Linköping University. 
 	\label{fig:experimental-setup}
 \end{figure}
 
-In more detail, \ch{NO}, \ch{NO2} and \ch{NH3} had five possible concentration values each: 5, 10, 20, 40, and 80 \acrfull{ppm}. The experiment was designed to encompass all possible combinations of these gases, amounting to 125 different gas mixtures. Each feature was submitted to the same frequency cycle four times. The cycle consists of 16 unique frequencies: 0.05, 0.1, 0.25, 0.5, 1, 2, 5, 10, 25, 50, 100, 200, 500, 1000, 2500 and 5000 \acrfull{hertz}. A typical raw sensor response for frequency modulation experiments is shown on Figure~\ref{fig:raw}.
+In more detail, \ch{NO}, \ch{NO2} and \ch{NH3} had five possible concentration values each: 5, 10, 20, 40, and 80 \acrfull{ppm}. The experiment was designed to encompass all possible combinations of these gases, amounting to 125 different gas mixtures. Each feature was submitted to the same frequency cycle four times. The cycle consists of 16 unique frequencies: 0.05, 0.1, 0.25, 0.5, 1, 2, 5, 10, 25, 50, 100, 200, 500, 1000, 2500 and 5000 \acrfull{hertz}. A typical raw sensor response for frequency modulation experiments is shown in Figure~\ref{fig:raw}.
 
 \begin{figure}[!htb]
 	\centering
@@ -24,11 +24,11 @@ In more detail, \ch{NO}, \ch{NO2} and \ch{NH3} had five possible concentration v
 
 Throughout one cycle, several slope and average features were extracted. The sample rate for feature extraction was set at 4 \acrshort{hertz}, i.e. in a cycle of 60 seconds, a total of $60 \text{s} \times 4 \frac{1}{\text{s}} = 240$ pairs of slopes and averages are recorded, which totals to 480 features per cycle. In other words, during one experiment --  4 cycles of 60 seconds -- a total of $480 \times 4 = 1920$ features are extracted. 
 
-One way to visualize this process is shown in Figures~\ref{fig:feat-window}. Note that the y-axis is in log-scale due to the different orders of magnitude of frequencies. Moreover, Figure~\ref{fig:features} gives more insight into feature measurement and Table~\ref{tab:measurements} summarizes the data acquisition details.
+One way to visualize the above process is shown in Figures~\ref{fig:feat-window}. Note that the y-axis is in log-scale due to the different orders of magnitude of frequencies. Moreover, Figure~\ref{fig:features} gives more insight into feature measurement, and Table~\ref{tab:measurements} summarizes the data acquisition details.
 
 \begin{figure}[!htb]
 	\centering
-	\includegraphics[width=1\textwidth]{../figures/measurement-windows.png}
+	\includegraphics[width=0.9\textwidth]{../figures/measurement-windows.png}
 	
 	\caption{Feature measurements times per cycle. The width of the red line indicates the duration of one of the feature measurement windows as an example.}
 	\label{fig:feat-window}
@@ -36,7 +36,7 @@ One way to visualize this process is shown in Figures~\ref{fig:feat-window}. Not
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=1\textwidth]{../figures/features.pdf}
+	\includegraphics[width=0.9\textwidth]{../figures/features.pdf}
 	\caption{A visualization of the feature measurement process.}
 	\label{fig:features}
 \end{figure}
@@ -77,7 +77,7 @@ For specific timestamps and measurement durations, the reader is referred to App
 \section{Raw data}
 \label{sec:raw-data}
 
-The experiments were run between 26th and 29th March, 2021. The experiment data was exported as an excel file containing twelve columns, as specified in Table~\ref{tab:raw-cols}
+The experiments were run between 26th and 29th March 2021. The experiment data was exported as an excel file containing twelve columns, as specified in Table~\ref{tab:raw-cols}
 
 
 \begin{table}[h]
@@ -124,7 +124,7 @@ The experiments were run between 26th and 29th March, 2021. The experiment data 
 	\resizebox{\textwidth}{!}{%
 		\begin{tabular}{p{1.5cm}p{1.3cm}p{0.8cm}p{1.3cm}p{0.8cm}p{0.8cm}p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}p{1.8cm}}
 		\toprule[0.5mm]
-		Index & Exposure\newline nr &  Cycle\newline  nr &  Sample\newline  nr &  NO\newline  [ppm] &  NO2\newline  [ppm] &  NH3\newline  [ppm] &  Freq\newline  [Hz] &  Slope\newline  sensor 1\newline [uA/s] &  Slope\newline  sensor 2\newline [uA/s] &  Average\newline  sensor 1\newline [uA/s] &  Average\newline  sensor 2\newline [uA/s] &  Sensor\newline  temperature \newline[C] \\
+		Index & Exposure\newline nr &  Cycle\newline  nr &  Sample\newline  nr &  NO\newline  [ppm] &  NO2\newline  [ppm] &  NH3\newline  [ppm] &  Freq\newline  [Hz] &  Slope\newline  sensor 1\newline [$\mu$A/s] &  Slope\newline  sensor 2\newline [$\mu$A/s] &  Average\newline  sensor 1\newline [$\mu$A] &  Average\newline  sensor 2\newline [$\mu$A] &  Sensor\newline  temperature \newline[C] \\
 		\midrule[0.5mm]
 		0 &            1 &         1 &          1 &        10 &          5 &         20 &       0.05 &             -18.855169 &             -22.588416 &                32.926184 &                27.961554 &              274.994683 \\
 		1 &            1 &         1 &          2 &        10 &          5 &         20 &       0.05 &             -28.289268 &             -28.185027 &                25.853867 &                20.915297 &              274.980487 \\
@@ -162,7 +162,7 @@ The experiments were run between 26th and 29th March, 2021. The experiment data 
 \section{Pre-processing}
 \label{sec:preprocessing}
 
-The features (slopes and averages) from the same target (a particular exposure) in the raw data file in Table~\ref{tab:raw-sample} are spread across multiple rows, which is not suitable for analysis. Opposed to \acrshort{tco}, the experiments were conducted at constant temperature and therefore the temperature column is discarded. The data was, subsequently, modified to have the desired format: each row containing the predictors for one particular combination of gases. Additionally, the data from each sensor was split into  two datasets. 
+The features (slopes and averages) from the same target (a particular exposure) in the raw data file in Table~\ref{tab:raw-sample} are spread across multiple rows, which is not suitable for analysis, as different features from the same observation as spread along multiple columns. As opposed to \acrshort{tco}, the experiments were conducted at constant temperature, and therefore, the temperature column is discarded. The data was, subsequently, modified to have the desired format: each row containing the predictors for one particular combination of gases. Additionally, the data from each sensor was split into  two datasets. 
 
 The naming convention for the features is shown in Figure~\ref{fig:feat-naming}. First, the frequency in which the measurement was taken followed by the sensor number. After that, the feature name itself is followed by its index, i.e. where in the frequency cycle the measurement was made. This convention allows for easy identification of key information of the cycle and measurement.
 
@@ -173,7 +173,7 @@ The naming convention for the features is shown in Figure~\ref{fig:feat-naming}.
 	\label{fig:feat-naming}
 \end{figure}
 
-The pre-processing results in the format shown in Figure~\ref{fig:preprocessed-data}. Recalling that there are 125 possible mixtures of gases, it is important to note that there are repeated exposures in the data set and those are treated as individual observations. Since each unique gas mixture was exposed 4 times during a cycle, and the experiment was repeated 3 times, this yields a total of $4 \times 3 \times 125 = 1500$ exposures. A snippet of the final data set is shown in Table~\ref{tab:prepro-sample}.
+The pre-processing results in the format shown in Figure~\ref{fig:preprocessed-data}. Recalling that there are 125 possible mixtures of gases, it is important to note that there are repeated exposures in the data set, and those are treated as individual observations. Since each unique gas mixture was exposed 4 times during a cycle, and the experiment was repeated 3 times, this yields a total of $4 \times 3 \times 125 = 1500$ exposures. A snippet of the final data set is shown in Table~\ref{tab:prepro-sample}.
 
 \begin{figure}[h]
 	\centering
@@ -223,7 +223,9 @@ The pre-processing results in the format shown in Figure~\ref{fig:preprocessed-d
 	\end{tabular}}
 \end{table}
 
-In efforts to further analyze the data, the previous 1500 observations are averaged by unique mixtures, i.e. for each mixture, the features are averaged from its twelve exposures, yielding 125 observations. Figure~\ref{fig:averaging-process} clarifies this further. Table~\ref{tab:prepro-sample-unique-mixtures} contains the averaged slopes and averages per unique mixture. Analysis will be run in this data set separately as means of comparison. The lower number of data points here gives opportunity to visualize the data in a plot; this is done in Figure~\ref{fig:slopes-and-averages}.
+In efforts to further analyze the data, the previous 1500 observations are averaged by unique mixtures, i.e. for each mixture, the features are averaged from its twelve exposures, yielding 125 observations. Figure~\ref{fig:averaging-process} clarifies this further. Table~\ref{tab:prepro-sample-unique-mixtures} contains the averaged averages per unique mixture. Analysis will be run in this data set separately as means of comparison. The lower number of data points here gives an opportunity to visualize the data in a plot; this is done in Figure~\ref{fig:slopes-and-averages}. 
+
+The reason for not including slope features in Table~\ref{tab:prepro-sample-unique-mixtures}  lies in Figure~\ref{fig:slopes-and-averages}. From it, it is possible to see that slope features have a binary-like behavior: slopes are either zero or a really high value. Moreover, no clear separation can be seen between mixtures. All this indicates that slope features are not informative of gas concentrations. For this reason, secondary analysis will be done over average features only.
 
 \begin{figure}[h]
 	\centering
@@ -292,7 +294,7 @@ In efforts to further analyze the data, the previous 1500 observations are avera
 
 	\caption{(a) Slope and (b) average features, both un-normalized and normalized.}
 	\small
-	In each plot, each line represents an unique gas mixture.
+	In each plot, each line represents a unique gas mixture.
 	\label{fig:slopes-and-averages}
 \end{figure}
 

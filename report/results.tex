@@ -45,8 +45,6 @@ Each subplot  in Figure~\ref{fig:ols-both} corresponds to predictions of \nox an
 
 From Figure~\ref{fig:ols-both}, it can be seen that predictions are centered around the response mean for each gas, which is approximately 31\acrshort{ppm}. No prediction trend, however, is noticed, i.e. prediction concentrations have no relation with actual gas concentrations.
 
-
-\clearpage
 \section{\acrlong{pcr}}
 \label{sec:results-pcr}
 
@@ -234,6 +232,16 @@ Following the proposed model progression, the analysis proceeds to fit the \acrs
 \end{figure}
 
 The results here are similar to \acrshort{pcr}, with a significant smaller variance in predictions in comparison to \acrshort{ols} and equally spread around the mean (blue lines).
+
+It is possible to gain more insight on the regression process by plotting the predictions for training data. For example, in Figure~\ref{fig:pls-cv}, the model with minimum training error is the one with 199 \acrshort{pls} components (although from approximately 125 components the \acrshort{rmse} is virtually constant around 23). Despite performing badly at unseen test data at this point, the training data predictions are shown in Figure~\ref{fig:plsr-TRAIN-PRED}. From it, it is possible to see some prediction trend and relatively higher values of $R^2$. However, predictions have high variance, and despite being a complex model regarding number of regressors, one cannot say it overfitted. The main idea here is to show that the model performs poorly even on training data. This behavior is seen again in other models, and similar plots as Figure~\ref{fig:plsr-TRAIN-PRED} are suppressed in favor of conciseness.
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=1\textwidth]{../figures/PLSR-TRAINING-DATA.png}
+	\caption{Prediction for training data using the \acrshort{plsr} model with minimal \acrshort{rmse}.}
+	\label{fig:plsr-TRAIN-PRED}
+\end{figure}
+
 
 \clearpage
 \section{Ridge Regression}

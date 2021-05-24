@@ -82,7 +82,7 @@ def plot_actual_vs_pred(actual, pred, title, info):
         # Minor tick style
         ax.grid(axis = 'x', which = 'minor',linestyle=':', linewidth=0.5,color = "fuchsia")
         ax.tick_params(which = 'minor', axis="x", direction="in",
-                       length=10, width=3, color="fuchsia", rotation = 45, labelsize = 12)
+                       length=10, width=3, color="fuchsia", rotation = 45, labelsize = 20)
         ax.xaxis.set_minor_formatter('{x:.0f}')
         
         

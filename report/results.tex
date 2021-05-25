@@ -20,7 +20,7 @@ In Figure~\ref{fig:cor-mat}, the first, mainly green, quadrant correspond to slo
 \section{\acrlong{ols}}
 \label{sec:results-ols}
 
-As explained in Chapter~\ref{cha:methods}, \acrshort{ols} is treated here as a baseline. The actual vs. predicted plot in Figure~\ref{fig:ols-exposures} shows the predictions for both data sets.
+As explained in Chapter~\ref{cha:methods}, \acrshort{ols} is treated here as a baseline. The actual vs. predicted plot in Figure~\ref{fig:ols-exposures} shows the predictions for unseen test data for both data sets.
 
 \begin{figure}[!htb]
 	\centering
@@ -119,7 +119,7 @@ After this exploration of \acrshort{pca}, the analysis proceeds to fit a \acrsho
 	\label{fig:pcr-cv-both}
 \end{figure}
 
-After choosing the number of components, the regression was fit to the training data and used to predict unseen validation data. The results are shown in Figure~\ref{fig:pcr-both}. Once again, predicted concentrations are evenly spread around the mean.
+After choosing the number of components, the regression was fit to the training data and used to predict with unseen test data. The results are shown in Figure~\ref{fig:pcr-both}. Once again, predicted concentrations are evenly spread around the mean.
 
 \begin{figure}[!htb]
 	\centering
@@ -144,7 +144,7 @@ After choosing the number of components, the regression was fit to the training 
 \section{\acrlong{plsr}}
 \label{sec:results-plsr}
 
-Following the proposed model progression, the analysis proceeds to fit the \acrshort{plsr} model. A similar pipeline to Section~\ref{sec:results-pcr} was used. First, in Figure~\ref{fig:pls-both}, the choice of only two \acrshort{pls} components allowed visualization of data in a two-dimensional plot. Moreover, the total explained variance is shown in Figure~\ref{fig:pls-exp-var-both}. Once again, cross-validation using \acrshort{rmse} yields a single component as the best choice with an \acrshort{rmse} of approximately 27, which is then used to fit and predict gas concentrations in Figure~\ref{fig:plsr-actual-vs-pred-both}.
+Following the proposed model progression, the analysis proceeds to fit the \acrshort{plsr} model. A similar pipeline to Section~\ref{sec:results-pcr} was used. First, in Figure~\ref{fig:pls-both}, the choice of only two \acrshort{pls} components allowed visualization of data in a two-dimensional plot. Moreover, the total explained variance is shown in Figure~\ref{fig:pls-exp-var-both}. Once again, cross-validation using \acrshort{rmse} yields a single component as the best choice with an \acrshort{rmse} of approximately 27, which is then used to fit and predict  gas concentrations for unseen test data in Figure~\ref{fig:plsr-actual-vs-pred-both}.
 
 \begin{figure}[!htb]
 	\centering
@@ -231,7 +231,7 @@ Following the proposed model progression, the analysis proceeds to fit the \acrs
 	\label{fig:plsr-actual-vs-pred-both}
 \end{figure}
 
-The results here are similar to \acrshort{pcr}, with a significant smaller variance in predictions in comparison to \acrshort{ols} and equally spread around the mean (blue lines).
+The results here are similar to \acrshort{pcr}, with a significant smaller variance in predictions in comparison to \acrshort{ols} and equally spread around the blue lines, representing the target gas mean $\bar{y} \approx 31$ppm.
 
 It is possible to gain more insight on the regression process by plotting the predictions for training data. For example, in Figure~\ref{fig:pls-cv}, the model with minimum training error is the one with 199 \acrshort{pls} components (although from approximately 125 components the \acrshort{rmse} is virtually constant around 23). Despite performing badly at unseen test data at this point, the training data predictions are shown in Figure~\ref{fig:plsr-TRAIN-PRED}. From it, it is possible to see some prediction trend and relatively higher values of $R^2$. However, predictions have high variance, and despite being a complex model regarding number of regressors, one cannot say it overfitted. The main idea here is to show that the model performs poorly even on training data. This behavior is seen again in other models, and similar plots as Figure~\ref{fig:plsr-TRAIN-PRED} are suppressed in favor of conciseness.
 

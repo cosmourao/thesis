@@ -376,7 +376,7 @@ The choice of hyper-parameters $\boldsymbol{\lambda} \geq 0$ controls how much s
 
 There are several choices to make for the aforementioned models: How many \acrshort{pc}s/\acrshort{pls} components to use? How much penalization to impose in Ridge regression? 
 
-A first answer to this would be to split the data into training and validation sets. After fitting models to the former, the latter is used to measure the prediction error via some scoring function. In that sense, it is important to distinguish test error rate from training error rate. The first, also called generalization error, is the score of the fit on an independent, previously unseen test sample. The second, on the other hand, is the average score over the training sample \parencite{friedman2001}.
+A first answer to this would be to split the data into training and test sets. After fitting models to the training set, the test set is used to measure the prediction error via some scoring function. In that sense, it is important to distinguish test error rate from training error rate. The first, also called generalization error, is the score of the fit on an independent, previously unseen test sample. The second, on the other hand, is the average score over the training sample \parencite{friedman2001}.
 
 Scoring functions measure how much the data deviates from the fit and can be used as a qualitative tool for model selection and comparison.  Once this is done, the choice of the model that yields minimum error is trivial. Two examples of widely used score functions are \acrfull{mse} and \acrfull{rmse}. For the multi-output case of $m$ responses and $n$ observations, they are defined respectively as :
 

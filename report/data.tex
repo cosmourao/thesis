@@ -165,13 +165,13 @@ The experiments were run between 26th and 29th March 2021. The experiment data w
 \section{Pre-processing}
 \label{sec:preprocessing}
 
-The features (slopes and averages) from the same target (a particular exposure) in the raw data file in Table~\ref{tab:raw-sample} are spread across multiple rows, which is not suitable for analysis, as different features from the same observation as spread along multiple columns. As opposed to \acrshort{tco}, the experiments were conducted at constant temperature, and therefore, the temperature column is discarded. The data was, subsequently, modified to have the desired format: each row containing the predictors for one particular combination of gases. Additionally, the data from each sensor was split into  two datasets. 
+The features (slopes and averages) from the same target (a particular exposure) in the raw data file in Table~\ref{tab:raw-sample} are spread across multiple rows, which is not suitable for analysis, as different features from the same observation as spread along multiple rows. As opposed to \acrshort{tco}, the experiments were conducted at constant temperature, and therefore, the temperature column is discarded. The data was, subsequently, modified to have the desired format: each row containing the predictors for one particular combination of gases. Additionally, the data from each sensor was split into  two datasets. 
 
 The naming convention for the features is shown in Figure~\ref{fig:feat-naming}. First, the frequency in which the measurement was taken followed by the sensor number. After that, the feature name itself is followed by its index, i.e. where in the frequency cycle the measurement was made. This convention allows for easy identification of key information of the cycle and measurement.
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=1\textwidth]{../figures/feat-naming.pdf}
+	\includegraphics[width=0.8\textwidth]{../figures/feat-naming.pdf}
 	\caption{Feature naming convention.}
 	\label{fig:feat-naming}
 \end{figure}
@@ -230,6 +230,8 @@ In efforts to further analyze the data, the previous 1500 observations are avera
 
 The reason for not including slope features in Table~\ref{tab:prepro-sample-unique-mixtures}  lies in Figure~\ref{fig:slopes-and-averages}. From it, it is possible to see that slope features have a binary-like behavior: slopes are either zero or a really high value. Moreover, no clear separation can be seen between mixtures. All this indicates that slope features are not informative of gas concentrations. For this reason, secondary analysis will be done over average features only.
 
+\hspace{12mm}
+
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=1\textwidth]{../figures/averaging-process.pdf}
@@ -238,9 +240,9 @@ The reason for not including slope features in Table~\ref{tab:prepro-sample-uniq
 \end{figure}
 
 
-\begin{table}
+\begin{table}[h]
 	\centering
-	\caption{Sample of averaged features throughout all exposures data.}
+	\caption{Sample of averaged features throughout all exposures data. Note that the slope columns were discarded.}
 	\label{tab:prepro-sample-unique-mixtures}
 	\resizebox{\textwidth}{!}{%
 		\begin{tabular}{ccp{0.8cm}p{0.8cm}p{0.8cm}p{1.6cm}p{1.6cm}p{1.6cm}p{0.3cm}p{1.6cm}p{1.6cm}}

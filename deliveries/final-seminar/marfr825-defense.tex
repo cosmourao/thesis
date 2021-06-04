@@ -17,6 +17,7 @@
  \usepackage{subscript}
  \usepackage{subcaption}
  \usepackage{graphicx}
+ \geometry{papersize={12.8cm,10cm}}
  \newcommand{\nox}{\texorpdfstring{NO\textsubscript{x}}{NOx}\xspace}
 \begin{document}
 	\begin{frame}
@@ -408,6 +409,180 @@
 \section{Methods}
 \begin{frame}
 	\frametitle{Methods}
+	\framesubtitle{Chosen models}
+	
+	\begin{itemize}
+		\item Multivariate multiple regression problem
+		\begin{itemize}
+			\item Multiple predictors - slopes and averages.
+			\item Multiple responses - gas concentrations.
+		\end{itemize}
+		\item Proposed models:
+		\begin{enumerate}
+			\item Ordinary Least Squares Regression (OLS).
+			\item Principal Components Regression (PCR).
+			\item Partial Least Squares Regression (PLSR).
+			\item Ridge regression.
+		\end{enumerate}
+		\item Why?
+			\begin{itemize}
+				\item Natural progression of model choice: simple $\rightarrow$ complex
+				\item PLSR as a starting point: shown to work well in this field/problem.
+				\item Sensor data collected in short succession: possibly high correlated features $\rightarrow$ dimensionality reduction or shrinkage to alleviate it.
+			\end{itemize}
+		\item \textcolor{blue}{Pros}: backed by literature, simple to implement.
+		\item \textcolor{red}{Cons}: only linear models.
+		
+	\end{itemize}
+	
+\end{frame}
+
+\begin{frame}
+	\frametitle{Methods}
+	\framesubtitle{OLS}
+	
+	\begin{itemize}
+	\item Relation between predictors (X) and responses (Y):
+
+	\begin{equation}
+		\label{eqn:ols}
+		\mathbf{Y = XB +  E}
+	\end{equation}
+
+\item The difference between the response and the prediction is the residual. The Residual Sum of Squares is defined as:
+	
+	\begin{equation} 
+		\label{eqn:rss}
+		\text{RSS}(\mathbf{B}) = \text{Tr}[\mathbf{(Y-X\hat{B})^\intercal (Y-X\hat{B})}]
+	\end{equation}
+
+\item The estimate for coefficients $\hat{\mathbf{B}}$ is chosen to minimize the RSS:
+
+	\begin{equation}
+		\label{eqn:betahat}
+		\mathbf{\hat{B}^\text{OLS}} = \underset{\mathbf{B}}{\arg\min} 	\; 	\text{RSS}(\mathbf{B})
+	\end{equation}
+
+\begin{equation}
+	\label{eqn:ols_beta}
+	\mathbf{\hat{B}^\text{OLS}} = \mathbf{(X^\intercal X)^{-1} X^\intercal Y}
+\end{equation}
+
+\item In this problem, features are sampled in quick succession (4 Hz). This will lead to highly correlated features $\rightarrow$ high variance of coefficients.
+\end{itemize}
+	
+\end{frame}
+
+\begin{frame}
+	\frametitle{Methods}
+	\framesubtitle{PCR}
+	
+	\begin{itemize}
+	
+	\item The objective of PCA is to find a matrix $\mathbf{P}$ such that the linear transformation
+	
+		\begin{equation}
+			\label{eqn:pca}
+			\mathbf{T=XP^\intercal}
+		\end{equation}
+	
+yields new variables that are uncorrelated and arranged in decreasing order of variance. The linear relation between response and PC scores is then:
+
+	\begin{equation}
+		\label{eqn:pcr}
+		\mathbf{Y = T B + E}
+	\end{equation}
+
+\item And the regression coefficients are found analogously to OLS:
+
+	\begin{equation}
+		\label{eqn:beta-pcr}
+		\mathbf{\hat{B}^{\text{PCR}} = (T^\intercal T)^{-1}T^\intercal Y}
+	\end{equation}
+
+\item While this method successfully best explains the variability in $\mathbf{X}$, the responses $\mathbf{Y}$ are not taken into account.
+\end{itemize}
+\end{frame}	
+
+\begin{frame}
+	\frametitle{Methods}
+	\framesubtitle{PLSR}
+	
+	\begin{itemize}
+	
+	\item Supervision of the identification of components.
+	\item Linear transformations for both $\mathbf{X}$ and $\mathbf{Y}$, analogous to PCA.
+	
+	\begin{equation}
+	\label{eqn:x-decomp}
+	\mathbf{W=XL^\intercal}
+	\end{equation}
+
+\begin{equation}
+	\label{eqn:y-decomp}
+	\mathbf{U = YQ^\intercal}
+\end{equation}
+
+
+\item The relation between responses and PLS scores is:
+	\begin{equation}
+	\label{eqn:plsr}
+	\mathbf{Y = WB + E}
+\end{equation}
+
+\item Again, analogous to OLS, the coefficients are:
+
+\begin{equation}
+	\label{eqn:beta-plsr}
+	\mathbf{\hat{B}^{\text{PLSR}} = (W^\intercal W)^{-1}W^\intercal Y}
+\end{equation}
+\end{itemize}
+		
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{Methods}
+\framesubtitle{Ridge}
+\begin{itemize}
+
+\item Shrinkage of coefficients. Coefficients tend to, but never reach, zero.
+
+\item Addition of a regularization term.
+
+$\lambda$ controls the regularization strength.
+
+\item The RSS for multioutput ridge regression is:
+
+\begin{equation} 
+	\label{eqn:rss-ridge}
+	\text{RSS}^{\text{Ridge}}(\mathbf{\hat{B}, \boldsymbol{\lambda} }) = \text{Tr} [\mathbf{(Y-X\hat{B})^\intercal (Y-X\hat{B})}] + \text{Tr}[\mathbf{\hat{B}^\intercal \hat{B}+ \boldsymbol{\lambda} I}]
+\end{equation}
+
+\item Similar to before, the estimate for $\mathbf{B}$ is found by minimizing the RSS.
+
+\begin{equation}
+	\label{eqn:ridgebetahat}
+	\mathbf{\hat{B}^\text{Ridge}} = \underset{\mathbf{B}}{\arg\min} 	\; \text{RSS}^{\text{Ridge}}(\mathbf{B})
+\end{equation}	
+
+\item Solving for $\mathbf{\hat{B}}$ yields:
+
+\begin{equation}
+	\label{eqn:ridgebetahat2}
+	\mathbf{\hat{B}^\text{Ridge}} = \mathbf{(X^\intercal X + \boldsymbol{\lambda}  I )^{-1} X^\intercal Y}
+\end{equation}
+
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+	\frametitle{Methods}
+	
+	\begin{figure}[h]
+		\includegraphics[width=0.7\textwidth]{../../figures/methods-schema.pdf}
+	\end{figure}
 	
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
@@ -427,8 +602,6 @@
 			\caption{Actual vs. Predicted plot for \textbf{mixtures} - averaged average features.}
 			\label{fig:ols-averaged}
 		\end{figure}
-
-	
 \end{frame}
 
 \begin{frame}
@@ -523,9 +696,6 @@
 \begin{frame}
 	\frametitle{Results}
 	\framesubtitle{PLSR}
-	
-
-		
 		\begin{figure}
 			\includegraphics[width=0.5\linewidth]{../../figures/pls-cv.png}
 			\caption{CV results for \textbf{exposures}.}
@@ -537,9 +707,6 @@
 			\caption{CV results for \textbf{mixtures}.}
 			\label{fig:pls-cv-avg-feat}
 		\end{figure}
-	
-
-	
 \end{frame}
 
 \begin{frame}
@@ -612,6 +779,15 @@
 \begin{frame}
 	\frametitle{Discussion}
 	
+	\begin{itemize}
+		\item All models fail on predicting gas concentrations.
+		\item Slopes are not informative.
+		\item Averages might be informative but there is no linear order in it.
+		\item Predictions are centered approximately  around the target mean $\bar{y} = 31$ ppm.
+		\item Results show that less complex, under-fitting models are preferred.
+		
+	\end{itemize} 	
+	
 \end{frame}
 
 
@@ -644,9 +820,10 @@
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Conclusion}
+\section{Conclusion and Future work}
 \begin{frame}
 	\frametitle{Conclusion}
+	\framesubtitle{and future work}
 	
 	\begin{enumerate}
 		\item Can frequency modulation be used to simultaneously quantify \nox and Ammonia concentrations?
@@ -654,6 +831,7 @@
 			\item \textbf{Possibly not.}
 			\item To answer this conclusively, different approaches need to be experimented with:
 			\begin{enumerate}
+				\item Different shape-defining features? E.g. differences.
 				\item Different wave shape? E.g. Triangular waves.
 				\item Different models? E.g. Non-parametric models.
 				\item Different measurement window? e.g. lower sampling rate				
@@ -664,7 +842,7 @@
 		\item Does the quality-of-fit vary over different prediction models?
 		\begin{itemize}
 			\item \textbf{No.}
-			\item No point in selecting which model is "the best of the worst".
+			\item No point in selecting which model is "less bad".
 		\end{itemize}
 	\end{enumerate}
 
